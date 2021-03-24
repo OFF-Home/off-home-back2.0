@@ -1,6 +1,12 @@
 
 var db = require('../../database.js')
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_categories = function (req,res,next) {
     let sql = 'SELECT *' +
         'FROM Categories;';
@@ -18,6 +24,12 @@ exports.get_categories = function (req,res,next) {
     })
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitats_categoria = function (req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +

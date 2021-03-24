@@ -1,6 +1,12 @@
 
 var db = require('../../database.js')
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.regUsuari = function(req,res,next) {
     var data = {
         email: req.body.email,
@@ -29,6 +35,12 @@ exports.regUsuari = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.showUsuari = function (req,res,next) {
     var data = {
         username: req.params.username

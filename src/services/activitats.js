@@ -2,6 +2,12 @@
 var db = require('../../database.js');
 
 //datahora format es '28-10-2000 19:00:00'
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitats = function(req,res,next) {
     var data = {
         username: req.params.username,
@@ -27,6 +33,12 @@ exports.get_activitats = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.create_activitats = function(req,res,next) {
     var data = {
         usuariCreador: req.params.usuariCreador,
