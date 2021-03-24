@@ -3,7 +3,7 @@ var router = express.Router();
 let activitats = require('../services/activitats');
 
 
-router.get('/', activitats.get_activitats);
+router.get('/:username/:datahora', activitats.get_activitats);
 
 router.post('/create/:usuariCreador', activitats.create_activitats);
 
