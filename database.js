@@ -25,7 +25,11 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             if (err) {
                 console.error(err.message);
             }
-            //else inserir aqui inserts per defecte
+            else {
+                let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+                db.run(sql,["victorfer@gmai.com","victorfer","12342","10/10/2000","holaaaa",200,300,0,1,3,"jejeje","Spanish"]);
+            }
+            console.log("Taula Usuaris creada correctament");
         });
         db.run('CREATE TABLE Llocs (' +
             'nomCarrer text,' +
@@ -37,14 +41,24 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             if (err) {
                 console.error(err.message);
             }
+            else {
+                let sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
+                db.run(sql,["C/Balmes",74,23345232,53452567]);
+            }
+            console.log("Taula Llocs creada correctament");
         });
-        db.run('CREATE TABLE DataHora (' +
+        /*db.run('CREATE TABLE DataHora (' +
             'dataHora DateTime,' +
             'CONSTRAINT DATAHORA_PK PRIMARY KEY (dataHora));', (err) => {
             if(err) {
                 console.error(err.message);
             }
-        });
+            else {
+                let sql = 'INSERT INTO DataHora VALUES (?)';
+                db.run(sql,["24/03/2021 18:00:00"]);
+            }
+            console.log("Taula DataHora creada correctament");
+        }); */
         db.run('CREATE TABLE Categories (' +
             'categoria text,' +
             'descripcio text,' +
@@ -52,6 +66,11 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             if (err) {
                 console.error(err.message);
             }
+            else {
+                let sql = 'INSERT INTO Categories VALUES (?,?)';
+                db.run(sql,["Running","Correr per la Barceloneta"]);
+            }
+            console.log("Taula Categories creada correctament");
         });
         db.run('CREATE TABLE Activitats (' +
             'usuariCreador text,' +
@@ -66,11 +85,15 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT Activitats_PK PRIMARY KEY (usuariCreador,dataHoraIni),' +
             'CONSTRAINT Activitats_FK_Usuaris FOREIGN KEY (usuariCreador) references Usuaris(email),' +
             'CONSTRAINT Activitats_FK_Llocs FOREIGN KEY (nomCarrer,numCarrer) references Llocs(nomCarrer,numCarrer),' +
-            'CONSTRAINT Activitats_FK_DataHora FOREIGN KEY (dataHoraIni) references DataHora(dataHora),' +
             'CONSTRAINT Activitats_FK_Categlreis FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
             if (err) {
                 console.error(err.message);
             }
+            else {
+                let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+                db.run(sql,["victorfer@gmai.com","C/Balmes",74,"24/03/2021 18:00:00","Running",20,"Correr","m'encanta correr","24/03/2021 19:00:00"]);
+            }
+            console.log("Taula Activitats creada correctament");
         });
     }
 });
