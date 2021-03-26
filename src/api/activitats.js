@@ -11,4 +11,9 @@ router.get('/:username/:datahora', activitats.get_activitats);
  *  Crea una instància d'activitat amb l'usuari de la url i els paràmtres necessaris del body */
 router.post('/create/:usuariCreador', activitats.create_activitats);
 
+/** Funció d'enrutament de la direcció /activitats/inserusuari amb post.
+ *  Crea una instància de participants amb els paràmetres necessaris del body*/
+router.post('/insertusuari',activitats.insertUsuariActivitat);
+
+
 module.exports = router;

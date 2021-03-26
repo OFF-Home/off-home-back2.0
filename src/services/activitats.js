@@ -51,7 +51,6 @@ exports.create_activitats = function(req,res,next) {
         descripcio: req.body.descripcio,
         dataHoraFi: req.body.dataHoraFi
     }
-    console.log(data);
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
     db.run(sql,info,(err) => {
@@ -63,4 +62,30 @@ exports.create_activitats = function(req,res,next) {
         }
         res.send('OK');
     });
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+
+exports.insertUsuariActivitat = function(req,res,next) {
+    var data = {
+        usuariCreador: req.body.usuariCreador,
+        dataHoraIni: req.body.dataHoraIni,
+        usuariParticipant: req.body.usuariParticipant
+    };
+    var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
+    let sql = 'INSERT INTO Participants VALUES (?,?,?)';
+    db.run(sql,info,(err) => {
+        if (err) {
+            res.json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        res.send('OK');
+    })
 }
