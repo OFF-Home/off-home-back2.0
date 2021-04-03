@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 let activitats = require('../services/activitats');
 
+router.get('/:email',activitats.getActivitatsALesQuueParticipo);
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
 router.get('/filterByData/:data',activitats.filterByData);
 router.get('/filterByTitle/:title',activitats.filterByTitle);
@@ -17,6 +18,7 @@ router.post('/create/:usuariCreador', activitats.create_activitats);
 /** Funció d'enrutament de la direcció /activitats/inserusuari amb post.
  *  Crea una instància de participants amb els paràmetres necessaris del body*/
 router.post('/insertusuari',activitats.insertUsuariActivitat);
+
 
 
 
