@@ -89,3 +89,47 @@ exports.insertUsuariActivitat = function(req,res,next) {
         res.send('OK');
     })
 }
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.filterByData = function(req,res,next) {
+    var nom = {
+        data: req.params.data
+    }
+    let sql = 'SELECT *' +
+        'FROM Activitats a ' +
+        'WHERE a.dataHoraIni = ?;';
+    db.all(sql, [nom.data], (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Activities Not Found');
+        }
+        res.send(rows);
+    });
+}
+
+exports.get_activitatsOrderedByName = function(req,res,next) {
+    let sql = 'SELECT *' +
+        'FROM Activitats a ' +
+        'ORDER BY a.titol ASC;';
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Activities Not Found');
+        }
+        res.send(rows);
+    });
+
+}
