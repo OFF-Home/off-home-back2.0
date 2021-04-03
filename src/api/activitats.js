@@ -4,6 +4,7 @@ let activitats = require('../services/activitats');
 
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
 router.get('/filterByData/:data',activitats.filterByData);
+router.get('/filterByTitle/:title',activitats.filterByTitle);
 /**
  *  Funció d'enrutament de la direcció /activitats/:username/:datahora amb el mètode get, on @username és l'email  i datahora la data i l'hora d'una activitat existent.
  *  Retorna la informació d'una activitat, identificada per aquests dos paràmetres */

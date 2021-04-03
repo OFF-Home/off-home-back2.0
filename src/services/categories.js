@@ -33,7 +33,7 @@ exports.get_categories = function (req,res,next) {
 exports.get_activitats_categoria = function (req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
-        'WHERE a.categoria = ?;';
+        'WHERE LOWER(a.categoria) = LOWER (?);';
     db.all(sql,[req.params.tagId],(err,rows) => {
         if(err) {
             res.json({

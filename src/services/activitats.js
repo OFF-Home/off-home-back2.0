@@ -116,6 +116,26 @@ exports.filterByData = function(req,res,next) {
     });
 }
 
+exports.filterByTitle = function (req,res,next) {
+    var nom = {
+        títol: req.params.title
+    }
+    let sql = 'SELECT *' +
+        'FROM Activitats a ' +
+        'WHERE LOWER(a.titol) = LOWER(?);';
+    db.all(sql, [nom.títol], (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Activities Not Found');
+        }
+        res.send(rows);
+    });
+}
+
 exports.get_activitatsOrderedByName = function(req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
