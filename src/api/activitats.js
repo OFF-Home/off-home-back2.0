@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-let activitats = require('../services/activitats');
+var activitats = require('../services/activitats.js');
 
 /**
  *  Funció d'enrutament de la direcció /activitats/:username/:datahora amb el mètode get, on @username és l'email  i datahora la data i l'hora d'una activitat existent.
