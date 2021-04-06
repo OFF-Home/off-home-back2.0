@@ -85,7 +85,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT Activitats_PK PRIMARY KEY (usuariCreador,dataHoraIni),' +
             'CONSTRAINT Activitats_FK_Usuaris FOREIGN KEY (usuariCreador) references Usuaris(email),' +
             'CONSTRAINT Activitats_FK_Llocs FOREIGN KEY (nomCarrer,numCarrer) references Llocs(nomCarrer,numCarrer),' +
-            'CONSTRAINT Activitats_FK_Categlreis FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
+            'CONSTRAINT Activitats_FK_Categories FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
             if (err) {
                 console.error(err.message);
             }
@@ -101,7 +101,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'usuariParticipant text,' +
             'CONSTRAINT Participants_PK PRIMARY KEY (usuariCreador,dataHoraIni,usuariParticipant),' +
             'CONSTRAINT Participants_FK1 FOREIGN KEY (usuariCreador,dataHoraIni) REFERENCES Activitats (usuariCreador,dataHoraIni),' +
-            'CONSTRAINT Participants_PK FOREIGN KEY (usuariParticipant) REFERENCES Usuaris (email));', (err) => {
+            'CONSTRAINT Participants_FK2 FOREIGN KEY (usuariParticipant) REFERENCES Usuaris (email));', (err) => {
             if (err) {
                 console.error(err.message);
             }
