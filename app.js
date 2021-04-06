@@ -39,8 +39,26 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+ // res.status(err.status || 500);
+  //res.render('error');
+  if (String(err).includes("UNIQUE constraint failed: Usuaris.username")) {
+    res.status(500).send('This username is already in use');
+  }
+  else if(String(err).includes("UNIQUE constraint failed: Usuaris.email")) {
+    res.status(500).send('This email is already in use');
+  }
+  else if (String(err).includes("UNIQUE constraint failed: Activitats.usuariCreador, Activitats.dataHoraIni")) {
+    res.status(500).send('The user alreadey has an activity at this date and hour');
+  }
+  else if (String(err).includes("UNIQUE constraint failed: Participants.usuariCreador, Participants.dataHoraIni, Participants.usuariParticipant")) {
+    res.status(500).send('The user is already in the activity');
+  }
+  else if (String(err).includes("UNIQUE constraint failed: Llocs.nomCarrer, Llocs.numCarrer")) {
+    res.status(500).send('The ubication already exists');
+  }
+  else {
+    res.status(500).send(err.message);
+  }
 });
 
 module.exports = app;
