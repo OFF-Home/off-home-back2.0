@@ -47,7 +47,7 @@ exports.showUsuari = function (req,res,next) {
     }
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
-        'WHERE u.username = ?'
+        'WHERE LOWER(u.username)  = LOWER(?)'
     db.get(sql,[data.username],(err,row) => {
         if(row == null) {
             res.send('User not found');
@@ -74,4 +74,35 @@ exports.updateUsuari = function (req,res,next) {
     var target = req.params.username;
     let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
     models.updateUsuari(info,target,res,next);
+}
+
+exports.showTags = function(req,res,next) {
+    var data = {
+        username: req.params.username
+    }
+    let sql = 'SELECT * ' +
+        'FROM TagsxUsuari tu ' +
+        'WHERE LOWER(tu.Usuari) = LOWER(?)'
+    db.get(sql,[data.username],(err,row) => {
+        if(row == null) {
+            res.send('Tags not found');
+        }
+        res.json(row);
+    });
+}
+
+exports.findUserByName = function (req,res,next) {
+    var data = {
+        username: req.params.username
+    }
+    let sql = 'SELECT * ' +
+        'FROM Usuaris u ' +
+        'WHERE LOWER(u.email)= LOWER(?)'
+    db.get(sql,[data.username],(err,row) => {
+        if(row == null) {
+            var respo = 'User ' + data.username + ' not found';
+            res.send(respo);
+        }
+        res.json(row);
+    });
 }

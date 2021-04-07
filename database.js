@@ -125,7 +125,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         db.run('CREATE TABLE TagsxUsuari (' +
             'nomTag text,' +
             'Usuari text,' +
-            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag),'+
+            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag,Usuari),'+
             'CONSTRAINT TagsxUsuari_FK1 FOREIGN KEY (nomTag) REFERENCES Tags (nomTag),' +
             'CONSTRAINT TagsxUsuari_FK2 FOREIGN KEY (Usuari) REFERENCES Usuaris (email));', (err) => {
             if (err) {
@@ -133,7 +133,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             }
             else {
                 let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
-                db.run(sql,["running,victor@gmai.com"]);
+                db.run(sql,["running","victor@gmai.com"]);
                 console.log("Taula TagsxUsuari creada correctament");
             }
         });
