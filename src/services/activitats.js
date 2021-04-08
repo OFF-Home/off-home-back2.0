@@ -114,17 +114,6 @@ exports.getActivitatsALesQueParticipo = function(req,res,next) {
     var nom = {
         nom: req.params.email
     }
-    console.log(nom.nom);
-    let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
-    db.all(sql,[nom.nom], (err, rows) => {
-        if (err) {
-            res.json({
-                status: err.status,
-                message: err.message
-            });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
-        }
-        res.send(rows);
-    });
+    activitats.getActivitatsALesQueParticipo(nom,req,res,next);
+
 }

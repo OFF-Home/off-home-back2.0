@@ -1,3 +1,5 @@
+
+
 var db = require('../../database.js');
 
 
@@ -66,4 +68,19 @@ exports.insertUsuariActivitat = function(data,req,res,next){
         }
         res.send('OK');
     })
+}
+
+exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
+    let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
+    db.all(sql,[nom.nom], (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Activities Not Found');
+        }
+        res.send(rows);
+    });
 }
