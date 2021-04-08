@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 let activitats = require('../services/activitats');
 
-router.get('/:email',activitats.getActivitatsALesQuueParticipo);
+
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
+router.get('/:email',activitats.getActivitatsALesQuueParticipo);
 router.get('/filterByData/:data',activitats.filterByData);
 router.get('/filterByTitle/:title',activitats.filterByTitle);
 /**
