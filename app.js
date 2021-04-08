@@ -56,6 +56,9 @@ app.use(function(err, req, res, next) {
   else if (String(err).includes("UNIQUE constraint failed: Llocs.nomCarrer, Llocs.numCarrer")) {
     res.status(500).send('The ubication already exists');
   }
+  else if (String(err).includes("SQLITE_CONSTRAINT: NOT NULL constraint failed: Activitats.titol")) {
+    res.status(500).send('A title is needed');
+  }
   else {
     res.status(500).send(err.message);
   }

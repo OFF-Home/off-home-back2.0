@@ -20,11 +20,10 @@ exports.regUsuari = function(req,res,next) {
         darkmode : req.body.darkmode,
         notificacions : req.body.notificacions,
         estrelles : req.body.estrelles,
-        tags : req.body.tags,
         language : req.body.language
     }
     let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
-    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?)';
     db.run(sql,info, (err) => {
         if (err) {
             next(err);
