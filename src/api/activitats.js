@@ -4,7 +4,7 @@ let activitats = require('../services/activitats');
 
 
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
-router.get('/:email',activitats.getActivitatsALesQuueParticipo);
+router.get('/:email',activitats.getActivitatsALesQueParticipo);
 router.get('/filterByData/:data',activitats.filterByData);
 router.get('/filterByTitle/:title',activitats.filterByTitle);
 /**
