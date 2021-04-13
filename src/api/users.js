@@ -15,8 +15,6 @@ router.get('/:username/show', user.showUsuari);
 
 router.post('/:username/update',user.updateUsuari);
 
-router.get('/:username/tags',user.showTags);
-
 router.get('/:username/',user.findUserByName);
 
 

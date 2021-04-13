@@ -75,33 +75,8 @@ exports.updateUsuari = function (req,res,next) {
     models.updateUsuari(info,target,res,next);
 }
 
-exports.showTags = function(req,res,next) {
-    var data = {
-        username: req.params.username
-    }
-    let sql = 'SELECT * ' +
-        'FROM TagsxUsuari tu ' +
-        'WHERE LOWER(tu.Usuari) = LOWER(?)'
-    db.get(sql,[data.username],(err,row) => {
-        if(row == null) {
-            res.send('Tags not found');
-        }
-        res.json(row);
-    });
-}
 
 exports.findUserByName = function (req,res,next) {
-    var data = {
-        username: req.params.username
-    }
-    let sql = 'SELECT * ' +
-        'FROM Usuaris u ' +
-        'WHERE LOWER(u.email)= LOWER(?)'
-    db.get(sql,[data.username],(err,row) => {
-        if(row == null) {
-            var respo = 'User ' + data.username + ' not found';
-            res.send(respo);
-        }
-        res.json(row);
-    });
+    models.findUserByName(req,res,next);
+
 }
