@@ -18,13 +18,14 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'notifications boolean,' +
             'estrelles integer,' +
             'language text,' +
+            'image text,'+
             'CONSTRAINT USUARIS_PK PRIMARY KEY (email),' +
             'CONSTRAINT USUARIS_U0 UNIQUE (username));', (err) => {
             if (err) {
                 console.error(err.message);
             }
             else {
-                let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+                let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
                 db.run(sql,["victorfer@gmai.com","victorfer","12342","10-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
                 db.run(sql,["victor@gmai.com","victor","1234234","12-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
                 console.log("Taula Usuaris creada correctament");

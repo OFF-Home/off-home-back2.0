@@ -21,17 +21,7 @@ exports.regUsuari = function(req,res,next) {
         estrelles : req.body.estrelles,
         language : req.body.language
     }
-    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
-
-    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-    db.run(sql,info, (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
-    });
+    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language];
 
     models.regUsuari(info,res,next);
 
@@ -47,18 +37,6 @@ exports.showUsuari = function (req,res,next) {
     var data = {
         username: req.params.username
     }
-
-    let sql = 'SELECT * ' +
-        'FROM Usuaris u ' +
-        'WHERE LOWER(u.username)  = LOWER(?)'
-    db.get(sql,[data.username],(err,row) => {
-        if(row == null) {
-            res.send('User not found');
-        }
-        res.json(row);
-    });
-
-    console.log(data.username);
     models.showUsuari(data,res,next);
 
 }

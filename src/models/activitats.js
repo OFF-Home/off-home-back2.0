@@ -7,7 +7,18 @@ exports.get_activitats = function (req,res,next) {
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
 
     db.run(sql,[req.params.username, req.params.datahora], (err,row) => {
-
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else if (row == null) {
+            res.send('No Activity Found');
+        }
+        res.json(row);
+    });
+}
 
 
 
@@ -69,11 +80,6 @@ exports.create_activitats = function (req,res,next) {
                 message: err.message
             });
         }else res.send('OK');
-
-        } else if (rows == null) {
-            res.send('Activities Not Found');
-        }
-        res.send(rows);
     });
 
 }

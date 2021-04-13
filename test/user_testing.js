@@ -11,7 +11,7 @@ const url= 'http://localhost:3000';
 
 describe('/POST UpdateUsuari:', () => {
     before(function(done){
-        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
         db.run(sql,['josep@gmail.com','josep','2365']);
         db.run(sql,['pep@gmail.com','pep','3456']);
         done();
@@ -84,7 +84,7 @@ describe('/POST registrarUsuari', () => {
 
 describe('/GET show info Usuari', () => {
     before(function(done){
-        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
         db.run(sql,['josep@gmail.com','josep','2365']);
         done();
     });
