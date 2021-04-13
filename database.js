@@ -8,7 +8,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         console.log('Connected to the DataBase');
         db.run('CREATE TABLE Usuaris (' +
             'email text,' +
-            'username text,' +
+            'username text not null,' +
             'password text,' +
             'birthDate date,' +
             'description text,' +
@@ -33,8 +33,8 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         db.run('CREATE TABLE Llocs (' +
             'nomCarrer text,' +
             'numCarrer integer,' +
-            'latitud real,' +
-            'altitud real,' +
+            'latitud real not null,' +
+            'altitud real not null,' +
             'CONSTRAINT LLocs_PK PRIMARY KEY (nomCarrer,numCarrer),' +
             'CONSTRAINT LLocs_U0 UNIQUE (latitud,altitud));', (err) => {
             if (err) {
@@ -73,8 +73,8 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         });
         db.run('CREATE TABLE Activitats (' +
             'usuariCreador text,' +
-            'nomCarrer text,' +
-            'numCarrer integer,' +
+            'nomCarrer text not null,' +
+            'numCarrer integer not null,' +
             'dataHoraIni DateTime,' +
             'categoria text,' +
             'maxParticipant integer,' +
@@ -139,5 +139,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         });
     }
 });
+
+
 
 module.exports = db;
