@@ -15,5 +15,7 @@ router.get('/:username/show', user.showUsuari);
 
 router.post('/:username/update',user.updateUsuari);
 
+router.get('/:username/',user.findUserByName);
+
 
 module.exports = router;

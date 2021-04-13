@@ -9,6 +9,7 @@ var indexRouter = require('./src/api/index');
 var usersRouter = require('./src/api/users');
 var activitatsRouter = require('./src/api/activitats');
 var categoriesRouter = require('./src/api/categories');
+var tagsRouter = require('./src/api/tags');
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/activitats',activitatsRouter);
 app.use('/categories',categoriesRouter);
+app.use('/tags',tagsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,6 +58,9 @@ app.use(function(err, req, res, next) {
   }
   else if (String(err).includes("UNIQUE constraint failed: Llocs.nomCarrer, Llocs.numCarrer")) {
     res.status(500).send('The ubication already exists');
+  }
+  else if (String(err).includes("SQLITE_CONSTRAINT: NOT NULL constraint failed: Activitats.titol")) {
+    res.status(500).send('A title is needed');
   }
   else {
     res.status(500).send(err.message);

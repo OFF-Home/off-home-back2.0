@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-let activitats = require('../services/activitats');
+var activitats = require('../services/activitats.js');
 
 
 router.get('/orderByName',activitats.get_activitatsOrderedByName);

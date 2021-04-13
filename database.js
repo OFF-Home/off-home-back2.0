@@ -17,17 +17,16 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'darkmode boolean,' +
             'notifications boolean,' +
             'estrelles integer,' +
-            'tags text,' +
             'language text,' +
-            'CONSTRAINT LLOCS_PK PRIMARY KEY (email),' +
-            'CONSTRAINT LLOCS_U0 UNIQUE (username));', (err) => {
+            'CONSTRAINT USUARIS_PK PRIMARY KEY (email),' +
+            'CONSTRAINT USUARIS_U0 UNIQUE (username));', (err) => {
             if (err) {
                 console.error(err.message);
             }
             else {
-                let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-                db.run(sql,["victorfer@gmai.com","victorfer","12342","10-10-2000","holaaaa",200,300,0,1,3,"jejeje","Spanish"]);
-                db.run(sql,["victor@gmai.com","victor","1234234","12-10-2000","holaaaa",200,300,0,1,3,"jejeje","Spanish"]);
+                let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+                db.run(sql,["victorfer@gmai.com","victorfer","12342","10-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
+                db.run(sql,["victor@gmai.com","victor","1234234","12-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
                 console.log("Taula Usuaris creada correctament");
             }
         });
@@ -109,6 +108,33 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 let sql = 'INSERT INTO Participants VALUES (?,?,?)';
                 db.run(sql,["victorfer@gmai.com","24-03-2021 18:00:00","victor@gmai.com"]);
                 console.log("Taula Participants creada correctament");
+            }
+        });
+        db.run('CREATE TABLE Tags (' +
+            'nomTag text,' +
+            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag));', (err) => {
+            if (err) {
+                console.error(err.message);
+            }
+            else {
+                let sql = 'INSERT INTO Tags VALUES (?)';
+                db.run(sql,["running"]);
+                console.log("Taula Tags creada correctament");
+            }
+        });
+        db.run('CREATE TABLE TagsxUsuari (' +
+            'nomTag text,' +
+            'Usuari text,' +
+            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag,Usuari),'+
+            'CONSTRAINT TagsxUsuari_FK1 FOREIGN KEY (nomTag) REFERENCES Tags (nomTag),' +
+            'CONSTRAINT TagsxUsuari_FK2 FOREIGN KEY (Usuari) REFERENCES Usuaris (email));', (err) => {
+            if (err) {
+                console.error(err.message);
+            }
+            else {
+                let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
+                db.run(sql,["running","victor@gmai.com"]);
+                console.log("Taula TagsxUsuari creada correctament");
             }
         });
     }

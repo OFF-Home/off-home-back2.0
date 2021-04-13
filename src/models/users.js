@@ -79,3 +79,21 @@ exports.updateUsuari = function(info,target,res,next) {
         }
     });
 }
+
+
+exports.findUserByName = function(req,res,next){
+    var data = {
+        username: req.params.username
+    }
+    let sql = 'SELECT * ' +
+        'FROM Usuaris u ' +
+        'WHERE LOWER(u.email)= LOWER(?)'
+    db.get(sql,[data.username],(err,row) => {
+        if(row == null) {
+            var respo = 'User ' + data.username + ' not found';
+            res.send(respo);
+        }
+        res.json(row);
+    });
+}
+

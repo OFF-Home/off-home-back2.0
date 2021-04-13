@@ -19,11 +19,22 @@ exports.regUsuari = function(req,res,next) {
         darkmode : req.body.darkmode,
         notificacions : req.body.notificacions,
         estrelles : req.body.estrelles,
-        tags : req.body.tags,
         language : req.body.language
     }
     let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
+
+    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    db.run(sql,info, (err) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send('OK');
+        }
+    });
+
     models.regUsuari(info,res,next);
+
 }
 
 /**
@@ -36,8 +47,20 @@ exports.showUsuari = function (req,res,next) {
     var data = {
         username: req.params.username
     }
+
+    let sql = 'SELECT * ' +
+        'FROM Usuaris u ' +
+        'WHERE LOWER(u.username)  = LOWER(?)'
+    db.get(sql,[data.username],(err,row) => {
+        if(row == null) {
+            res.send('User not found');
+        }
+        res.json(row);
+    });
+
     console.log(data.username);
     models.showUsuari(data,res,next);
+
 }
 
 /**
@@ -64,4 +87,10 @@ exports.updateUsuari = function (req,res,next) {
     var target = req.params.username;
     let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
     models.updateUsuari(info,target,res,next);
+}
+
+
+exports.findUserByName = function (req,res,next) {
+    models.findUserByName(req,res,next);
+
 }
