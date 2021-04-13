@@ -95,19 +95,20 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 console.log("Taula Activitats creada correctament");
             }
         });
-        db.run('CREATE TABLE Participants (' +
+        db.run('CREATE TABLE Valoracions (' +
+            'valoracio integer ,' +
             'usuariCreador text,' +
             'dataHoraIni DateTime,' +
             'usuariParticipant text,' +
             'CONSTRAINT Participants_PK PRIMARY KEY (usuariCreador,dataHoraIni,usuariParticipant),' +
+            'CONSTRAINT Valoracions_check CHECK valoracio > 0 && valoracio < 6,' +
             'CONSTRAINT Participants_FK1 FOREIGN KEY (usuariCreador,dataHoraIni) REFERENCES Activitats (usuariCreador,dataHoraIni),' +
-            'CONSTRAINT Participants_PK FOREIGN KEY (usuariParticipant) REFERENCES Usuaris (email));', (err) => {
+            'CONSTRAINT Participants_PK FOREIGN KEY (usuariCreador,dataHoraIni,usuariParticipant) REFERENCES Participants (usuariCreador,dataHoraIni,usuariParticipant));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
-                let sql = 'INSERT INTO Participants VALUES (?,?,?)';
-                db.run(sql,["victorfer@gmai.com","24-03-2021 18:00:00","victor@gmai.com"]);
+            } else {
+                let sql = 'INSERT INTO Valoracions VALUES (?,?,?,?)';
+                db.run(sql, ["3", "victor@gmai.com", "24-03-2021 18:00:00", "victor@gmai.com"]);
                 console.log("Taula Participants creada correctament");
             }
         });
