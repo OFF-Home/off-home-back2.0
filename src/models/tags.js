@@ -35,7 +35,7 @@ exports.delete_tags = function(req,res,next) {
         nomTag: req.body.nomTag,
         username: req.params.username,
     }
-    let sql = 'DELETE FROM TagsxUsuari tu WHERE tu.nomTag = (?) AND tu.username = (?)';
+    let sql = 'DELETE FROM TagsxUsuari WHERE LOWER(nomTag) = LOWER(?) AND LOWER(Usuari) = LOWER(?);';
     db.get(sql,[data.nomTag,data.username],(err,row) => {
         if(row == null) {
             res.send('Delete tag al usuario');

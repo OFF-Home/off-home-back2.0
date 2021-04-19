@@ -116,6 +116,21 @@ exports.insertUsuariActivitat = function(data,req,res,next){
     })
 }
 
+exports.deleteUsuariActivitat = function(data,req,res,next){
+    var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
+    let sql = 'DELETE FROM Participants WHERE LOWER(usuariCreador) = LOWER(?) AND ' +
+        'LOWER(dataHoraIni) = LOWER(?) AND LOWER(usuariParticipant) = LOWER(?);';
+    db.run(sql,info,(err) => {
+        if (err) {
+            res.json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        res.send('Usuari Eliminat');
+    })
+}
+
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
     let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
