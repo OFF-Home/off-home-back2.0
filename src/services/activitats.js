@@ -42,6 +42,16 @@ exports.insertUsuariActivitat = function(req,res,next) {
 
 }
 
+exports.deleteUsuariActivitat = function(req,res,next) {
+    var data = {
+        usuariCreador: req.body.usuariCreador,
+        dataHoraIni: req.body.dataHoraIni,
+        usuariParticipant: req.body.usuariParticipant
+    };
+    activitats.deleteUsuariActivitat(data,req,res,next)
+
+}
+
 /**
  *
  * @param req
