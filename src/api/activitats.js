@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-let activitats = require('../services/activitats');
+var activitats = require('../services/activitats.js');
 
 
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
@@ -21,7 +21,9 @@ router.post('/create/:usuariCreador', activitats.create_activitats);
  *  Crea una instància de participants amb els paràmetres necessaris del body*/
 router.post('/insertusuari',activitats.insertUsuariActivitat);
 
-
+/** Funció d'enrutament de la direcció /activitats/deleteUsuari amb post.
+ *  Elimina una instància de participants amb els paràmetres necessaris del body*/
+router.post('/deleteUsuari',activitats.deleteUsuariActivitat);
 
 
 

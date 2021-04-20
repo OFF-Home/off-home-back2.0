@@ -3,14 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const fileUpload = require('express-fileupload')
+
 
 var indexRouter = require('./src/api/index');
 var usersRouter = require('./src/api/users');
 var activitatsRouter = require('./src/api/activitats');
 var categoriesRouter = require('./src/api/categories');
+var tagsRouter = require('./src/api/tags');
+var UploadsRouter = require('./src/api/uploads');
 
 var app = express();
 
+app.use(fileUpload());
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +31,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/activitats',activitatsRouter);
 app.use('/categories',categoriesRouter);
+app.use('/tags',tagsRouter);
+app.use('/upload',UploadsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -39,8 +46,29 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+ // res.status(err.status || 500);
+  //res.render('error');
+  if (String(err).includes("UNIQUE constraint failed: Usuaris.username")) {
+    res.status(500).send('This username is already in use');
+  }
+  else if(String(err).includes("UNIQUE constraint failed: Usuaris.email")) {
+    res.status(500).send('This email is already in use');
+  }
+  else if (String(err).includes("UNIQUE constraint failed: Activitats.usuariCreador, Activitats.dataHoraIni")) {
+    res.status(500).send('The user alreadey has an activity at this date and hour');
+  }
+  else if (String(err).includes("UNIQUE constraint failed: Participants.usuariCreador, Participants.dataHoraIni, Participants.usuariParticipant")) {
+    res.status(500).send('The user is already in the activity');
+  }
+  else if (String(err).includes("UNIQUE constraint failed: Llocs.nomCarrer, Llocs.numCarrer")) {
+    res.status(500).send('The ubication already exists');
+  }
+  else if (String(err).includes("SQLITE_CONSTRAINT: NOT NULL constraint failed: Activitats.titol")) {
+    res.status(500).send('A title is needed');
+  }
+  else {
+    res.status(500).send(err.message);
+  }
 });
 
 module.exports = app;

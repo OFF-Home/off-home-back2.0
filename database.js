@@ -8,7 +8,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         console.log('Connected to the DataBase');
         db.run('CREATE TABLE Usuaris (' +
             'email text,' +
-            'username text,' +
+            'username text not null,' +
             'password text,' +
             'birthDate date,' +
             'description text,' +
@@ -17,25 +17,25 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'darkmode boolean,' +
             'notifications boolean,' +
             'estrelles integer,' +
-            'tags text,' +
             'language text,' +
-            'CONSTRAINT LLOCS_PK PRIMARY KEY (email),' +
-            'CONSTRAINT LLOCS_U0 UNIQUE (username));', (err) => {
+            'image text,'+
+            'CONSTRAINT USUARIS_PK PRIMARY KEY (email),' +
+            'CONSTRAINT USUARIS_U0 UNIQUE (username));', (err) => {
             if (err) {
                 console.error(err.message);
             }
             else {
                 let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-                db.run(sql,["victorfer@gmai.com","victorfer","12342","10-10-2000","holaaaa",200,300,0,1,3,"jejeje","Spanish"]);
-                db.run(sql,["victor@gmai.com","victor","1234234","12-10-2000","holaaaa",200,300,0,1,3,"jejeje","Spanish"]);
+                db.run(sql,["victorfer@gmai.com","victorfer","12342","10-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
+                db.run(sql,["victor@gmai.com","victor","1234234","12-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
                 console.log("Taula Usuaris creada correctament");
             }
         });
         db.run('CREATE TABLE Llocs (' +
             'nomCarrer text,' +
             'numCarrer integer,' +
-            'latitud real,' +
-            'altitud real,' +
+            'latitud real not null,' +
+            'altitud real not null,' +
             'CONSTRAINT LLocs_PK PRIMARY KEY (nomCarrer,numCarrer),' +
             'CONSTRAINT LLocs_U0 UNIQUE (latitud,altitud));', (err) => {
             if (err) {
@@ -74,8 +74,8 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         });
         db.run('CREATE TABLE Activitats (' +
             'usuariCreador text,' +
-            'nomCarrer text,' +
-            'numCarrer integer,' +
+            'nomCarrer text not null,' +
+            'numCarrer integer not null,' +
             'dataHoraIni DateTime,' +
             'categoria text,' +
             'maxParticipant integer,' +
@@ -85,7 +85,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT Activitats_PK PRIMARY KEY (usuariCreador,dataHoraIni),' +
             'CONSTRAINT Activitats_FK_Usuaris FOREIGN KEY (usuariCreador) references Usuaris(email),' +
             'CONSTRAINT Activitats_FK_Llocs FOREIGN KEY (nomCarrer,numCarrer) references Llocs(nomCarrer,numCarrer),' +
-            'CONSTRAINT Activitats_FK_Categlreis FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
+            'CONSTRAINT Activitats_FK_Categories FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
             if (err) {
                 console.error(err.message);
             }
@@ -103,7 +103,8 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT Participants_PK PRIMARY KEY (usuariCreador,dataHoraIni,usuariParticipant),' +
             'CONSTRAINT Participants_check CHECK (valoracio is NULL OR (valoracio > 0 AND valoracio < 6)),' +
             'CONSTRAINT Participants_FK1 FOREIGN KEY (usuariCreador,dataHoraIni) REFERENCES Activitats (usuariCreador,dataHoraIni),' +
-            'CONSTRAINT Participants FOREIGN KEY (usuariCreador,dataHoraIni,usuariParticipant) REFERENCES Participants (usuariCreador,dataHoraIni,usuariParticipant));', (err) => {
+            'CONSTRAINT Participants_FK2 FOREIGN KEY (usuariParticipant) REFERENCES Usuaris (email));', (err) => {
+
             if (err) {
                 console.error(err.message);
             } else {
@@ -112,7 +113,36 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 console.log("Taula Participants creada correctament");
             }
         });
+        db.run('CREATE TABLE Tags (' +
+            'nomTag text,' +
+            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag));', (err) => {
+            if (err) {
+                console.error(err.message);
+            }
+            else {
+                let sql = 'INSERT INTO Tags VALUES (?)';
+                db.run(sql,["running"]);
+                console.log("Taula Tags creada correctament");
+            }
+        });
+        db.run('CREATE TABLE TagsxUsuari (' +
+            'nomTag text,' +
+            'Usuari text,' +
+            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag,Usuari),'+
+            'CONSTRAINT TagsxUsuari_FK1 FOREIGN KEY (nomTag) REFERENCES Tags (nomTag),' +
+            'CONSTRAINT TagsxUsuari_FK2 FOREIGN KEY (Usuari) REFERENCES Usuaris (email));', (err) => {
+            if (err) {
+                console.error(err.message);
+            }
+            else {
+                let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
+                db.run(sql,["running","victor@gmai.com"]);
+                console.log("Taula TagsxUsuari creada correctament");
+            }
+        });
     }
 });
+
+
 
 module.exports = db;
