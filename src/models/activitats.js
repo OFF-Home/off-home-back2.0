@@ -56,6 +56,24 @@ exports.filterByData = function(nom, req,res,next) {
 
 }
 
+exports.filterByValoration = function(val,req,res,next) {
+    console.log(val.valoration)
+    let sql = ' SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN (SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.valoracio = ?);';
+
+    db.all(sql, [val.valoration], (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Participants Not Found');
+        }
+        res.send(rows);
+    });
+
+}
+
 exports.insertUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'INSERT INTO Participants VALUES (?,?,?)';
