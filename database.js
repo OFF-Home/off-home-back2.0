@@ -137,9 +137,9 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         db.run('CREATE TABLE Segueix (' +
             'usuariSeguidor text NOT NULL, ' +
             'usuariSeguit text NOT NULL, ' +
-            'CONSTRAINT Follow_PK PRIMARY KEY (usuariSeguidor,usuariSeguit)' +
-            'CONSTRAINT seguitEsUsuaris_FK2 FOREIGN KEY (usuariSeguit) REFERENCES Usuaris (email) ' +
-            'CONSTRAINT seguidorEsUsuaris_FK2 FOREIGN KEY (usuariSeguidor) REFERENCES Usuaris (email) ' +
+            'CONSTRAINT Follow_PK PRIMARY KEY (usuariSeguidor,usuariSeguit),' +
+            'CONSTRAINT seguitEsUsuaris_FK2 FOREIGN KEY (usuariSeguit) REFERENCES Usuaris (email), ' +
+            'CONSTRAINT seguidorEsUsuaris_FK2 FOREIGN KEY (usuariSeguidor) REFERENCES Usuaris (email), ' +
             'CONSTRAINT noFollowMyself CHECK (usuariSeguidor <> usuariSeguit));', (err) => {
             if (err) {
                 console.error(err.message);
