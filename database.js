@@ -141,6 +141,24 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             }
         });
     }
+    db.run('CREATE TABLE Segueix (' +
+        'usuariSeguidor text, ' +
+        'usuariSeguit text, ' +
+        'CONSTRAINT Follow_PK PRIMARY KEY (usuariSeguidor,usuariSeguit)' +
+        'CONSTRAINT noFollowMyself CHECK (usuariSeguidor <> usuariSeguit));', (err) => {
+            if (err) {
+                console.error(err.message);
+            }
+            else {
+                let sql = 'INSERT INTO Segueix VALUES (?,?)';
+                db.run(sql,["victorfer@gmai.com","victor@gmai.com"]);
+                console.log("Taula Segueix creada correctament");
+            }
+        }
+
+
+
+    );
 });
 
 
