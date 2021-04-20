@@ -74,6 +74,14 @@ exports.filterByTitle = function (req,res,next) {
 
 }
 
+exports.filterByValoration = function(req,res,next){
+    var val = {
+        valoration: req.params.valoration
+
+    }
+    activitats.filterByValoration(val,req,res,next);
+}
+
 exports.get_activitatsOrderedByName = function(req,res,next) {
     activitats.get_activitatsOrderedByName(req,res,next);
 }

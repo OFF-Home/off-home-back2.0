@@ -96,18 +96,20 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             }
         });
         db.run('CREATE TABLE Participants (' +
+            'valoracio integer,' +
             'usuariCreador text,' +
             'dataHoraIni DateTime,' +
             'usuariParticipant text,' +
             'CONSTRAINT Participants_PK PRIMARY KEY (usuariCreador,dataHoraIni,usuariParticipant),' +
+            'CONSTRAINT Participants_check CHECK (valoracio is NULL OR (valoracio > 0 AND valoracio < 6)),' +
             'CONSTRAINT Participants_FK1 FOREIGN KEY (usuariCreador,dataHoraIni) REFERENCES Activitats (usuariCreador,dataHoraIni),' +
             'CONSTRAINT Participants_FK2 FOREIGN KEY (usuariParticipant) REFERENCES Usuaris (email));', (err) => {
+
             if (err) {
                 console.error(err.message);
-            }
-            else {
-                let sql = 'INSERT INTO Participants VALUES (?,?,?)';
-                db.run(sql,["victorfer@gmai.com","24-03-2021 18:00:00","victor@gmai.com"]);
+            } else {
+                let sql = 'INSERT INTO Participants VALUES (?,?,?,?)';
+                db.run(sql, ["3", "victorfer@gmai.com", "24-03-2021 18:00:00", "victor@gmai.com"]);
                 console.log("Taula Participants creada correctament");
             }
         });

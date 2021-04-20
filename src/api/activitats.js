@@ -7,6 +7,7 @@ router.get('/orderByName',activitats.get_activitatsOrderedByName);
 router.get('/:email',activitats.getActivitatsALesQueParticipo);
 router.get('/filterByData/:data',activitats.filterByData);
 router.get('/filterByTitle/:title',activitats.filterByTitle);
+router.get('/filterByValoration/:valoration',activitats.filterByValoration);
 /**
  *  Funció d'enrutament de la direcció /activitats/:username/:datahora amb el mètode get, on @username és l'email  i datahora la data i l'hora d'una activitat existent.
  *  Retorna la informació d'una activitat, identificada per aquests dos paràmetres */
