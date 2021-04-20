@@ -97,3 +97,19 @@ exports.findUserByName = function(req,res,next){
     });
 }
 
+exports.follow = function(req,res,next) {
+    var data = {
+        usuariSeguidor: req.params.username,
+        usuariSeguit: req.body.followed
+    }
+    let sql = 'INSERT INTO Segueix VALUES (?,?)';
+    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send('OK');
+        }
+    });
+}
+
