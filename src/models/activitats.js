@@ -39,6 +39,40 @@ exports.get_activitatsOrderedByName = function(req,res,next) {
     });
 }
 
+exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
+    let sql = 'SELECT *' +
+        'FROM Activitats a ' +
+        'ORDER BY a.titol DESC;';
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Activities Not Found');
+        }
+        res.send(rows);
+    });
+}
+
+exports.get_activitatsOrderedByDate = function(req,res,next) {
+    let sql = 'SELECT *' +
+        'FROM Activitats a ' +
+        'ORDER BY a.dataHoraIni DESC;';
+    db.all(sql, (err, rows) => {
+        if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows == null) {
+            res.send('Activities Not Found');
+        }
+        res.send(rows);
+    });
+}
+
 exports.filterByTitle = function(nom, req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
