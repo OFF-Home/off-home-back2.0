@@ -145,7 +145,7 @@ exports.getFollow = function(req,res,next) {
     });
 }
 
-exports.updateFollow = function(req,res,next) {
+exports.increaseFollow = function(req,res,next) {
     var data = {
         usuariSeguit: req.body.followed
     }
@@ -153,6 +153,26 @@ exports.updateFollow = function(req,res,next) {
     let sql = 'UPDATE Usuaris SET followers = followers+1 WHERE LOWER(email) = LOWER(?)';
 
     db.run(sql,[data.usuariSeguit], function(err) {
+        if (err) {
+            next(err);
+        }
+        else if (this.changes === 0) {
+            res.send('User Not Found');
+        }
+        else {
+            res.send ('User has been updated');
+        }
+    });
+}
+
+exports.increaseFollowing = function(req,res,next) {
+    var data = {
+        usuariSeguidor: req.params.username,
+    }
+
+    let sql = 'UPDATE Usuaris SET following = following+1 WHERE LOWER(email) = LOWER(?)';
+
+    db.run(sql,[data.usuariSeguidor], function(err) {
         if (err) {
             next(err);
         }
