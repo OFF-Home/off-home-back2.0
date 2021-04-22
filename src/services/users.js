@@ -80,3 +80,8 @@ exports.follow = function(req,res,next) {
 exports.unfollow = function(req,res,next) {
     models.unfollow(req,res,next);
 }
+
+exports.getFollow = function(req,res,next) {
+    models.getFollow(req,res,next);
+    models.updateFollow(req,res,next);
+}
