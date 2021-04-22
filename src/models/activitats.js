@@ -198,3 +198,43 @@ exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
 
     });
 }
+
+function GetKilometros(lat1,lon1,lat2,lon2) {
+    rad = function(x) {return x*Math.PI/180;}
+    var R = 6378.137; //Radio de la tierra en km
+    var dLat = rad( lat2 - lat1 );
+    var dLong = rad( lon2 - lon1 );
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d.toFixed(3); //Retorna tres decimales
+}
+
+exports.getActivitatsByRadi = function(info,res,next) {
+    let sql = 'SELECT * ' +
+        'FROM Activitats a , Llocs l ' +
+        'WHERE ' +
+        'a.nomCarrer = l.nomCarrer and a.numCarrer = l.numCarrer '
+    db.all(sql,[],(err,rows) => {
+        if (err) {
+            console.log(err);
+            next(err);
+        }
+        else {
+            let data = [];
+            rows.forEach(function(row) {
+                let distance = parseFloat(GetKilometros(info.latitud,info.altitud,row.latitud,row.altitud));
+                if(distance <= parseFloat(info.distance)) {
+                    row.distance = distance;
+                    data.push(row);
+                }
+            });
+            if (data.length == 0) {
+                res.send('No activities near');
+            }
+            else {
+                res.send(data);
+            }
+        }
+    });
+}
