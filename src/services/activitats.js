@@ -97,6 +97,16 @@ exports.getActivitatsALesQueParticipo = function(req,res,next) {
 
 }
 
+exports.getActivitatsByRadi = function(req,res,next) {
+    var data = {
+        latitud : req.body.latitud,
+        altitud : req.body.altitud,
+        distance : req.body.distance
+    }
+    models.getActivitatsByRadi(data,res,next);
+
+}
+
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }
