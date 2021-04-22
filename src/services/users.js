@@ -75,8 +75,17 @@ exports.findUserByName = function (req,res,next) {
 
 exports.follow = function(req,res,next) {
     models.follow(req,res,next);
+    models.increaseFollow(req,res,next);
+    models.increaseFollowing(req,res,next);
 }
 
 exports.unfollow = function(req,res,next) {
     models.unfollow(req,res,next);
+    models.decreaseFollow(req,res,next);
+    models.decreaseFollowing(req,res,next);
+}
+
+exports.getFollow = function(req,res,next) {
+    models.getFollow(req,res,next);
+
 }
