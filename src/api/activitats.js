@@ -4,6 +4,8 @@ var activitats = require('../services/activitats.js');
 
 
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
+router.get('/orderByNameDesc',activitats.get_activitatsOrderedByNameDesc);
+router.get('/orderByDate',activitats.get_activitatsOrderedByDate);
 router.get('/:email',activitats.getActivitatsALesQueParticipo);
 router.get('/filterByData/:data',activitats.filterByData);
 router.get('/filterByTitle/:title',activitats.filterByTitle);

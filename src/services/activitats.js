@@ -85,7 +85,9 @@ exports.filterByValoration = function(req,res,next){
 exports.get_activitatsOrderedByName = function(req,res,next) {
     activitats.get_activitatsOrderedByName(req,res,next);
 }
-
+exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
+    activitats.get_activitatsOrderedByNameDesc(req,res,next);
+}
 
 exports.getActivitatsALesQueParticipo = function(req,res,next) {
     var nom = {
@@ -93,4 +95,8 @@ exports.getActivitatsALesQueParticipo = function(req,res,next) {
     }
     activitats.getActivitatsALesQueParticipo(nom,req,res,next);
 
+}
+
+exports.get_activitatsOrderedByDate = function(req,res,next) {
+    activitats.get_activitatsOrderedByDate(req,res,next);
 }

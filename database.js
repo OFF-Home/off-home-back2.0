@@ -3,8 +3,7 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
     if (err) {
         console.error(err.message);
-    }
-    else {
+    } else {
         console.log('Connected to the DataBase');
         db.run('CREATE TABLE Usuaris (' +
             'email text,' +
@@ -18,16 +17,15 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'notifications boolean,' +
             'estrelles integer,' +
             'language text,' +
-            'image text,'+
+            'image text,' +
             'CONSTRAINT USUARIS_PK PRIMARY KEY (email),' +
             'CONSTRAINT USUARIS_U0 UNIQUE (username));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
+            } else {
                 let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-                db.run(sql,["victorfer@gmai.com","victorfer","12342","10-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
-                db.run(sql,["victor@gmai.com","victor","1234234","12-10-2000","holaaaa",200,300,0,1,3,"Spanish"]);
+                db.run(sql, ["victorfer@gmai.com", "victorfer", "12342", "10-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
+                db.run(sql, ["victor@gmai.com", "victor", "1234234", "12-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
                 console.log("Taula Usuaris creada correctament");
             }
         });
@@ -40,10 +38,9 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT LLocs_U0 UNIQUE (latitud,altitud));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
+            } else {
                 let sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
-                db.run(sql,["C/Balmes",74,23345232,53452567]);
+                db.run(sql, ["C/Balmes", 74, 23345232, 53452567]);
                 console.log("Taula Llocs creada correctament");
             }
         });
@@ -62,13 +59,12 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         db.run('CREATE TABLE Categories (' +
             'categoria text,' +
             'descripcio text,' +
-            'CONSTRAINT Categoreis_PK PRIMARY KEY (categoria));',(err) => {
+            'CONSTRAINT Categoreis_PK PRIMARY KEY (categoria));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
+            } else {
                 let sql = 'INSERT INTO Categories VALUES (?,?)';
-                db.run(sql,["Running","Correr per la Barceloneta"]);
+                db.run(sql, ["Running", "Correr per la Barceloneta"]);
                 console.log("Taula Categories creada correctament");
             }
         });
@@ -88,10 +84,9 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT Activitats_FK_Categories FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
+            } else {
                 let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-                db.run(sql,["victorfer@gmai.com","C/Balmes",74,"24-03-2021 18:00:00","Running",20,"Correr","m'encanta correr","24-03-2021 19:00:00"]);
+                db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "24-03-2021 18:00:00", "Running", 20, "Correr", "m'encanta correr", "24-03-2021 19:00:00"]);
                 console.log("Taula Activitats creada correctament");
             }
         });
@@ -118,31 +113,45 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'CONSTRAINT Tags_PK PRIMARY KEY (nomTag));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
+            } else {
                 let sql = 'INSERT INTO Tags VALUES (?)';
-                db.run(sql,["running"]);
+                db.run(sql, ["running"]);
                 console.log("Taula Tags creada correctament");
             }
         });
         db.run('CREATE TABLE TagsxUsuari (' +
             'nomTag text,' +
             'Usuari text,' +
-            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag,Usuari),'+
+            'CONSTRAINT Tags_PK PRIMARY KEY (nomTag,Usuari),' +
             'CONSTRAINT TagsxUsuari_FK1 FOREIGN KEY (nomTag) REFERENCES Tags (nomTag),' +
             'CONSTRAINT TagsxUsuari_FK2 FOREIGN KEY (Usuari) REFERENCES Usuaris (email));', (err) => {
             if (err) {
                 console.error(err.message);
-            }
-            else {
+            } else {
                 let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
-                db.run(sql,["running","victor@gmai.com"]);
+                db.run(sql, ["running", "victor@gmai.com"]);
                 console.log("Taula TagsxUsuari creada correctament");
             }
         });
+
+        db.run('CREATE TABLE Segueix (' +
+            'usuariSeguidor text NOT NULL, ' +
+            'usuariSeguit text NOT NULL, ' +
+            'CONSTRAINT Follow_PK PRIMARY KEY (usuariSeguidor,usuariSeguit),' +
+            'CONSTRAINT seguitEsUsuaris_FK2 FOREIGN KEY (usuariSeguit) REFERENCES Usuaris (email), ' +
+            'CONSTRAINT seguidorEsUsuaris_FK2 FOREIGN KEY (usuariSeguidor) REFERENCES Usuaris (email), ' +
+            'CONSTRAINT noFollowMyself CHECK (usuariSeguidor <> usuariSeguit));', (err) => {
+            if (err) {
+                console.error(err.message);
+            } else {
+                let sql = 'INSERT INTO Segueix VALUES (?,?)';
+                db.run(sql, ["victorfer@gmai.com", "victor@gmai.com"]);
+                console.log("Taula Segueix creada correctament");
+            }
+        });
+
     }
+
 });
-
-
 
 module.exports = db;
