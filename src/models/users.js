@@ -87,7 +87,7 @@ exports.findUserByName = function(req,res,next){
     }
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
-        'WHERE LOWER(u.email)= LOWER(?)'
+        'WHERE LOWER(u.username)= LOWER(?)'
     db.get(sql,[data.username],(err,row) => {
         if(row == null) {
             var respo = 'User ' + data.username + ' not found';
