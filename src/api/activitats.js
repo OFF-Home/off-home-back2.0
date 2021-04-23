@@ -31,18 +31,18 @@ router.get('/orderByDate',activitats.get_activitatsOrderedByDate);
 router.get('/:email',activitats.getActivitatsALesQueParticipo);
 
 /**
- * Funció d'enrutament de la direcció /filterByData/:data, amb el mètode get.
+ * Funció d'enrutament de la direcció  /activitats/filterByData/:data, amb el mètode get.
  * Retorna activitats a dataHoraIni igual a data.
  */
 router.get('/filterByData/:data',activitats.filterByData);
 /**
- * Funció d'enrutament de la direcció /filterByTitle/:title, amb el mètode get.
+ * Funció d'enrutament de la direcció  /activitats/filterByTitle/:title, amb el mètode get.
  * Retorna activitats amb el títol indicat.
  */
 router.get('/filterByTitle/:title',activitats.filterByTitle);
 
 /**
- * Funció d'enrutament de la direcció /filterByValoration/:valoration, amb el mètode get.
+ * Funció d'enrutament de la direcció /activitats/filterByValoration/:valoration, amb el mètode get.
  * Retorna activitats amb la valoració indicada.
  */
 router.get('/filterByValoration/:valoration',activitats.filterByValoration);

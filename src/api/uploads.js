@@ -3,7 +3,7 @@ var router = express.Router();
 let upload = require('../services/uploads');
 
 /**
- * Funció d'enrutament de la direcció /userimage/:email amb post.
+ * Funció d'enrutament de la direcció /upload/userimage/:email amb post.
  * Retorna OK si s'ha pujat correctement.
  */
 router.post('/userimage/:email',upload.uploadImageUser);
