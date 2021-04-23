@@ -3,13 +3,48 @@ var router = express.Router();
 var activitats = require('../services/activitats.js');
 
 
+/**
+ * Funció d'enrutament de la direcció /activitats/searchbyraadi amb el mètode get.
+ * Retorna activitats dins del radi indicat.
+ */
 router.get('/searchbyradi',activitats.getActivitatsByRadi );
+/**
+ * Funció d'enrutament de la direcció /activitats/orderByName, amb el mètode get.
+ * Retorna activitats ordenades per nom de forma ascendent.
+ */
 router.get('/orderByName',activitats.get_activitatsOrderedByName);
+/**
+ * Funció d'enrutament de la direcció /activitats/orderByNameDesc, amb el mètode get.
+ * Retorna activitats ordenades per nom de forma descendent.
+ */
 router.get('/orderByNameDesc',activitats.get_activitatsOrderedByNameDesc);
+/**
+ * Funció d'enrutament de la direcció /activitats/orderByDate, amb el mètode get.
+ * Retorna les activitats ordenades per data de més recent a menys.
+ */
 router.get('/orderByDate',activitats.get_activitatsOrderedByDate);
+
+/**
+ * Funció d'enrutament de la direcció /activitats/:email, amb el mètode get.
+ * Retorna activitats  a les que participa l'usuari.
+ */
 router.get('/:email',activitats.getActivitatsALesQueParticipo);
+
+/**
+ * Funció d'enrutament de la direcció /filterByData/:data, amb el mètode get.
+ * Retorna activitats a dataHoraIni igual a data.
+ */
 router.get('/filterByData/:data',activitats.filterByData);
+/**
+ * Funció d'enrutament de la direcció /filterByTitle/:title, amb el mètode get.
+ * Retorna activitats amb el títol indicat.
+ */
 router.get('/filterByTitle/:title',activitats.filterByTitle);
+
+/**
+ * Funció d'enrutament de la direcció /filterByValoration/:valoration, amb el mètode get.
+ * Retorna activitats amb la valoració indicada.
+ */
 router.get('/filterByValoration/:valoration',activitats.filterByValoration);
 /**
  *  Funció d'enrutament de la direcció /activitats/:username/:datahora amb el mètode get, on @username és l'email  i datahora la data i l'hora d'una activitat existent.
