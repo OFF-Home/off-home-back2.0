@@ -42,6 +42,12 @@ exports.insertUsuariActivitat = function(req,res,next) {
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.deleteUsuariActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.body.usuariCreador,
@@ -66,6 +72,12 @@ exports.filterByData = function(req,res,next) {
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.filterByTitle = function (req,res,next) {
     var nom = {
         títol: req.params.title
@@ -74,6 +86,12 @@ exports.filterByTitle = function (req,res,next) {
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.filterByValoration = function(req,res,next){
     var val = {
         valoration: req.params.valoration
@@ -82,13 +100,31 @@ exports.filterByValoration = function(req,res,next){
     activitats.filterByValoration(val,req,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitatsOrderedByName = function(req,res,next) {
     activitats.get_activitatsOrderedByName(req,res,next);
 }
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
     activitats.get_activitatsOrderedByNameDesc(req,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getActivitatsALesQueParticipo = function(req,res,next) {
     var nom = {
         nom: req.params.email
@@ -97,6 +133,12 @@ exports.getActivitatsALesQueParticipo = function(req,res,next) {
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getActivitatsByRadi = function(req,res,next) {
     var data = {
         latitud : req.body.latitud,
@@ -107,6 +149,12 @@ exports.getActivitatsByRadi = function(req,res,next) {
 
 }
 
+/**
+ * 
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }

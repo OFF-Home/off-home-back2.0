@@ -68,23 +68,47 @@ exports.updateUsuari = function (req,res,next) {
 }
 
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.findUserByName = function (req,res,next) {
     models.findUserByName(req,res,next);
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.follow = function(req,res,next) {
     models.follow(req,res,next);
     //models.increaseFollow(req,res,next);
     //models.increaseFollowing(req,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.unfollow = function(req,res,next) {
     models.unfollow(req,res,next);
     //models.decreaseFollow(req,res,next);
     //models.decreaseFollowing(req,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getFollow = function(req,res,next) {
     models.getFollow(req,res,next);
 

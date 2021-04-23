@@ -81,6 +81,12 @@ exports.updateUsuari = function(info,target,res,next) {
 }
 
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.findUserByName = function(req,res,next){
     var data = {
         username: req.params.username
@@ -97,6 +103,12 @@ exports.findUserByName = function(req,res,next){
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.follow = function(req,res,next) {
     var data = {
         usuariSeguidor: req.params.username,
@@ -114,6 +126,12 @@ exports.follow = function(req,res,next) {
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.unfollow = function(req,res,next) {
     var data = {
         usuariSeguidor: req.params.username,
@@ -130,6 +148,12 @@ exports.unfollow = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getFollow = function(req,res,next) {
     var data = {
         usuariSeguit: req.params.username,
@@ -145,6 +169,12 @@ exports.getFollow = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.increaseFollow = function(req,res,next) {
     var data = {
         usuariSeguit: req.body.followed
@@ -165,6 +195,12 @@ exports.increaseFollow = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.increaseFollowing = function(req,res,next) {
     var data = {
         usuariSeguidor: req.params.username,
@@ -185,6 +221,12 @@ exports.increaseFollowing = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.decreaseFollow = function(req,res,next) {
     var data = {
         usuariSeguit: req.body.followed
@@ -205,6 +247,12 @@ exports.decreaseFollow = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.decreaseFollowing = function(req,res,next) {
     var data = {
         usuariSeguidor: req.params.username,

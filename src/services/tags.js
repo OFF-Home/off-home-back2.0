@@ -22,6 +22,12 @@ exports.insert_tags = function(req,res,next) {
     models.insert_tags(req,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.delete_tags = function(req,res,next) {
     models.delete_tags(req,res,next);
 }

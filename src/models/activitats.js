@@ -1,6 +1,12 @@
 
 var db = require('../../database.js')
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitats = function (req,res,next) {
     let sql = 'SELECT * ' +
         'FROM Activitats a ' +
@@ -21,7 +27,12 @@ exports.get_activitats = function (req,res,next) {
 }
 
 
-
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitatsOrderedByName = function(req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
@@ -39,6 +50,12 @@ exports.get_activitatsOrderedByName = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
@@ -56,6 +73,12 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
@@ -73,6 +96,13 @@ exports.get_activitatsOrderedByDate = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param nom
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.filterByTitle = function(nom, req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
@@ -93,6 +123,12 @@ exports.filterByTitle = function(nom, req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.create_activitats = function (req,res,next) {
     var data = {
         usuariCreador: req.params.usuariCreador,
@@ -118,6 +154,13 @@ exports.create_activitats = function (req,res,next) {
 
 }
 
+/**
+ *
+ * @param nom
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.filterByData = function(nom, req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
@@ -136,6 +179,13 @@ exports.filterByData = function(nom, req,res,next) {
 
 }
 
+/**
+ *
+ * @param val
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.filterByValoration = function(val,req,res,next) {
     console.log(val.valoration)
     let sql = ' SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN (SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.valoracio = ?);';
@@ -154,6 +204,13 @@ exports.filterByValoration = function(val,req,res,next) {
 
 }
 
+/**
+ *
+ * @param data
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.insertUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'INSERT INTO Participants VALUES (?,?,?)';
@@ -168,6 +225,13 @@ exports.insertUsuariActivitat = function(data,req,res,next){
     })
 }
 
+/**
+ *
+ * @param data
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.deleteUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'DELETE FROM Participants WHERE LOWER(usuariCreador) = LOWER(?) AND ' +
@@ -183,6 +247,13 @@ exports.deleteUsuariActivitat = function(data,req,res,next){
     })
 }
 
+/**
+ *
+ * @param nom
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
     let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
@@ -210,6 +281,12 @@ function GetKilometros(lat1,lon1,lat2,lon2) {
     return d.toFixed(3); //Retorna tres decimales
 }
 
+/**
+ *
+ * @param info
+ * @param res
+ * @param next
+ */
 exports.getActivitatsByRadi = function(info,res,next) {
     let sql = 'SELECT * ' +
         'FROM Activitats a , Llocs l ' +

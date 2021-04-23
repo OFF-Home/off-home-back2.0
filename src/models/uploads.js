@@ -3,6 +3,13 @@ var db = require('../../database.js')
 var fs = require('fs');
 
 
+/**
+ *
+ * @param path_img
+ * @param email
+ * @param res
+ * @param next
+ */
 function updateImage(path_img,email,res,next) {
     let sql = 'UPDATE Usuaris SET image = ? ' +
         'WHERE email = ?;';
@@ -15,6 +22,13 @@ function updateImage(path_img,email,res,next) {
     });
 }
 
+/**
+ *
+ * @param path_img
+ * @param email
+ * @param res
+ * @param next
+ */
 exports.uploadImageUser = function(path_img,email,res,next) {
     let sql = 'SELECT image ' +
         'FROM Usuaris ' +

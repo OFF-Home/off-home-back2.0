@@ -1,5 +1,11 @@
 var db = require('../../database.js')
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.showTags = function (req,res,next) {
     var data = {
         username: req.params.username
@@ -16,6 +22,12 @@ exports.showTags = function (req,res,next) {
 }
 
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.insert_tags = function(req,res,next) {
     var data = {
         nomTag: req.body.nomTag,
@@ -30,6 +42,12 @@ exports.insert_tags = function(req,res,next) {
     });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.delete_tags = function(req,res,next) {
     var data = {
         nomTag: req.body.nomTag,
