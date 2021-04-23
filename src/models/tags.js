@@ -13,11 +13,11 @@ exports.showTags = function (req,res,next) {
     let sql = 'SELECT * ' +
         'FROM TagsxUsuari tu ' +
         'WHERE LOWER(tu.Usuari) = LOWER(?)'
-    db.get(sql,[data.username],(err,row) => {
-        if(row == null) {
+    db.all(sql,[data.username],(err,rows) => {
+        if(rows == null) {
             res.send('Tags not found');
         }
-        res.json(row);
+        res.json(rows);
     });
 }
 
