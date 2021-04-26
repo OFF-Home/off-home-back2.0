@@ -29,7 +29,7 @@ exports.regUsuari = function(info,res,next) {
 exports.showUsuari = function(info,res,next) {
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
-        'WHERE u.username = ?'
+        'WHERE u.email = ?'
     db.get(sql,[info.username],(err,row) => {
         if(row == null) {
             res.send('User not found');
