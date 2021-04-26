@@ -213,7 +213,7 @@ exports.filterByValoration = function(val,req,res,next) {
  */
 exports.insertUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
-    let sql = 'INSERT INTO Participants VALUES (?,?,?)';
+    let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?)';
     db.run(sql,info,(err) => {
         if (err) {
             res.json({
