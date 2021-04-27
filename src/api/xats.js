@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 let xat = require('../services/xats');
 
-router.post('/caminada', xat.crearXatGrup);
+router.get('/', xat.veureXats);
+
+router.post('/caminada', xat.crearXat);
 
 module.exports = router;

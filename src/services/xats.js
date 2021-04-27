@@ -1,6 +1,11 @@
 var models = require('../models/xats.js')
 
-exports.crearXatGrup = function(req,res,next) {
-    models.crearXatGrup(req,res,next);
+exports.veureXats = function(req,res,next) {
+    models.veureXats(req,res,next);
+
+}
+
+exports.crearXat = function(req,res,next) {
+    models.crearXat(req,res,next);
 
 }

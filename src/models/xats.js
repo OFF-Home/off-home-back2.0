@@ -2,7 +2,18 @@ const firebaseAdmin = require('firebase-admin');
 
 const firebaseDB = firebaseAdmin.database();
 
-exports.crearXatGrup = function(req,res,next) {
+exports.veureXats = function(req,res,next) {
+
+    firebaseDB.ref('xats').once('value', (snapshot) =>
+    {
+        const data = snapshot.val();
+        res.send(data);
+    });
+
+}
+
+
+exports.crearXat = function(req,res,next) {
     const data = {
         nomActivitat: req.body.nomActivitat
     };
