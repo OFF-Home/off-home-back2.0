@@ -4,6 +4,18 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const fileUpload = require('express-fileupload')
+const firebaseAdmin = require('firebase-admin');
+
+var serviceAccount = require("./off-home-93451-firebase-adminsdk-ew1oq-42cac07c20.json");
+
+firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(serviceAccount),
+  databaseURL: 'https://off-home-93451-default-rtdb.firebaseio.com/'
+});
+
+
+
+
 
 
 var indexRouter = require('./src/api/index');
@@ -12,6 +24,8 @@ var activitatsRouter = require('./src/api/activitats');
 var categoriesRouter = require('./src/api/categories');
 var tagsRouter = require('./src/api/tags');
 var UploadsRouter = require('./src/api/uploads');
+var xatsRouter = require('./src/api/xats');
+
 
 var app = express();
 
@@ -33,6 +47,7 @@ app.use('/activitats',activitatsRouter);
 app.use('/categories',categoriesRouter);
 app.use('/tags',tagsRouter);
 app.use('/upload',UploadsRouter);
+app.use('/xats',xatsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

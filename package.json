@@ -12,6 +12,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-fileupload": "^1.2.1",
+    "firebase-admin": "^9.6.0",
     "http-errors": "~1.6.3",
     "jdoc": "^0.2.0",
     "jsdoc": "^3.6.6",
