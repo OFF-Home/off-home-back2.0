@@ -5,6 +5,16 @@ exports.veureXats = function(req,res,next) {
 
 }
 
+exports.veureXatIndividual = function(req,res,next) {
+    models.veureXatIndividual(req,res,next);
+
+}
+
+exports.veureXatGrupal = function(req,res,next) {
+    models.veureXatGrupal(req,res,next);
+
+}
+
 exports.crearXat = function(req,res,next) {
     models.crearXat(req,res,next);
 
