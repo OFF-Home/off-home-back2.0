@@ -317,8 +317,11 @@ exports.getActivitatsByRadi = function(info,res,next) {
 }
 
 exports.valorarActivitat= function(data,req,res,next) {
-    let sql = 'UPDATE Participants SET valoracio = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
-    db.run(sql,[data.valoracio,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
+    let comentari;
+    if (data.comentari = '' ) comentari = null
+    else comentari = data.comentari
+    let sql = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
+    db.run(sql,[data.valoracio,comentari,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
         if (err) {
             res.status(409).json({
                 status : err.status,

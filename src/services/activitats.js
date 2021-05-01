@@ -164,7 +164,8 @@ exports.valorarActivitat = function(req,res,next){
         valoracio: req.body.valoracio,
         usuariCreador: req.body.usuariCreador,
         dataHoraIni: req.body.dataHoraIni,
-        usuariParticipant: req.body.usuariParticipant
+        usuariParticipant: req.body.usuariParticipant,
+        comentari: req.body.comentari
 
     }
     activitats.valorarActivitat(data,req,res,next);
