@@ -257,15 +257,16 @@ exports.deleteUsuariActivitat = function(data,req,res,next){
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
     let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
-        if (err) {
+        if (rows==null) {
+            res.send('Activities Not Found');
+        }
+        else if (err) {
             res.json({
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
 
     });
 }
@@ -294,7 +295,6 @@ exports.getActivitatsByRadi = function(info,res,next) {
         'a.nomCarrer = l.nomCarrer and a.numCarrer = l.numCarrer '
     db.all(sql,[],(err,rows) => {
         if (err) {
-            console.log(err);
             next(err);
         }
         else {
@@ -307,7 +307,7 @@ exports.getActivitatsByRadi = function(info,res,next) {
                 }
             });
             if (data.length == 0) {
-                res.send('No activities near');
+                res.status(204).send('No activities near');
             }
             else {
                 res.send(data);
