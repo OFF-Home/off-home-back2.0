@@ -26,7 +26,18 @@ exports.get_activitats = function(req,res,next) {
  * @param next
  */
 exports.create_activitats = function(req,res,next) {
-    models.create_activitats(req,res,next);
+    var data = {
+        usuariCreador: req.params.usuariCreador,
+        nomCarrer: req.body.nomCarrer,
+        carrerNum: req.body.carrerNum,
+        dataHoraIni: req.body.dataHoraIni,
+        categoria: req.body.categoria,
+        maxParticipants: req.body.maxParticipants,
+        titol: req.body.titol,
+        descripcio: req.body.descripcio,
+        dataHoraFi: req.body.dataHoraFi
+    }
+    models.create_activitats(data,req,res,next);
 }
 
 /**

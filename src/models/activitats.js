@@ -131,27 +131,17 @@ exports.filterByTitle = function(nom, req,res,next) {
  * @param res
  * @param next
  */
-exports.create_activitats = function (req,res,next) {
-    var data = {
-        usuariCreador: req.params.usuariCreador,
-        nomCarrer: req.body.nomCarrer,
-        carrerNum: req.body.carrerNum,
-        dataHoraIni: req.body.dataHoraIni,
-        categoria: req.body.categoria,
-        maxParticipants: req.body.maxParticipants,
-        titol: req.body.titol,
-        descripcio: req.body.descripcio,
-        dataHoraFi: req.body.dataHoraFi
-    }
+exports.create_activitats = function (data,req,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
     db.run(sql,info,(err) => {
         if (err) {
-            res.json({
+            res.status(409).json({
                 status: err.status,
                 message: err.message
             });
-        }else res.send('OK');
+        }
+        else res.status(201).send('OK');
     });
 
 }
@@ -218,12 +208,12 @@ exports.insertUsuariActivitat = function(data,req,res,next){
     let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?)';
     db.run(sql,info,(err) => {
         if (err) {
-            res.json({
-                status : err.status,
-                message : err.message
+            res.status(409).json({
+                status: err.status,
+                message: err.message
             });
         }
-        res.send('OK');
+        else res.status(201).send('OK');
     })
 }
 
@@ -234,18 +224,18 @@ exports.insertUsuariActivitat = function(data,req,res,next){
  * @param res
  * @param next
  */
-exports.deleteUsuariActivitat = function(data,req,res,next){
+exports.deleteUsuariActivitat = function(data,req,res,next){ //sempre retorna ok, no sé com comprovar si ha borrat algo
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'DELETE FROM Participants WHERE LOWER(usuariCreador) = LOWER(?) AND ' +
         'LOWER(dataHoraIni) = LOWER(?) AND LOWER(usuariParticipant) = LOWER(?);';
     db.run(sql,info,(err) => {
         if (err) {
-            res.json({
+            res.status(409).json({
                 status : err.status,
                 message : err.message
             });
         }
-        res.send('Usuari Eliminat');
+        else res.send('Participant Eliminat de la activitat');
     })
 }
 
