@@ -44,7 +44,7 @@ exports.get_activitatsOrderedByName = function(req,res,next) {
                 message: err.message
             });
         } else if (rows == null) {
-            res.send('Activities Not Found');
+            res.status(204).send('Activities Not Found');
         }
         res.send(rows);
     });
@@ -67,7 +67,7 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
                 message: err.message
             });
         } else if (rows == null) {
-            res.send('Activities Not Found');
+            res.status(204).send('Activities Not Found');
         }
         res.send(rows);
     });
