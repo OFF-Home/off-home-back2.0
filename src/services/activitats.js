@@ -12,7 +12,11 @@ let activitats = require('../models/activitats');
  * @param next
  */
 exports.get_activitats = function(req,res,next) {
-    models.get_activitats(req,res,next);
+    var data = {
+        username: req.params.username ,
+        datahora: req.params.datahora
+    }
+    models.get_activitats(data,req,res,next);
 }
 
 /**

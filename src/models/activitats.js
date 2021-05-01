@@ -7,22 +7,24 @@ var db = require('../../database.js')
  * @param res
  * @param next
  */
-exports.get_activitats = function (req,res,next) {
+exports.get_activitats = function (data,req,res,next) {
+    console.log(data.username)
+    console.log(data.datahora)
     let sql = 'SELECT * ' +
         'FROM Activitats a ' +
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
 
-    db.run(sql,[req.params.username, req.params.datahora], (err,row) => {
+    db.all(sql,[data.username, data.datahora], (err,rows) => {
         if (err) {
             res.json({
                 status: err.status,
                 message: err.message
             });
         }
-        else if (row == null) {
-            res.send('No Activity Found');
+        else if (rows.length == 0) {
+            res.status(204).send('No Activity Found');
         }
-        res.json(row);
+        else res.send(rows);
     });
 }
 
