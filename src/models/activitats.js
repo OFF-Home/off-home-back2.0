@@ -116,10 +116,10 @@ exports.filterByTitle = function(nom, req,res,next) {
             });
 
         }
-        else if (row == null) {
-            res.send('No Activity Found');
+        else if (rows.length==0) {
+            res.status(204).send('No Activity Found');
         }
-        res.json(row);
+        else res.json(rows);
     });
 }
 
@@ -171,10 +171,10 @@ exports.filterByData = function(nom, req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 
 }
@@ -196,10 +196,10 @@ exports.filterByValoration = function(val,req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Participants Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Participants Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 
 }
@@ -257,8 +257,8 @@ exports.deleteUsuariActivitat = function(data,req,res,next){
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
     let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
-        if (rows==null) {
-            res.send('Activities Not Found');
+        if (rows.length == 0) {
+            res.status(204).send('Activities Not Found');
         }
         else if (err) {
             res.json({
