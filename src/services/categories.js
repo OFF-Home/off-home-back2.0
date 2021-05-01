@@ -18,5 +18,6 @@ exports.get_categories = function (req,res,next) {
  * @param next
  */
 exports.get_activitats_categoria = function (req,res,next) {
-    categories.get_activitats_categoria(req,res,next);
+    data=req.params.tagId;
+    categories.get_activitats_categoria(data,req,res,next);
 }
