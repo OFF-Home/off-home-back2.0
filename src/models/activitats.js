@@ -66,10 +66,10 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
+        } else if (rows.length==0) {
             res.status(204).send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 }
 
