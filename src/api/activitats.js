@@ -59,6 +59,10 @@ router.post('/create/:usuariCreador', activitats.create_activitats);
  *  Crea una instància de participants amb els paràmetres necessaris del body*/
 router.post('/insertusuari',activitats.insertUsuariActivitat);
 
+/** Funció d'enrutament de la direcció /activitats/avalorar amb post.
+ *  Afegeix una valoració a la instància Participant*/
+router.put('/valorar',activitats.valorarActivitat)
+
 /** Funció d'enrutament de la direcció /activitats/deleteUsuari amb post.
  *  Elimina una instància de participants amb els paràmetres necessaris del body*/
 router.post('/deleteUsuari',activitats.deleteUsuariActivitat);

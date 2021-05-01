@@ -315,3 +315,20 @@ exports.getActivitatsByRadi = function(info,res,next) {
         }
     });
 }
+
+exports.valorarActivitat= function(data,req,res,next) {
+    let sql = 'UPDATE Participants SET valoracio = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
+    db.run(sql,[data.valoracio,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else if (this.changes === 0) {
+            res.status(404).send('Participant not found');
+        }
+        else res.status(200).send('Activity successfully valorated');
+    })
+
+}

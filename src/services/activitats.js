@@ -158,3 +158,14 @@ exports.getActivitatsByRadi = function(req,res,next) {
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }
+
+exports.valorarActivitat = function(req,res,next){
+    var data = {
+        valoracio: req.body.valoracio,
+        usuariCreador: req.body.usuariCreador,
+        dataHoraIni: req.body.dataHoraIni,
+        usuariParticipant: req.body.usuariParticipant
+
+    }
+    activitats.valorarActivitat(data,req,res,next);
+}
