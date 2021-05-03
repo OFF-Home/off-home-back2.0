@@ -25,8 +25,18 @@ exports.enviarMsg = function(req,res,next) {
 
 }
 
+exports.esborrarMsg = function(req,res,next) {
+    models.esborrarMsg(req,res,next);
+
+}
+
 exports.crearXatGrup = function(req,res,next) {
     models.crearXatGrupal(req,res,next);
+
+}
+
+exports.esborrarMsgGrup = function(req,res,next) {
+    models.esborrarMsgGrup(req,res,next);
 
 }
 

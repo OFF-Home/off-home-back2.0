@@ -37,15 +37,28 @@ router.post('/crearGrup', xat.crearXatGrup);
 router.post('/missatgesIndividual', xat.enviarMsg);
 
 /**
+ * S'esborra un missatge en el xat individual. Es passa els dos emails identificadors del xat, l'email del que fa el missatge i el missatge pel body.
+ */
+
+router.delete('/missatgesIndividual/delete', xat.esborrarMsg);
+/**
  * Es crea un missatge en el xat grupal. Es passa l'usuari creador i la datahora identificadora del xat, l'email del que fa el missatge i el missatge pel body.
  */
 
 router.post('/missatgesGrup', xat.enviarMsgGrup);
 
 /**
+ * S'esborra un missatge en el xat grupal. Es passa l'usuari creador i la datahora identificadora del xat, l'email del que fa el missatge i el missatge pel body.
+ */
+
+router.delete('/missatgesGrup/delete', xat.esborrarMsgGrup);
+/**
  * S'afegeix l'usuari al xat grupal de l'activitat, una veagda s'inscriu a l'activitat. Es passa l'usuari creador i la datahora identificadora del xat, i l'email del nou participant pel body.
  */
 
 router.post('/afegirUsuariXatGrup', xat.afegirUsuariXatGrupal);
+
+
+
 
 module.exports = router;
