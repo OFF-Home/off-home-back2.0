@@ -141,7 +141,7 @@ exports.create_activitats = function (req,res,next) {
         descripcio: req.body.descripcio,
         dataHoraFi: req.body.dataHoraFi
     }
-    var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
+    var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi,0];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
     db.run(sql,info,(err) => {
         if (err) {
@@ -318,7 +318,7 @@ exports.getActivitatsByRadi = function(info,res,next) {
 
 exports.valorarActivitat= function(data,req,res,next) {
     let comentari;
-    if (data.comentari = '' ) comentari = null
+    if (data.comentari == null ) comentari = null
     else comentari = data.comentari
     let sql = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
     db.run(sql,[data.valoracio,comentari,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
@@ -334,4 +334,54 @@ exports.valorarActivitat= function(data,req,res,next) {
         else res.status(200).send('Activity successfully valorated');
     })
 
+}
+
+exports.placesLliures = function(data,req,res,next) {
+    let maxParticipant=0;
+    let placesOcupades=0;
+    let sql = 'SELECT maxParticipant FROM Activitats WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    db.get(sql,[data.username,data.dataHoraIni], (err,row) => {
+
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else if (row == null){
+            res.status(404).send('Activitat no trobada');
+        }
+
+        else {
+            res.send(row);
+            //console.log(row.maxParticipant);
+            //maxParticipant = row.maxParticipant;
+        }
+
+    })
+
+    let sql2 = 'Select DISTINCT usuariParticipant FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    db.all(sql2, [data.username,data.dataHoraIni], (err,rows) => {
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else if (rows.length==0){
+            res.status(404).send('Activitat no trobada');
+        }
+
+        else {
+            console.log('Entro en el else')
+            placesOcupades = rows.length;
+        }
+
+    })
+    console.log(maxParticipant)
+    console.log(placesOcupades)
+    if (maxParticipant-placesOcupades >= 0) {
+        res.send('Queden places')
+    }
+    else res.send('No queden places')
 }

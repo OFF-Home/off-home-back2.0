@@ -1,4 +1,5 @@
 
+
 var db = require('../../database.js');
 var models = require('../models/activitats.js')
 
@@ -169,4 +170,12 @@ exports.valorarActivitat = function(req,res,next){
 
     }
     activitats.valorarActivitat(data,req,res,next);
+}
+
+exports.calcularPlacesLliures = function(req,res,next) {
+    let data = {
+        username: req.params.username,
+        dataHoraIni: req.params.datahora
+    }
+    models.placesLliures(data,req,res,next)
 }
