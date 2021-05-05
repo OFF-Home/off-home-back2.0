@@ -354,9 +354,8 @@ exports.placesLliures = function(data,req,res,next) {
         }
 
         else {
-            res.send(row);
-            //console.log(row.maxParticipant);
-            //maxParticipant = row.maxParticipant;
+            //console.log('Max:' + row['maxParticipant'])
+            maxParticipant = parseInt(row['maxParticipant']);
         }
 
     })
@@ -374,15 +373,14 @@ exports.placesLliures = function(data,req,res,next) {
         }
 
         else {
-            console.log('Entro en el else')
-            placesOcupades = rows.length;
+            //console.log('Entro en el else')
+            //console.log('Ocupades' + rows.length)
+            placesOcupades = parseInt(rows.length);
         }
 
     })
-    console.log(maxParticipant)
-    console.log(placesOcupades)
     if (maxParticipant-placesOcupades >= 0) {
-        res.send('Queden places')
+        res.send('True')
     }
-    else res.send('No queden places')
+    else res.send('False')
 }
