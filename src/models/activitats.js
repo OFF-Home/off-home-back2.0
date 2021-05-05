@@ -187,10 +187,11 @@ exports.filterByData = function(nom, req,res,next) {
  * @param next
  */
 exports.filterByValoration = function(val,req,res,next) {
-    console.log(val.valoration)
-    let sql = ' SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN (SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.valoracio = ?);';
+    valoration=parseInt(val.valoration)
 
-    db.all(sql, [val.valoration], (err, rows) => {
+    let sql = ' SELECT * FROM Activitats a WHERE ? = (SELECT AVG(p.valoracio) FROM Participants p WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni );';
+
+    db.all(sql, [valoration], (err, rows) => {
         if (err) {
             res.json({
                 status: err.status,
