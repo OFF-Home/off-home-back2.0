@@ -1,5 +1,6 @@
 
 var db = require('../../database.js')
+//import Tree from '../../tree';
 
 /**
  *
@@ -271,7 +272,7 @@ exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
 }
 
 function GetKilometros(lat1,lon1,lat2,lon2) {
-    rad = function(x) {return x*Math.PI/180;}
+    var rad = function(x) {return x*Math.PI/180;}
     var R = 6378.137; //Radio de la tierra en km
     var dLat = rad( lat2 - lat1 );
     var dLong = rad( lon2 - lon1 );
@@ -315,3 +316,71 @@ exports.getActivitatsByRadi = function(info,res,next) {
         }
     });
 }
+
+exports.getParticipantsActivitat = function(data,res,next) {
+    let sql = 'SELECT u.username ' +
+        'FROM Activitats a , Participants p, Usuaris u ' +
+        'WHERE a.usuariCreador = ? AND a.dataHoraIni = ? AND u.email = p.usuariParticipant ';
+    db.all(sql,[data.usuariCreador,data.dataHoraIni],(err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows == null) {
+            res.status(204).send('No users in the activity');
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+/*
+function createTree(activities_done,activities_all) {
+
+}
+
+exports.getExplore = function(data,res,next) {
+    let sql_all = 'SELECT * ' +
+        'FROM Activitats a, Participants p ' +
+        'WHERE a.valoracio_mitjana IS NULL ' +
+        'ORDER BY a.dataHoraIni';
+    let sql2_all_done = 'SELECT a.categoria ' +
+        'FROM Activitats a, Participants p ' +
+        'WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND p.usuariParticipant = ? AND a.valoracio_mitjana IS NOT NULL ' +
+        'ORDER BY a.dataHoraIni';
+    db.all(sql2_all_done,[data.email],(err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows == null) {
+            let sql_aux = 'SELECT * ' +
+                'FROM Activitats a ' +
+                'ORDER BY a.dataHoraIni';
+            db.all(sql_aux, [], (err, rows_all) => {
+                if (err) {
+                    next(err);
+                }
+                else if (rows_all == null) {
+                    res.status(204).send('No activities available');
+                }
+                else {
+                    res.send(rows_all);
+                }
+            });
+        }
+        else {
+            db.all(sql_all,[],(err,rows_tot) => {
+                if (err) {
+                    next(err);
+                }
+                else if (rows_tot == null) {
+                    res.status(204).send('No activities available');
+                }
+                else {
+                    createTree(rows,rows_tot);
+                }
+            })
+        }
+    });
+}
+
+ */
