@@ -65,7 +65,7 @@ exports.updateUsuari = function(info,target,res,next) {
             input.push(info[i]);
         }
     }
-    sql += ' WHERE username = ?;';
+    sql += ' WHERE email = ?;';
     input.push(target);
     db.run(sql,input, function(err) {
         if (err) {
