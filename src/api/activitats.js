@@ -3,6 +3,8 @@ var router = express.Router();
 var activitats = require('../services/activitats.js');
 
 
+router.get('/participants/:usuariCreador',activitats.getParticipantsActivitat);
+
 /**
  * Funció d'enrutament de la direcció /activitats/searchbyraadi amb el mètode get.
  * Retorna activitats dins del radi indicat.
@@ -62,6 +64,8 @@ router.post('/insertusuari',activitats.insertUsuariActivitat);
 /** Funció d'enrutament de la direcció /activitats/deleteUsuari amb post.
  *  Elimina una instància de participants amb els paràmetres necessaris del body*/
 router.post('/deleteUsuari',activitats.deleteUsuariActivitat);
+
+router.get('/explore/:email',activitats.getExplore);
 
 
 module.exports = router;

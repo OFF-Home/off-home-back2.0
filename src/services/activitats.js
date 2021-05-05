@@ -158,3 +158,18 @@ exports.getActivitatsByRadi = function(req,res,next) {
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }
+
+exports.getParticipantsActivitat = function(req,res,next) {
+    var data = {
+        usuariCreador: req.params.usuariCreador,
+        dataHoraIni: req.body.dataHoraIni
+    };
+    activitats.getParticipantsActivitat(data,res,next);
+}
+
+exports.getExplore = function (req,res,next) {
+    var data = {
+        email: req.params.email
+    };
+    activitats.getExplore(data,res,next);
+}
