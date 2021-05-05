@@ -54,3 +54,28 @@ exports.uploadImageUser = function(path_img,email,res,next) {
         }
     });
 }
+
+exports.getImageUser = function (data,res,next) {
+    let sql = 'SELECT u.image ' +
+        'FROM Usuaris u ' +
+        'WHERE u.username = ?';
+    db.get(sql,[data.username],(err,row) => {
+        if (err) {
+            next(err);
+        }
+        else if (row == null) {
+            res.status(404).send('User Not Found');
+        }
+        else {
+            fs.readFile(row.image, function(err,data) {
+                if (err) {
+                    next(err);
+                }
+                else {
+                    res.writeHead(200, {'Content-Type': 'image/jpeg'});
+                    res.end(data);
+                }
+            })
+        }
+    })
+}

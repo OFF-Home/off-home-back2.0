@@ -21,3 +21,10 @@ exports.uploadImageUser = function(req,res,next) {
             }
         });
 }
+
+exports.getImageUserUploaded = function(req,res,next) {
+    let data = {
+        username: req.params.username
+    }
+    model.getImageUser(data,res,next);
+}
