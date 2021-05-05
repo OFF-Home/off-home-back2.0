@@ -79,6 +79,26 @@ exports.enviarMsg = function(req,res,next) {
     res.send('Enviat');
 }
 
+exports.esborrarMsg = function(req,res,next) {
+
+    let missatgeId = req.body.msgId
+    let usid_1 = req.body.usid_1
+    let usid_2 = req.body.usid_2
+    var xatid
+    if(usid_1 > usid_2){
+        xatid = usid_2.concat("_").concat(usid_1)
+    }else if(usid_1 < usid_2){
+        xatid = usid_1.concat("_").concat(usid_2)
+    }else{
+        res.status(500).send('Emails iguals');
+    }
+
+
+
+    firebaseDB.ref('xatsIndividuals/'+xatid).child(missatgeId).remove()
+    res.send('Esborrat');
+}
+
 exports.crearXatGrupal = function(req,res,next) {
 
 
@@ -129,15 +149,10 @@ exports.esborrarMsgGrup = function(req,res,next) {
     let usuariCreador = req.body.usid_creador
     let dataHoraIni = req.body.dataHoraIni
     let activitat = usuariCreador.concat("_").concat(dataHoraIni)
+    let missatgeId = req.body.msgId
 
-    const data = {
-
-        usid_enviador: req.body.usid_enviador,
-        message: req.body.message
-    };
-
-    firebaseDB.ref('xatsGrupals/'+activitat).remove()
-    res.send('Enviat');
+    firebaseDB.ref('xatsGrupals/'+ activitat).child(missatgeId).remove()
+    res.send('Esborrat');
 }
 
 exports.afegirUsuariXatGrupal = function(req,res,next) {
