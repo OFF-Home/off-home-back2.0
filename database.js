@@ -86,7 +86,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 console.error(err.message);
             } else {
                 let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-                db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "24-03-2021 18:00:00", "Running", 20, "Correr", "m'encanta correr", "24-03-2021 19:00:00"]);
+                db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "2021-03-24 18:00:00.000", "Running", 20, "Correr", "m'encanta correr", "2021-03-24 19:00:00.000"]);
                 console.log("Taula Activitats creada correctament");
             }
         });
@@ -105,7 +105,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 console.error(err.message);
             } else {
                 let sql = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
-                db.run(sql, [null, "victorfer@gmai.com", "24-03-2021 18:00:00", "victor@gmai.com",null]);
+                db.run(sql, [null, "victorfer@gmai.com", "2021-03-24 19:00:00.000", "victor@gmai.com",null]);
                 console.log("Taula Participants creada correctament");
             }
         });
@@ -148,6 +148,14 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 let sql = 'INSERT INTO Segueix VALUES (?,?)';
                 db.run(sql, ["victorfer@gmai.com", "victor@gmai.com"]);
                 console.log("Taula Segueix creada correctament");
+            }
+        });
+
+        db.run('CREATE VIEW IF NOT EXISTS Activitatsinfo AS SELECT usuariCreador, nomCarrer, numCarrer, dataHoraIni, categoria, maxParticipant, titol, descripcio, dataHoraFi, datetime("now")>dataHoraFi AS acabada  FROM Activitats; ', (err) => {
+            if (err) {
+                console.error(err.message);
+            } else {
+                console.log("Vista Activitatsinfo creada correctament");
             }
         });
 

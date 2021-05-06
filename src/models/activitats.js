@@ -256,7 +256,7 @@ exports.deleteUsuariActivitat = function(data,req,res,next){
  * @param next
  */
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
-    let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
+    let sql = 'SELECT * FROM Activitats a WHERE datetime("now") < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
         if (err) {
             res.json({
