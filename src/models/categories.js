@@ -17,10 +17,10 @@ exports.get_categories = function (req,res,next) {
                 status: err.message,
                 message: err.message
             })
-        } else if (rows == null) {
-            res.send('Categories Not Found');
+        } else if (rows.length == 0) {
+            res.status(204).send('No categories found');
         }
-        res.send(rows);
+        else res.send(rows);
     })
 
 }
@@ -31,20 +31,20 @@ exports.get_categories = function (req,res,next) {
  * @param res
  * @param next
  */
-exports.get_activitats_categoria = function (req,res,next) {
+exports.get_activitats_categoria = function (data,req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
         'WHERE LOWER(a.categoria) = LOWER (?);';
-    db.all(sql,[req.params.tagId],(err,rows) => {
+    db.all(sql,[data],(err,rows) => {
         if(err) {
             res.json({
                 status : err.status,
                 message : err.message
             });
         }
-        else if (rows == null) {
-            res.send('Activities Not Found');
+        else if (rows.length == 0) {
+            res.status(204).send('No activities found in the category');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 }

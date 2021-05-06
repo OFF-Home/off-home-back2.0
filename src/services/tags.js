@@ -9,7 +9,10 @@ var models = require('../models/tags.js')
  * @param next
  */
 exports.showTags = function(req,res,next) {
-    models.showTags(req,res,next);
+    var data = {
+        username: req.params.username
+    }
+    models.showTags(data,req,res,next);
 }
 
 /**
@@ -19,7 +22,11 @@ exports.showTags = function(req,res,next) {
  * @param next
  */
 exports.insert_tags = function(req,res,next) {
-    models.insert_tags(req,res,next);
+    var data = {
+        nomTag: req.body.nomTag,
+        username: req.params.username,
+    }
+    models.insert_tags(data,req,res,next);
 }
 
 /**
@@ -29,5 +36,9 @@ exports.insert_tags = function(req,res,next) {
  * @param next
  */
 exports.delete_tags = function(req,res,next) {
-    models.delete_tags(req,res,next);
+    var data = {
+        nomTag: req.body.nomTag,
+        username: req.params.username,
+    }
+    models.delete_tags(data,req,res,next);
 }
