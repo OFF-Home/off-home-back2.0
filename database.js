@@ -78,6 +78,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             'titol text not null,' +
             'descripcio text,' +
             'dataHoraFi DateTime,' +
+            'valoracio_mitjana real,' +
             'CONSTRAINT Activitats_PK PRIMARY KEY (usuariCreador,dataHoraIni),' +
             'CONSTRAINT Activitats_FK_Usuaris FOREIGN KEY (usuariCreador) references Usuaris(email),' +
             'CONSTRAINT Activitats_FK_Llocs FOREIGN KEY (nomCarrer,numCarrer) references Llocs(nomCarrer,numCarrer),' +
@@ -85,7 +86,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             if (err) {
                 console.error(err.message);
             } else {
-                let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+                let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?,?)';
                 db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "24-03-2021 18:00:00", "Running", 20, "Correr", "m'encanta correr", "24-03-2021 19:00:00"]);
                 console.log("Taula Activitats creada correctament");
             }
