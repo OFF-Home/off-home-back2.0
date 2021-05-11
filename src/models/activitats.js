@@ -1,6 +1,6 @@
 
 var db = require('../../database.js')
-//import Tree from '../../tree';
+var Tree = require('../../tree');
 
 /**
  *
@@ -9,8 +9,6 @@ var db = require('../../database.js')
  * @param next
  */
 exports.get_activitats = function (data,req,res,next) {
-    console.log(data.username)
-    console.log(data.datahora)
     let sql = 'SELECT * ' +
         'FROM Activitats a ' +
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
@@ -311,8 +309,8 @@ exports.getActivitatsByRadi = function(info,res,next) {
 
 exports.getParticipantsActivitat = function(data,res,next) {
     let sql = 'SELECT u.username ' +
-        'FROM Activitats a , Participants p, Usuaris u ' +
-        'WHERE a.usuariCreador = ? AND a.dataHoraIni = ? AND u.email = p.usuariParticipant ';
+        'FROM Participants p, Usuaris u ' +
+        'WHERE p.usuariCreador = ? AND p.dataHoraIni = ? AND u.email = p.usuariParticipant ';
     db.all(sql,[data.usuariCreador,data.dataHoraIni],(err,rows) => {
         if (err) {
             next(err);
@@ -325,27 +323,47 @@ exports.getParticipantsActivitat = function(data,res,next) {
         }
     });
 }
-/*
-function createTree(activities_done,activities_all) {
 
+function createTree(categories_done,activities_all,row_data) {
+    var tree = new Tree("root");
+    let n = row_data.length;
+    for (let i = 0; i < n; ++i) {
+        //afegim el primer nivell de fills corresponent a les dates
+        let data_tree = tree.addChild(row_data[i].dataHoraIni);
+        let len = categories_done.length
+        for (let t = 0; t < len; ++t) {
+            //afegim el segon nivell de fills corresponent a categories de mes rellevants a menys
+            let categorie_tree= data_tree.addChild(categories_done[t].categoria);
+        }
+    }
+    let n_all = activities_all.length;
+    for (let i = 0; i < n_all; ++i) {
+        //afegim l'ultim nivell corresponent a les activitats per despres fer el recorregut
+        tree.addLeaf(activities_all[i]);
+    }
+   // console.log(tree);
+    return tree.readTree();
 }
 
 exports.getExplore = function(data,res,next) {
     let sql_all = 'SELECT * ' +
-        'FROM Activitats a, Participants p ' +
-        'WHERE a.valoracio_mitjana IS NULL ' +
-        'ORDER BY a.dataHoraIni';
-    let sql2_all_done = 'SELECT a.categoria ' +
-        'FROM Activitats a, Participants p ' +
+        '        FROM Activitats a ' +
+        '        WHERE a.valoracio_mitjana IS NULL ' +
+        '        ORDER BY a.dataHoraIni;'
+    let sql2_all_done = 'SELECT DISTINCT a.categoria ' +
+        'FROM Activitats a , Participants p ' +
         'WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND p.usuariParticipant = ? AND a.valoracio_mitjana IS NOT NULL ' +
-        'ORDER BY a.dataHoraIni';
+        'order by a.dataHoraIni desc';
     db.all(sql2_all_done,[data.email],(err,rows) => {
         if (err) {
+            console.log('eer');
             next(err);
         }
-        else if (rows == null) {
+        else if (rows.length == 0) {
+            console.log('2');
             let sql_aux = 'SELECT * ' +
                 'FROM Activitats a ' +
+                'WHERE a.valoracio_mitjana IS NULL ' +
                 'ORDER BY a.dataHoraIni';
             db.all(sql_aux, [], (err, rows_all) => {
                 if (err) {
@@ -360,19 +378,30 @@ exports.getExplore = function(data,res,next) {
             });
         }
         else {
+            console.log('3');
+            console.log(rows);
             db.all(sql_all,[],(err,rows_tot) => {
                 if (err) {
                     next(err);
                 }
-                else if (rows_tot == null) {
+                else if (rows_tot.length == 0) {
                     res.status(204).send('No activities available');
                 }
                 else {
-                    createTree(rows,rows_tot);
+                    let sqlaux2= 'SELECT DISTINCT a.dataHoraIni ' +
+                        '        FROM Activitats a ' +
+                        '        WHERE a.valoracio_mitjana IS NULL ' +
+                        '        ORDER BY a.dataHoraIni;';
+                    db.all(sqlaux2,[],(err,row_data) => {
+                        if (err) {
+                            next(err);
+                        } else {
+                            let result = createTree(rows,rows_tot,row_data);
+                            res.send(result);
+                        }
+                    })
                 }
             })
         }
     });
 }
-
- */
