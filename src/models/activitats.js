@@ -331,22 +331,19 @@ exports.valorarActivitat= function(data,req,res,next) {
 }
 
 exports.placesLliures = function(data,req,res,next) {
-    let maxParticipant=0;
-    let placesOcupades=0;
+    let maxParticipant = 0;
+    let placesOcupades = 0;
     let sql = 'SELECT maxParticipant FROM Activitats WHERE usuariCreador = ? AND dataHoraIni = ?;'
-    db.get(sql,[data.username,data.dataHoraIni], (err,row) => {
+    db.get(sql, [data.username, data.dataHoraIni], (err, row) => {
 
         if (err) {
             res.status(409).json({
-                status : err.status,
-                message : err.message
+                status: err.status,
+                message: err.message
             });
-        }
-        else if (row == null){
+        } else if (row == null) {
             res.status(404).send('Activitat no trobada');
-        }
-
-        else {
+        } else {
             //console.log('Max:' + row['maxParticipant'])
             maxParticipant = parseInt(row['maxParticipant']);
         }
@@ -354,28 +351,25 @@ exports.placesLliures = function(data,req,res,next) {
     })
 
     let sql2 = 'Select DISTINCT usuariParticipant FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
-    db.all(sql2, [data.username,data.dataHoraIni], (err,rows) => {
+    db.all(sql2, [data.username, data.dataHoraIni], (err, rows) => {
         if (err) {
             res.status(409).json({
-                status : err.status,
-                message : err.message
+                status: err.status,
+                message: err.message
             });
-        }
-        else if (rows.length==0){
+        } else if (rows.length == 0) {
             res.status(404).send('Activitat no trobada');
-        }
-
-        else {
+        } else {
             //console.log('Entro en el else')
             //console.log('Ocupades' + rows.length)
             placesOcupades = parseInt(rows.length);
         }
 
     })
-    if (maxParticipant-placesOcupades >= 0) {
+    if (maxParticipant - placesOcupades >= 0) {
         res.send('True')
-    }
-    else res.send('False')
+    } else res.send('False')
+}
 
 exports.getParticipantsActivitat = function(data,res,next) {
     let sql = 'SELECT u.username ' +
