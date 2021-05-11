@@ -130,6 +130,7 @@ exports.filterByTitle = function(nom, req,res,next) {
  * @param res
  * @param next
  */
+
 exports.create_activitats = function (data,req,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
@@ -178,10 +179,11 @@ exports.filterByData = function(nom, req,res,next) {
  * @param next
  */
 exports.filterByValoration = function(val,req,res,next) {
-    console.log(val.valoration)
-    let sql = ' SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN (SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.valoracio = ?);';
+    valoration=parseInt(val.valoration)
 
-    db.all(sql, [val.valoration], (err, rows) => {
+    let sql = ' SELECT * FROM Activitats a WHERE ? = (SELECT AVG(p.valoracio) FROM Participants p WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni );';
+
+    db.all(sql, [valoration], (err, rows) => {
         if (err) {
             res.json({
                 status: err.status,
@@ -246,7 +248,7 @@ exports.deleteUsuariActivitat = function(data,req,res,next){ //sempre retorna ok
  * @param next
  */
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
-    let sql = 'SELECT * FROM Activitats a WHERE TIME() < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
+    let sql = 'SELECT * FROM Activitats a WHERE datetime("now") < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
         if (rows.length == 0) {
             res.status(204).send('Activities Not Found');
@@ -306,6 +308,74 @@ exports.getActivitatsByRadi = function(info,res,next) {
         }
     });
 }
+
+
+exports.valorarActivitat= function(data,req,res,next) {
+    let comentari;
+    if (data.comentari == null ) comentari = null
+    else comentari = data.comentari
+    let sql = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
+    db.run(sql,[data.valoracio,comentari,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else if (this.changes === 0) {
+            res.status(404).send('Participant not found');
+        }
+        else res.status(200).send('Activity successfully valorated');
+    })
+
+}
+
+exports.placesLliures = function(data,req,res,next) {
+    let maxParticipant=0;
+    let placesOcupades=0;
+    let sql = 'SELECT maxParticipant FROM Activitats WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    db.get(sql,[data.username,data.dataHoraIni], (err,row) => {
+
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else if (row == null){
+            res.status(404).send('Activitat no trobada');
+        }
+
+        else {
+            //console.log('Max:' + row['maxParticipant'])
+            maxParticipant = parseInt(row['maxParticipant']);
+        }
+
+    })
+
+    let sql2 = 'Select DISTINCT usuariParticipant FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    db.all(sql2, [data.username,data.dataHoraIni], (err,rows) => {
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else if (rows.length==0){
+            res.status(404).send('Activitat no trobada');
+        }
+
+        else {
+            //console.log('Entro en el else')
+            //console.log('Ocupades' + rows.length)
+            placesOcupades = parseInt(rows.length);
+        }
+
+    })
+    if (maxParticipant-placesOcupades >= 0) {
+        res.send('True')
+    }
+    else res.send('False')
 
 exports.getParticipantsActivitat = function(data,res,next) {
     let sql = 'SELECT u.username ' +
@@ -404,4 +474,5 @@ exports.getExplore = function(data,res,next) {
             })
         }
     });
+
 }

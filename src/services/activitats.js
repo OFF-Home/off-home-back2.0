@@ -1,4 +1,5 @@
 
+
 var db = require('../../database.js');
 var models = require('../models/activitats.js')
 
@@ -174,6 +175,26 @@ exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }
 
+
+exports.valorarActivitat = function(req,res,next){
+    var data = {
+        valoracio: req.body.valoracio,
+        usuariCreador: req.body.usuariCreador,
+        dataHoraIni: req.body.dataHoraIni,
+        usuariParticipant: req.body.usuariParticipant,
+        comentari: req.body.comentari
+
+    }
+    activitats.valorarActivitat(data,req,res,next);
+}
+
+exports.calcularPlacesLliures = function(req,res,next) {
+    let data = {
+        username: req.params.username,
+        dataHoraIni: req.params.datahora
+    }
+    models.placesLliures(data,req,res,next)
+
 exports.getParticipantsActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.params.usuariCreador,
@@ -187,4 +208,5 @@ exports.getExplore = function (req,res,next) {
         email: req.params.email
     };
     activitats.getExplore(data,res,next);
+
 }
