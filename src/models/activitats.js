@@ -1,5 +1,6 @@
 
 var db = require('../../database.js')
+var Tree = require('../../tree');
 
 /**
  *
@@ -7,22 +8,22 @@ var db = require('../../database.js')
  * @param res
  * @param next
  */
-exports.get_activitats = function (req,res,next) {
+exports.get_activitats = function (data,req,res,next) {
     let sql = 'SELECT * ' +
         'FROM Activitats a ' +
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
 
-    db.run(sql,[req.params.username, req.params.datahora], (err,row) => {
+    db.all(sql,[data.username, data.datahora], (err,rows) => {
         if (err) {
             res.json({
                 status: err.status,
                 message: err.message
             });
         }
-        else if (row == null) {
-            res.send('No Activity Found');
+        else if (rows.length == 0) {
+            res.status(204).send('No Activity Found');
         }
-        res.json(row);
+        else res.send(rows);
     });
 }
 
@@ -43,10 +44,10 @@ exports.get_activitatsOrderedByName = function(req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 }
 
@@ -66,10 +67,10 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 }
 
@@ -89,10 +90,10 @@ exports.get_activitatsOrderedByDate = function(req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 }
 
@@ -116,10 +117,10 @@ exports.filterByTitle = function(nom, req,res,next) {
             });
 
         }
-        else if (row == null) {
-            res.send('No Activity Found');
+        else if (rows.length==0) {
+            res.status(204).send('No Activity Found');
         }
-        res.json(row);
+        else res.json(rows);
     });
 }
 
@@ -129,27 +130,18 @@ exports.filterByTitle = function(nom, req,res,next) {
  * @param res
  * @param next
  */
-exports.create_activitats = function (req,res,next) {
-    var data = {
-        usuariCreador: req.params.usuariCreador,
-        nomCarrer: req.body.nomCarrer,
-        carrerNum: req.body.carrerNum,
-        dataHoraIni: req.body.dataHoraIni,
-        categoria: req.body.categoria,
-        maxParticipants: req.body.maxParticipants,
-        titol: req.body.titol,
-        descripcio: req.body.descripcio,
-        dataHoraFi: req.body.dataHoraFi
-    }
-    var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi,0];
+
+exports.create_activitats = function (data,req,res,next) {
+    var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
     db.run(sql,info,(err) => {
         if (err) {
-            res.json({
+            res.status(409).json({
                 status: err.status,
                 message: err.message
             });
-        }else res.send('OK');
+        }
+        else res.status(201).send('OK');
     });
 
 }
@@ -171,10 +163,10 @@ exports.filterByData = function(nom, req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 
 }
@@ -197,10 +189,10 @@ exports.filterByValoration = function(val,req,res,next) {
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Participants Not Found');
+        } else if (rows.length==0) {
+            res.status(204).send('Participants Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
     });
 
 }
@@ -217,12 +209,12 @@ exports.insertUsuariActivitat = function(data,req,res,next){
     let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?)';
     db.run(sql,info,(err) => {
         if (err) {
-            res.json({
-                status : err.status,
-                message : err.message
+            res.status(409).json({
+                status: err.status,
+                message: err.message
             });
         }
-        res.send('OK');
+        else res.status(201).send('OK');
     })
 }
 
@@ -233,18 +225,18 @@ exports.insertUsuariActivitat = function(data,req,res,next){
  * @param res
  * @param next
  */
-exports.deleteUsuariActivitat = function(data,req,res,next){
+exports.deleteUsuariActivitat = function(data,req,res,next){ //sempre retorna ok, no sé com comprovar si ha borrat algo
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'DELETE FROM Participants WHERE LOWER(usuariCreador) = LOWER(?) AND ' +
         'LOWER(dataHoraIni) = LOWER(?) AND LOWER(usuariParticipant) = LOWER(?);';
     db.run(sql,info,(err) => {
         if (err) {
-            res.json({
+            res.status(409).json({
                 status : err.status,
                 message : err.message
             });
         }
-        res.send('Usuari Eliminat');
+        else res.send('Participant Eliminat de la activitat');
     })
 }
 
@@ -258,21 +250,22 @@ exports.deleteUsuariActivitat = function(data,req,res,next){
 exports.getActivitatsALesQueParticipo = function (nom,req,res,next){
     let sql = 'SELECT * FROM Activitats a WHERE datetime("now") < a.dataHoraIni AND (a.usuariCreador,a.dataHoraIni) IN ( SELECT p.usuariCreador, p.dataHoraIni FROM Participants p WHERE p.usuariParticipant == ?);';
     db.all(sql,[nom.nom], (err, rows) => {
-        if (err) {
+        if (rows.length == 0) {
+            res.status(204).send('Activities Not Found');
+        }
+        else if (err) {
             res.json({
                 status: err.status,
                 message: err.message
             });
-        } else if (rows == null) {
-            res.send('Activities Not Found');
         }
-        res.send(rows);
+        else res.send(rows);
 
     });
 }
 
 function GetKilometros(lat1,lon1,lat2,lon2) {
-    rad = function(x) {return x*Math.PI/180;}
+    var rad = function(x) {return x*Math.PI/180;}
     var R = 6378.137; //Radio de la tierra en km
     var dLat = rad( lat2 - lat1 );
     var dLong = rad( lon2 - lon1 );
@@ -295,7 +288,6 @@ exports.getActivitatsByRadi = function(info,res,next) {
         'a.nomCarrer = l.nomCarrer and a.numCarrer = l.numCarrer '
     db.all(sql,[],(err,rows) => {
         if (err) {
-            console.log(err);
             next(err);
         }
         else {
@@ -308,7 +300,7 @@ exports.getActivitatsByRadi = function(info,res,next) {
                 }
             });
             if (data.length == 0) {
-                res.send('No activities near');
+                res.status(204).send('No activities near');
             }
             else {
                 res.send(data);
@@ -316,6 +308,7 @@ exports.getActivitatsByRadi = function(info,res,next) {
         }
     });
 }
+
 
 exports.valorarActivitat= function(data,req,res,next) {
     let comentari;
@@ -383,4 +376,103 @@ exports.placesLliures = function(data,req,res,next) {
         res.send('True')
     }
     else res.send('False')
+
+exports.getParticipantsActivitat = function(data,res,next) {
+    let sql = 'SELECT u.username ' +
+        'FROM Participants p, Usuaris u ' +
+        'WHERE p.usuariCreador = ? AND p.dataHoraIni = ? AND u.email = p.usuariParticipant ';
+    db.all(sql,[data.usuariCreador,data.dataHoraIni],(err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows == null) {
+            res.status(204).send('No users in the activity');
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+
+function createTree(categories_done,activities_all,row_data) {
+    var tree = new Tree("root");
+    let n = row_data.length;
+    for (let i = 0; i < n; ++i) {
+        //afegim el primer nivell de fills corresponent a les dates
+        let data_tree = tree.addChild(row_data[i].dataHoraIni);
+        let len = categories_done.length
+        for (let t = 0; t < len; ++t) {
+            //afegim el segon nivell de fills corresponent a categories de mes rellevants a menys
+            let categorie_tree= data_tree.addChild(categories_done[t].categoria);
+        }
+    }
+    let n_all = activities_all.length;
+    for (let i = 0; i < n_all; ++i) {
+        //afegim l'ultim nivell corresponent a les activitats per despres fer el recorregut
+        tree.addLeaf(activities_all[i]);
+    }
+   // console.log(tree);
+    return tree.readTree();
+}
+
+exports.getExplore = function(data,res,next) {
+    let sql_all = 'SELECT * ' +
+        '        FROM Activitats a ' +
+        '        WHERE a.valoracio_mitjana IS NULL ' +
+        '        ORDER BY a.dataHoraIni;'
+    let sql2_all_done = 'SELECT DISTINCT a.categoria ' +
+        'FROM Activitats a , Participants p ' +
+        'WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND p.usuariParticipant = ? AND a.valoracio_mitjana IS NOT NULL ' +
+        'order by a.dataHoraIni desc';
+    db.all(sql2_all_done,[data.email],(err,rows) => {
+        if (err) {
+            console.log('eer');
+            next(err);
+        }
+        else if (rows.length == 0) {
+            console.log('2');
+            let sql_aux = 'SELECT * ' +
+                'FROM Activitats a ' +
+                'WHERE a.valoracio_mitjana IS NULL ' +
+                'ORDER BY a.dataHoraIni';
+            db.all(sql_aux, [], (err, rows_all) => {
+                if (err) {
+                    next(err);
+                }
+                else if (rows_all == null) {
+                    res.status(204).send('No activities available');
+                }
+                else {
+                    res.send(rows_all);
+                }
+            });
+        }
+        else {
+            console.log('3');
+            console.log(rows);
+            db.all(sql_all,[],(err,rows_tot) => {
+                if (err) {
+                    next(err);
+                }
+                else if (rows_tot.length == 0) {
+                    res.status(204).send('No activities available');
+                }
+                else {
+                    let sqlaux2= 'SELECT DISTINCT a.dataHoraIni ' +
+                        '        FROM Activitats a ' +
+                        '        WHERE a.valoracio_mitjana IS NULL ' +
+                        '        ORDER BY a.dataHoraIni;';
+                    db.all(sqlaux2,[],(err,row_data) => {
+                        if (err) {
+                            next(err);
+                        } else {
+                            let result = createTree(rows,rows_tot,row_data);
+                            res.send(result);
+                        }
+                    })
+                }
+            })
+        }
+    });
+
 }

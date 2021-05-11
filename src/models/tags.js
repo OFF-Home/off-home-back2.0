@@ -1,45 +1,37 @@
 var db = require('../../database.js')
 
-exports.showTags = function (req,res,next) {
-    var data = {
-        username: req.params.username
-    }
+exports.showTags = function (data,req,res,next) {
     let sql = 'SELECT * ' +
         'FROM TagsxUsuari tu ' +
         'WHERE LOWER(tu.Usuari) = LOWER(?)'
     db.get(sql,[data.username],(err,row) => {
         if(row == null) {
-            res.send('Tags not found');
+            res.status(204).send('Tags not found');
         }
-        res.json(row);
+        else res.json(row);
     });
 }
 
 
-exports.insert_tags = function(req,res,next) {
-    var data = {
-        nomTag: req.body.nomTag,
-        username: req.params.username,
-    }
+exports.insert_tags = function(data,req,res,next) {
+    console.log(data.nomTag)
     let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
     db.get(sql,[data.nomTag,data.username],(err,row) => {
         if(row == null) {
-            res.send('Insert tag al usuario');
+            console.log('he entrat aqí')
+            res.status(201).send('Insert tag al usuario');
         }
-        res.json(row);
+        else res.status(409).json(row);
     });
 }
 
-exports.delete_tags = function(req,res,next) {
-    var data = {
-        nomTag: req.body.nomTag,
-        username: req.params.username,
-    }
+exports.delete_tags = function(data,req,res,next) {
+
     let sql = 'DELETE FROM TagsxUsuari WHERE LOWER(nomTag) = LOWER(?) AND LOWER(Usuari) = LOWER(?);';
     db.get(sql,[data.nomTag,data.username],(err,row) => {
         if(row == null) {
-            res.send('Delete tag al usuario');
+            res.status(200).send('Delete tag al usuario');
         }
-        res.json(row);
+        else res.status(409).json(row);
     });
 }

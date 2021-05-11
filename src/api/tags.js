@@ -16,6 +16,6 @@ router.post('/:username/insert',tags.insert_tags);
  *  Funció d'enrutament de la direcció /tags/:username/delete amb el mètode post, on @username és el nom d'usuari.
  *  Elimina la instància de TagsXUsuari amb l'usuari de la url i els paràmetres necessaris del body */
 
-router.post('/:username/delete',tags.delete_tags);
+router.delete('/:username/delete',tags.delete_tags);
 
 module.exports = router;
