@@ -3,6 +3,10 @@ var router = express.Router();
 var activitats = require('../services/activitats.js');
 
 
+router.get('/participants/:usuariCreador',activitats.getParticipantsActivitat);
+
+router.get('/explore/:email',activitats.getExplore);
+
 /**
  * Funció d'enrutament de la direcció /activitats/searchbyraadi amb el mètode get.
  * Retorna activitats dins del radi indicat.

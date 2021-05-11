@@ -75,7 +75,10 @@ exports.updateUsuari = function (req,res,next) {
  * @param next
  */
 exports.findUserByName = function (req,res,next) {
-    models.findUserByName(req,res,next);
+    var data = {
+        username: req.params.username
+    }
+    models.findUserByName(data,req,res,next);
 
 }
 
@@ -86,7 +89,11 @@ exports.findUserByName = function (req,res,next) {
  * @param next
  */
 exports.follow = function(req,res,next) {
-    models.follow(req,res,next);
+    var data = {
+        usuariSeguidor: req.params.username,
+        usuariSeguit: req.body.followed
+    }
+    models.follow(data,req,res,next);
     //models.increaseFollow(req,res,next);
     //models.increaseFollowing(req,res,next);
 }
@@ -98,7 +105,11 @@ exports.follow = function(req,res,next) {
  * @param next
  */
 exports.unfollow = function(req,res,next) {
-    models.unfollow(req,res,next);
+    var data = {
+        usuariSeguidor: req.params.username,
+        usuariSeguit: req.body.followed
+    }
+    models.unfollow(data,req,res,next);
     //models.decreaseFollow(req,res,next);
     //models.decreaseFollowing(req,res,next);
 }
@@ -110,6 +121,9 @@ exports.unfollow = function(req,res,next) {
  * @param next
  */
 exports.getFollow = function(req,res,next) {
-    models.getFollow(req,res,next);
+    var data = {
+        usuariSeguit: req.params.username,
+    }
+    models.getFollow(data,req,res,next);
 
 }

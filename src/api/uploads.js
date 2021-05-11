@@ -8,4 +8,6 @@ let upload = require('../services/uploads');
  */
 router.post('/userimage/:email',upload.uploadImageUser);
 
+router.get('/userimageget/:username',upload.getImageUserUploaded);
+
 module.exports = router;

@@ -15,7 +15,7 @@ exports.regUsuari = function(info,res,next) {
             next(err);
         }
         else {
-            res.send('OK');
+            res.status(201).send('OK');
         }
     });
 }
@@ -32,7 +32,7 @@ exports.showUsuari = function(info,res,next) {
         'WHERE u.email = ?'
     db.get(sql,[info.username],(err,row) => {
         if(row == null) {
-            res.send('User not found');
+            res.status(404).send('User not found');
         }
         else if (err) {
             next(err);
@@ -65,14 +65,14 @@ exports.updateUsuari = function(info,target,res,next) {
             input.push(info[i]);
         }
     }
-    sql += ' WHERE username = ?;';
+    sql += ' WHERE email = ?;';
     input.push(target);
     db.run(sql,input, function(err) {
         if (err) {
             next(err);
         }
         else if (this.changes === 0) {
-            res.send('User Not Found');
+            res.status(404).send('User Not Found');
         }
         else {
             res.send ('User has been updated');
@@ -87,19 +87,16 @@ exports.updateUsuari = function(info,target,res,next) {
  * @param res
  * @param next
  */
-exports.findUserByName = function(req,res,next){
-    var data = {
-        username: req.params.username
-    }
+exports.findUserByName = function(data,req,res,next){
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
         'WHERE LOWER(u.username)= LOWER(?)'
     db.get(sql,[data.username],(err,row) => {
         if(row == null) {
             var respo = 'User ' + data.username + ' not found';
-            res.send(respo);
+            res.status(404).send(respo);
         }
-        res.json(row);
+        else res.json(row);
     });
 }
 
@@ -109,11 +106,8 @@ exports.findUserByName = function(req,res,next){
  * @param res
  * @param next
  */
-exports.follow = function(req,res,next) {
-    var data = {
-        usuariSeguidor: req.params.username,
-        usuariSeguit: req.body.followed
-    }
+exports.follow = function(data,req,res,next) {
+
     let sql = 'INSERT INTO Segueix VALUES (?,?)';
     db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
         if (err) {
@@ -132,11 +126,8 @@ exports.follow = function(req,res,next) {
  * @param res
  * @param next
  */
-exports.unfollow = function(req,res,next) {
-    var data = {
-        usuariSeguidor: req.params.username,
-        usuariSeguit: req.body.followed
-    }
+exports.unfollow = function(data,req,res,next) {
+
     let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ? ';
     db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
         if (err) {
@@ -154,10 +145,8 @@ exports.unfollow = function(req,res,next) {
  * @param res
  * @param next
  */
-exports.getFollow = function(req,res,next) {
-    var data = {
-        usuariSeguit: req.params.username,
-    }
+exports.getFollow = function(data,req,res,next) {
+
     let sql = 'SELECT * FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?)';
     db.all(sql,[data.usuariSeguit], (err, rows) => {
         if (err) {
@@ -265,6 +254,7 @@ exports.decreaseFollowing = function(req,res,next) {
             next(err);
         }
         else if (this.changes === 0) {
+
             res.send('User Not Found');
         }
         else {

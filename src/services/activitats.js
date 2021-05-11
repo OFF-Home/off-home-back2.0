@@ -13,7 +13,11 @@ let activitats = require('../models/activitats');
  * @param next
  */
 exports.get_activitats = function(req,res,next) {
-    models.get_activitats(req,res,next);
+    var data = {
+        username: req.params.username ,
+        datahora: req.params.datahora
+    }
+    models.get_activitats(data,req,res,next);
 }
 
 /**
@@ -23,7 +27,18 @@ exports.get_activitats = function(req,res,next) {
  * @param next
  */
 exports.create_activitats = function(req,res,next) {
-    models.create_activitats(req,res,next);
+    var data = {
+        usuariCreador: req.params.usuariCreador,
+        nomCarrer: req.body.nomCarrer,
+        carrerNum: req.body.carrerNum,
+        dataHoraIni: req.body.dataHoraIni,
+        categoria: req.body.categoria,
+        maxParticipants: req.body.maxParticipants,
+        titol: req.body.titol,
+        descripcio: req.body.descripcio,
+        dataHoraFi: req.body.dataHoraFi
+    }
+    models.create_activitats(data,req,res,next);
 }
 
 /**
@@ -160,6 +175,7 @@ exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }
 
+
 exports.valorarActivitat = function(req,res,next){
     var data = {
         valoracio: req.body.valoracio,
@@ -178,4 +194,19 @@ exports.calcularPlacesLliures = function(req,res,next) {
         dataHoraIni: req.params.datahora
     }
     models.placesLliures(data,req,res,next)
+
+exports.getParticipantsActivitat = function(req,res,next) {
+    var data = {
+        usuariCreador: req.params.usuariCreador,
+        dataHoraIni: req.body.dataHoraIni
+    };
+    activitats.getParticipantsActivitat(data,res,next);
+}
+
+exports.getExplore = function (req,res,next) {
+    var data = {
+        email: req.params.email
+    };
+    activitats.getExplore(data,res,next);
+
 }
