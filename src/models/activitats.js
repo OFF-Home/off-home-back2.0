@@ -483,3 +483,19 @@ exports.getExplore = function(data,res,next) {
     });
 
 }
+
+exports.getValoracio = function(data,req,res,next) {
+    let sql = 'SELECT valoracio FROM Participants WHERE usuariCreador = ? AND usuariParticipant = ? AND dataHoraIni = ?;'
+    console.log(data.usuariCreador + data.usuariParticipant + data.dataHoraIni);
+    db.get(sql, [data.usuariCreador,data.usuariParticipant,data.dataHoraIni], (err,row) => {
+        if (err) {
+            next(err);
+        }
+        else if (row == null) {
+            res.status(404).send('Activity not valorated');
+        }
+        else {
+            res.send(row); //retorna un json amb la valoració
+        }
+    })
+}

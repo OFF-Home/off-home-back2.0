@@ -211,3 +211,13 @@ exports.getExplore = function (req,res,next) {
     activitats.getExplore(data,res,next);
 
 }
+
+exports.getValoracio = function (req,res,next) {
+    var data = {
+        usuariCreador: req.query.usuariCreador,
+        usuariParticipant: req.query.usuariParticipant,
+        dataHoraIni: req.query.dataHoraIni
+    }
+    console.log(data.usuariCreador + data.usuariParticipant + data.dataHoraIni);
+    activitats.getValoracio(data,req,res,next)
+}
