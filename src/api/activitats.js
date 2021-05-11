@@ -3,6 +3,8 @@ var router = express.Router();
 var activitats = require('../services/activitats.js');
 
 router.get('/participants/valoracio', activitats.getValoracio)
+
+router.get('/participants/comentaris', activitats.getComentaris )
 router.get('/participants/:usuariCreador',activitats.getParticipantsActivitat);
 
 router.get('/explore/:email',activitats.getExplore);

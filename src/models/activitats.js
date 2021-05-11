@@ -499,3 +499,19 @@ exports.getValoracio = function(data,req,res,next) {
         }
     })
 }
+
+exports.getComentaris = function(data,req,res,next) {
+    let sql = 'SELECT usuariParticipant,comentari FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    db.all(sql, [data.usuariCreador, data.dataHoraIni], (err,rows) =>
+    {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length == 0) {
+            res.status(404).send('No comentaries for this activity');
+        }
+        else {
+            res.send(rows); //retorna un json amb la valoració
+        }
+    })
+}

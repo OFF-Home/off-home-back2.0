@@ -221,3 +221,11 @@ exports.getValoracio = function (req,res,next) {
     console.log(data.usuariCreador + data.usuariParticipant + data.dataHoraIni);
     activitats.getValoracio(data,req,res,next)
 }
+
+exports.getComentaris = function (req,res,next ) {
+    var data = {
+        usuariCreador: req.query.usuariCreador,
+        dataHoraIni: req.query.dataHoraIni
+    }
+    activitats.getComentaris(data,req,res,next)
+}
