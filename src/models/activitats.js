@@ -189,7 +189,7 @@ exports.filterByData = function(nom, req,res,next) {
 exports.filterByValoration = function(val,req,res,next) {
     valoration=parseInt(val.valoration)
 
-    let sql = ' SELECT * FROM Activitats a WHERE ? = (SELECT AVG(p.valoracio) FROM Participants p WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni );';
+    let sql = ' SELECT * FROM Activitats a WHERE ? = (SELECT round(AVG(p.valoracio),0) FROM Participants p WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni );';
 
     db.all(sql, [valoration], (err, rows) => {
         if (err) {

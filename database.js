@@ -105,7 +105,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 console.error(err.message);
             } else {
                 let sql = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
-                db.run(sql, [null, "victorfer@gmai.com", "2021-03-24 19:00:00.000", "victor@gmai.com",null]);
+                db.run(sql, [null, "victorfer@gmai.com", "2021-03-24 18:00:00.000", "victor@gmai.com",null]);
                 console.log("Taula Participants creada correctament");
             }
         });
