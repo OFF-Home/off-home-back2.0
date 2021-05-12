@@ -379,7 +379,7 @@ exports.getParticipantsActivitat = function(data,res,next) {
         if (err) {
             next(err);
         }
-        else if (rows == null) {
+        else if (rows.length == 0) {
             res.status(204).send('No users in the activity');
         }
         else {
