@@ -14,10 +14,6 @@ firebaseAdmin.initializeApp({
 });
 
 
-
-
-
-
 var indexRouter = require('./src/api/index');
 var usersRouter = require('./src/api/users');
 var activitatsRouter = require('./src/api/activitats');

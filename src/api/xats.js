@@ -2,16 +2,13 @@ var express = require('express');
 var router = express.Router();
 let xat = require('../services/xats');
 
-/**
- * Et retorna tots els xats d'un usuari que es passa pel body
- */
-router.get('/', xat.veureXats);
+
 
 /**
  * Et retorna tots els missatges d'un xat individual. Es passa els emails dels dos usuaris pel body.
  */
 
-router.get('/individual', xat.veureXatIndividual);
+router.get('/individual/', xat.veureXatIndividual);
 
 /**
  * Et retorna tots els missatges d'un xat grupal
@@ -58,7 +55,10 @@ router.delete('/missatgesGrup/delete', xat.esborrarMsgGrup);
 
 router.post('/afegirUsuariXatGrup', xat.afegirUsuariXatGrupal);
 
-
+/**
+ * Et retorna tots els xats d'un usuari que es passa pel body
+ */
+router.get('/:usid', xat.veureXats);
 
 
 module.exports = router;
