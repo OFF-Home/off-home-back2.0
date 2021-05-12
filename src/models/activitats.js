@@ -318,8 +318,8 @@ exports.valorarActivitat= function(data,req,res,next) {
     db.run(sql,[data.valoracio,comentari,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
         if (err) {
             res.status(409).json({
-                status : err.status,
-                message : err.message
+                status: err.status,
+                message: err.message
             });
         }
         else if (this.changes === 0) {
@@ -411,23 +411,22 @@ function createTree(categories_done,activities_all,row_data) {
 
 exports.getExplore = function(data,res,next) {
     let sql_all = 'SELECT * ' +
-        '        FROM Activitats a ' +
-        '        WHERE a.valoracio_mitjana IS NULL ' +
-        '        ORDER BY a.dataHoraIni;'
-    let sql2_all_done = 'SELECT DISTINCT a.categoria ' +
-        'FROM Activitats a , Participants p ' +
-        'WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND p.usuariParticipant = ? AND a.valoracio_mitjana IS NOT NULL ' +
-        'order by a.dataHoraIni desc';
+        '        FROM ActivitatsInfo a ' +
+        '        WHERE a.acabada = 0 ' +
+        '        ORDER BY a.dataHoraIni;';
+    let sql2_all_done = 'SELECT a.categoria ' +
+        '        FROM ActivitatsInfo a , Participants p ' +
+        '        WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND p.usuariParticipant = ? AND a.acabada = 1 ' +
+        '        group by a.categoria ' +
+        '        order by count(*) desc;';
     db.all(sql2_all_done,[data.email],(err,rows) => {
         if (err) {
-            console.log('eer');
             next(err);
         }
         else if (rows.length == 0) {
-            console.log('2');
             let sql_aux = 'SELECT * ' +
-                'FROM Activitats a ' +
-                'WHERE a.valoracio_mitjana IS NULL ' +
+                'FROM ActivitatsInfo a ' +
+                'WHERE a.acabada = 0 ' +
                 'ORDER BY a.dataHoraIni';
             db.all(sql_aux, [], (err, rows_all) => {
                 if (err) {
@@ -442,8 +441,6 @@ exports.getExplore = function(data,res,next) {
             });
         }
         else {
-            console.log('3');
-            console.log(rows);
             db.all(sql_all,[],(err,rows_tot) => {
                 if (err) {
                     next(err);
@@ -453,19 +450,39 @@ exports.getExplore = function(data,res,next) {
                 }
                 else {
                     let sqlaux2= 'SELECT DISTINCT a.dataHoraIni ' +
-                        '        FROM Activitats a ' +
-                        '        WHERE a.valoracio_mitjana IS NULL ' +
+                        '        FROM ActivitatsInfo a ' +
+                        '        WHERE a.acabada = 0 ' +
                         '        ORDER BY a.dataHoraIni;';
                     db.all(sqlaux2,[],(err,row_data) => {
                         if (err) {
                             next(err);
                         } else {
-                            let result = createTree(rows,rows_tot,row_data);
-                            res.send(result);
+                            let sqlaux3 = 'SELECT c.categoria ' +
+                                'FROM Categories c ';
+                            db.all(sqlaux3,[],(err,tot_cat) => {
+                                if(err) {
+                                    next(err);
+                                }
+                                else {
+                                    //console.log(tot_cat);
+                                    tot_cat.forEach((cat) => {
+                                        let bool = false;
+                                        let n = rows.length;
+                                        for(let i = 0; i < n && !bool; ++i) {
+                                            if(cat.categoria == rows[i].categoria) {
+                                                bool = true;
+                                            }
+                                        }
+                                        if(!bool) rows.push(cat);
+                                    });
+                                    let result = createTree(rows,rows_tot,row_data);
+                                    res.send(result);
+                                }
+                            });
                         }
-                    })
+                    });
                 }
-            })
+            });
         }
     });
 

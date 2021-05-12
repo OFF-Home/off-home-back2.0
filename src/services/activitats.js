@@ -193,7 +193,8 @@ exports.calcularPlacesLliures = function(req,res,next) {
         username: req.params.username,
         dataHoraIni: req.params.datahora
     }
-    models.placesLliures(data,req,res,next)
+    models.placesLliures(data, req, res, next)
+}
 
 exports.getParticipantsActivitat = function(req,res,next) {
     var data = {
