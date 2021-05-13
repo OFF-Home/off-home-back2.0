@@ -314,7 +314,7 @@ exports.valorarActivitat= function(data,req,res,next) {
     let comentari;
     if (data.comentari == null ) comentari = null
     else comentari = data.comentari
-    let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio <> null;'
+    let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio == null;'
     var valorar =0
     db.all(sql,[data.usuariCreador,data.dataHoraIni,data.usuariParticipant], (err,rows)=> {
         if (err) {
