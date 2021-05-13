@@ -19,9 +19,10 @@ exports.regUsuari = function(req,res,next) {
         darkmode : req.body.darkmode,
         notificacions : req.body.notificacions,
         estrelles : req.body.estrelles,
-        language : req.body.language
+        language : req.body.language,
+        usid: req.body.usid
     }
-    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language];
+    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language,data.usid];
 
     models.regUsuari(info,res,next);
 
@@ -60,10 +61,11 @@ exports.updateUsuari = function (req,res,next) {
         notificacions : req.body.notificacions,
         estrelles : req.body.estrelles,
         tags : req.body.tags,
-        language : req.body.language
+        language : req.body.language,
+        usid: req.body.usid
     }
     var target = req.params.username;
-    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
+    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language,data.usid];
     models.updateUsuari(info,target,res,next);
 }
 
@@ -109,7 +111,7 @@ exports.unfollow = function(req,res,next) {
         usuariSeguidor: req.params.username,
         usuariSeguit: req.body.followed
     }
-    models.unfollow(data,req,res,next);
+    models.unfollow(data,res,next);
     //models.decreaseFollow(req,res,next);
     //models.decreaseFollowing(req,res,next);
 }
@@ -124,6 +126,6 @@ exports.getFollow = function(req,res,next) {
     var data = {
         usuariSeguit: req.params.username,
     }
-    models.getFollow(data,req,res,next);
+    models.getFollow(data,res,next);
 
 }

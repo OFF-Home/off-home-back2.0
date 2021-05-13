@@ -53,7 +53,7 @@ exports.updateUsuari = function(info,target,res,next) {
     let n = info.length;
     let first = true;
     let input = [];
-    let entries = ['email','username','password','birthDate','description','followers','following','darkmode','notifications','estrelles','language'];
+    let entries = ['email','username','password','birthDate','description','followers','following','darkmode','notifications','estrelles','language','usid'];
     for (let i = 0; i < n; ++i) {
         if (info[i] != null && first) {
             sql += entries[i] + ' = ?';
