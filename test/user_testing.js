@@ -11,10 +11,13 @@ const url= 'http://localhost:3000';
 
 describe('/PUT UpdateUsuari:', () => {
     before(function(done){
-        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-        db.run(sql,['josep@gmail.com','josep','2365']);
-        db.run(sql,['pep@gmail.com','pep','3456']);
-        done();
+        db.serialize(() => {
+            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            db.run(sql,['josep@gmail.com','josep','2365']);
+            db.run(sql,['pep@gmail.com','pep','3456'], () => {
+                done();
+            });
+        });
     });
     after(function(done){
         let sql= 'DELETE FROM Usuaris WHERE username = ?;';
@@ -84,9 +87,12 @@ describe('/POST registrarUsuari', () => {
 
 describe('/GET show info Usuari', () => {
     before(function(done){
-        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-        db.run(sql,['ruben@gmail.com','ruben','2365']);
-        done();
+        db.serialize(() => {
+            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            db.run(sql,['ruben@gmail.com','ruben','2365'], () => {
+                done();
+            });
+        });
     });
     after(function(done){
         let sql= 'DELETE FROM Usuaris WHERE username = ?;';
