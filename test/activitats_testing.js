@@ -11,15 +11,18 @@ const url= 'http://localhost:3000';
 
 describe('/GET SearchByRadi:', () => {
     before(function(done){
-        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-        db.run(sql,['josep@gmail.com','josep','2365']);
-        sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
-        db.run(sql,['C/Font',25,41.401703,2.175327]);
-        sql = 'INSERT INTO Categories VALUES (?,?)'
-        db.run(sql,['Training','Train']);
-        sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-        db.run(sql,['josep@gmail.com','C/Font',25,'19-04-2021 18:00:00','Training',10,'Play','playing','19-04-2021 19:00:00']);
-        done();
+        db.serialize(() => {
+            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            db.run(sql,['josep@gmail.com','josep','2365']);
+            sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
+            db.run(sql,['C/Font',25,41.401703,2.175327]);
+            sql = 'INSERT INTO Categories VALUES (?,?)'
+            db.run(sql,['Training','Train']);
+            sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+            db.run(sql,['josep@gmail.com','C/Font',25,'19-04-2021 18:00:00','Training',10,'Play','playing','19-04-2021 19:00:00'], () => {
+                done();
+            });
+        });
     });
     after(function(done){
         let sql = 'DELETE FROM Activitats WHERE usuariCreador = ? and dataHoraIni = ?';
@@ -55,19 +58,22 @@ describe('/GET SearchByRadi:', () => {
 
 describe('/GET Participants Activitat:', () => {
     before(function (done) {
-        let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-        db.run(sql, ['jess@gmail.com', 'jess', '2365']);
-        db.run(sql, ['jess2@gmail.com', 'jess2', '56567']);
-        sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
-        db.run(sql, ['C/Font', 25, 41.401703, 2.175327]);
-        sql = 'INSERT INTO Categories VALUES (?,?)'
-        db.run(sql, ['Train', 'Trai']);
-        sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-        db.run(sql, ['jess@gmail.com', 'C/Font', 25, '19-04-2021 18:00:00', 'Train', 10, 'Play', 'playing', '19-04-2021 19:00:00']);
-        db.run(sql, ['jess@gmail.com', 'C/Font', 25, '30-04-2021 18:00:00', 'Train', 10, 'Play', 'playing', '30-04-2021 19:00:00']);
-        sql = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
-        db.run(sql,[null,'jess@gmail.com','19-04-2021 18:00:00','jess2@gmail.com',null]);
-        done();
+        db.serialize(() => {
+            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            db.run(sql, ['jess@gmail.com', 'jess', '2365']);
+            db.run(sql, ['jess2@gmail.com', 'jess2', '56567']);
+            sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
+            db.run(sql, ['C/Font', 25, 41.401703, 2.175327]);
+            sql = 'INSERT INTO Categories VALUES (?,?)'
+            db.run(sql, ['Train', 'Trai']);
+            sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+            db.run(sql, ['jess@gmail.com', 'C/Font', 25, '19-04-2021 18:00:00', 'Train', 10, 'Play', 'playing', '19-04-2021 19:00:00']);
+            db.run(sql, ['jess@gmail.com', 'C/Font', 25, '30-04-2021 18:00:00', 'Train', 10, 'Play', 'playing', '30-04-2021 19:00:00']);
+            sql = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
+            db.run(sql,[null,'jess@gmail.com','19-04-2021 18:00:00','jess2@gmail.com',null],() => {
+                done();
+            });
+        });
     });
     after(function (done) {
         let sql = 'DELETE FROM Activitats WHERE usuariCreador = ? and dataHoraIni = ?';
