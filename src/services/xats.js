@@ -16,7 +16,12 @@ exports.veureXatIndividual = function(req,res,next) {
 }
 
 exports.veureXatGrupal = function(req,res,next) {
-    models.veureXatGrupal(req,res,next);
+
+    var info = {
+        usid_creador: req.query.usid_creador,
+        dataHoraIni : req.query.dataHoraIni
+    }
+    models.veureXatGrupal(info,res,next);
 
 }
 
@@ -64,7 +69,13 @@ exports.crearXatGrup = function(req,res,next) {
 }
 
 exports.esborrarMsgGrup = function(req,res,next) {
-    models.esborrarMsgGrup(req,res,next);
+
+    var info = {
+        usid_creador : req.query.usid_creador,
+        dataHoraIni : req.query.dataHoraIni,
+        missatgeId : req.body.missatgeId
+    }
+    models.esborrarMsgGrup(info,res,next);
 
 }
 
@@ -81,6 +92,12 @@ exports.enviarMsgGrup = function(req,res,next) {
 }
 
 exports.afegirUsuariXatGrupal = function(req,res,next) {
-    models.afegirUsuariXatGrupal(req,res,next);
+
+    var info = {
+        usid_creador: req.query.usid_creador,
+        dataHoraIni : req.query.dataHoraIni,
+        usid_participant: req.body.usid_participant,
+    }
+    models.afegirUsuariXatGrupal(info,res,next);
 
 }

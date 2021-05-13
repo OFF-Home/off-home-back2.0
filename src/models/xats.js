@@ -103,10 +103,10 @@ exports.crearXatGrupal = function(info,res,next) {
     res.send('Creat');
 }
 
-exports.veureXatGrupal = function(req,res,next) {
+exports.veureXatGrupal = function(info,res,next) {
 
-    let usid_creador = req.body.usid_creador
-    let dataHoraIni = req.body.dataHoraIni
+    let usid_creador = info.usid_creador
+    let dataHoraIni = info.dataHoraIni
     let activitat = usid_creador.concat("_").concat(dataHoraIni)
 
     firebaseDB.ref('xatsGrupals/'+activitat).once('value', (snapshot) =>
@@ -124,34 +124,36 @@ exports.enviarMsgGrup = function(info,res,next) {
     let dataHoraIni = info.dataHoraIni
     let activitat = usid_creador.concat("_").concat(dataHoraIni)
 
+    const identificador = activitat.concat("_").concat(Date.now())
     const data = {
 
+        id: identificador,
         usid_enviador: info.usid_enviador,
         message: info.message
     };
 
-    firebaseDB.ref('xatsGrupals/'+activitat).push(data)
+    firebaseDB.ref('xatsGrupals/'+activitat).child(identificador).push(data)
     res.send('Enviat');
 }
 
-exports.esborrarMsgGrup = function(req,res,next) {
+exports.esborrarMsgGrup = function(info,res,next) {
 
 
-    let usuariCreador = req.body.usid_creador
-    let dataHoraIni = req.body.dataHoraIni
-    let activitat = usuariCreador.concat("_").concat(dataHoraIni)
-    let missatgeId = req.body.msgId
+    let usid_creador = info.usid_creador
+    let dataHoraIni = info.dataHoraIni
+    let activitat = usid_creador.concat("_").concat(dataHoraIni)
+    let missatgeId = info.missatgeId
 
-    firebaseDB.ref('xatsGrupals/'+ activitat).child(missatgeId).remove()
+    firebaseDB.ref('xatsGrupals/'+ activitat+'/'+missatgeId).remove()
     res.send('Esborrat');
 }
 
-exports.afegirUsuariXatGrupal = function(req,res,next) {
+exports.afegirUsuariXatGrupal = function(info,res,next) {
 
 
-    let usid_creador = req.body.usid_creador
-    let dataHoraIni = req.body.dataHoraIni
-    let usid_participant = req.body.email
+    let usid_creador = info.usid_creador
+    let dataHoraIni = info.dataHoraIni
+    let usid_participant = info.usid_participant
     let activitat = usid_creador.concat("_").concat(dataHoraIni)
 
     firebaseDB.ref('usuaris/'+ usid_participant).push(activitat)
