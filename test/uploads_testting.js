@@ -14,10 +14,10 @@ describe('/POST uploadImage', () => {
     before(function(done){
         db.serialize(() => {
             fs.copyFileSync(`${__dirname}/image_for_testing2.jpg`,`${__dirname}/../images/image_for_testing2.jpg`);
-            let sql = 'INSERT INTO Usuaris (email,username,password,image) VALUES (?,?,?,?)';
-            db.run(sql,['jose@gmail.com','jose','2365','./images/image_for_testing2.jpg']);
-            sql = 'INSERT INTO Usuaris (email,username,password) VALUES (?,?,?)';
-            db.run(sql,['pep@gmail.com','pep','0685488'], () => {
+            let sql = 'INSERT INTO Usuaris (email,username,image) VALUES (?,?,?)';
+            db.run(sql,['jose@gmail.com','jose','./images/image_for_testing2.jpg']);
+            sql = 'INSERT INTO Usuaris (email,username) VALUES (?,?)';
+            db.run(sql,['pep@gmail.com','pep'], () => {
                 done();
             });
         });
@@ -69,8 +69,8 @@ describe('/GET getImageUser', () => {
     before(function (done) {
         db.serialize(() => {
             fs.copyFileSync(`${__dirname}/image_for_testing4.jpg`, `${__dirname}/../images/image_for_testing4.jpg`);
-            let sql = 'INSERT INTO Usuaris (email,username,password,image) VALUES (?,?,?,?)';
-            db.run(sql, ['joel@gmail.com', 'joel', '2365', './images/image_for_testing4.jpg'], () => {
+            let sql = 'INSERT INTO Usuaris (email,username,image) VALUES (?,?,?)';
+            db.run(sql, ['joel@gmail.com', 'joel','./images/image_for_testing4.jpg'], () => {
                 done();
             });
         })
