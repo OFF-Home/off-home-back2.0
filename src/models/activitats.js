@@ -206,7 +206,7 @@ exports.filterByValoration = function(val,req,res,next) {
  */
 exports.insertUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
-    let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?)';
+    let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?,NULLL)';
     db.run(sql,info,(err) => {
         if (err) {
             res.status(409).json({
@@ -314,9 +314,11 @@ exports.valorarActivitat= function(data,req,res,next) {
     let comentari;
     if (data.comentari == null ) comentari = null
     else comentari = data.comentari
-    let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio == null;'
+    let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio is null;'
     var valorar =0
     db.all(sql,[data.usuariCreador,data.dataHoraIni,data.usuariParticipant], (err,rows)=> {
+        console.log(rows)
+        console.log(data.usuariCreador + data.dataHoraIni + data.usuariParticipant)
         if (err) {
             res.status(409).json({
                 status: err.status,
