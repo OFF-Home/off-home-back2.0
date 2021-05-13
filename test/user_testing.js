@@ -13,8 +13,8 @@ describe('/PUT UpdateUsuari:', () => {
     before(function(done){
         db.serialize(() => {
             let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-            db.run(sql,['josep@gmail.com','josep','2365']);
-            db.run(sql,['pep@gmail.com','pep','3456'], () => {
+            db.run(sql,['josep@gmail.com','josep','130']);
+            db.run(sql,['pep@gmail.com','pep','130'], () => {
                 done();
             });
         });
@@ -66,7 +66,7 @@ describe('/POST registrarUsuari', () => {
     it('should insert the user', (done) => {
         chai.request(url)
             .post('/users/josep/create')
-            .send({email:'josep@gmail.com',password: '634563'})
+            .send({email:'josep@gmail.com'})
             .end(function(err,res) {
                 expect(res).to.have.status(201);
                 expect(res.text).to.eql('OK');
@@ -76,7 +76,7 @@ describe('/POST registrarUsuari', () => {
     it('should can not insert the user', (done) => {
         chai.request(url)
             .post('/users/josep/create')
-            .send({email:'josep@gmail.com',password: '634563'})
+            .send({email:'josep@gmail.com'})
             .end(function(err,res) {
                 expect(res).to.have.status(500);
                 expect(res.text).to.eql('This username is already in use');
@@ -89,7 +89,7 @@ describe('/GET show info Usuari', () => {
     before(function(done){
         db.serialize(() => {
             let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-            db.run(sql,['ruben@gmail.com','ruben','2365'], () => {
+            db.run(sql,['ruben@gmail.com','ruben','120'], () => {
                 done();
             });
         });

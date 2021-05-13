@@ -8,7 +8,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
         db.run('CREATE TABLE Usuaris (' +
             'email text,' +
             'username text not null,' +
-            'password text,' +
+            'uid integer,' +
             'birthDate date,' +
             'description text,' +
             'followers integer,' +
@@ -24,8 +24,8 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 console.error(err.message);
             } else {
                 let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-                db.run(sql, ["victorfer@gmai.com", "victorfer", "12342", "10-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish",101]);
-                db.run(sql, ["victor@gmai.com", "victor", "1234234", "12-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish",102]);
+                db.run(sql, ["victorfer@gmai.com", "victorfer", "102", "10-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish",101]);
+                db.run(sql, ["victor@gmai.com", "victor", "102", "12-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish",102]);
                 console.log("Taula Usuaris creada correctament");
             }
         });
