@@ -485,7 +485,7 @@ exports.getExplore = function(data,res,next) {
 }
 
 exports.getValoracio = function(data,req,res,next) {
-    let sql = 'SELECT valoracio FROM Participants WHERE usuariCreador = ? AND usuariParticipant = ? AND dataHoraIni = ?;'
+    let sql = 'SELECT valoracio,comentari FROM Participants WHERE usuariCreador = ? AND usuariParticipant = ? AND dataHoraIni = ?;'
     console.log(data.usuariCreador + data.usuariParticipant + data.dataHoraIni);
     db.get(sql, [data.usuariCreador,data.usuariParticipant,data.dataHoraIni], (err,row) => {
         if (err) {
