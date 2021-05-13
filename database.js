@@ -92,7 +92,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             }
         });
         db.run('CREATE TABLE Participants (' +
-            'valoracio integer,' +
+            'valoracio real,' +
             'usuariCreador text,' +
             'dataHoraIni DateTime,' +
             'usuariParticipant text,' +

@@ -1,6 +1,6 @@
 
 var db = require('../../database.js')
-var Tree = require('../../tree');
+//var Tree = require('../../tree');
 
 /**
  *
@@ -314,19 +314,32 @@ exports.valorarActivitat= function(data,req,res,next) {
     let comentari;
     if (data.comentari == null ) comentari = null
     else comentari = data.comentari
-    let sql = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
-    db.run(sql,[data.valoracio,comentari,data.usuariCreador,data.dataHoraIni,data.usuariParticipant],(err)=> {
+    let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio <> null;'
+    var valorar =0
+    db.all(sql,[data.usuariCreador,data.dataHoraIni,data.usuariParticipant], (err,rows)=> {
         if (err) {
             res.status(409).json({
                 status: err.status,
                 message: err.message
             });
+        } else if (rows.length == 0) {
+            res.status(404).send('Activitat ja valorada');
         }
-        else if (this.changes === 0) {
-            res.status(404).send('Participant not found');
-        }
-        else res.status(200).send('Activity successfully valorated');
+        else { valorar = 1}
     })
+    if (valorar == 1) {
+        let sql2 = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
+        db.run(sql2, [data.valoracio, comentari, data.usuariCreador, data.dataHoraIni, data.usuariParticipant], (err) => {
+            if (err) {
+                res.status(409).json({
+                    status: err.status,
+                    message: err.message
+                });
+            } else if (this.changes === 0) {
+                res.status(404).send('Participant not found');
+            } else res.status(200).send('Activity successfully valorated');
+        })
+    }
 
 }
 
@@ -486,4 +499,36 @@ exports.getExplore = function(data,res,next) {
         }
     });
 
+}
+
+exports.getValoracio = function(data,req,res,next) {
+    let sql = 'SELECT valoracio,comentari FROM Participants WHERE usuariCreador = ? AND usuariParticipant = ? AND dataHoraIni = ?;'
+    console.log(data.usuariCreador + data.usuariParticipant + data.dataHoraIni);
+    db.get(sql, [data.usuariCreador,data.usuariParticipant,data.dataHoraIni], (err,row) => {
+        if (err) {
+            next(err);
+        }
+        else if (row == null) {
+            res.status(404).send('Activity not valorated');
+        }
+        else {
+            res.send(row); //retorna un json amb la valoració
+        }
+    })
+}
+
+exports.getComentaris = function(data,req,res,next) {
+    let sql = 'SELECT usuariParticipant,comentari FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    db.all(sql, [data.usuariCreador, data.dataHoraIni], (err,rows) =>
+    {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length == 0) {
+            res.status(404).send('No comentaries for this activity');
+        }
+        else {
+            res.send(rows); //retorna un json amb la valoració
+        }
+    })
 }
