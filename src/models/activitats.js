@@ -317,8 +317,7 @@ exports.valorarActivitat= function(data,req,res,next) {
     let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio is null;'
     var valorar =0
     db.all(sql,[data.usuariCreador,data.dataHoraIni,data.usuariParticipant], (err,rows)=> {
-        console.log(rows)
-        console.log(data.usuariCreador + data.dataHoraIni + data.usuariParticipant)
+
         if (err) {
             res.status(409).json({
                 status: err.status,
@@ -327,21 +326,22 @@ exports.valorarActivitat= function(data,req,res,next) {
         } else if (rows.length == 0) {
             res.status(404).send('Activitat ja valorada');
         }
-        else { valorar = 1}
+        else {
+            let sql2 = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
+            db.run(sql2, [data.valoracio, comentari, data.usuariCreador, data.dataHoraIni, data.usuariParticipant], (err) => {
+                if (err) {
+                    res.status(409).json({
+                        status: err.status,
+                        message: err.message
+                    });
+                } else if (this.changes === 0) {
+                    res.status(404).send('Participant not found');
+                } else res.status(200).send('Activity successfully valorated');
+            })}
     })
-    if (valorar == 1) {
-        let sql2 = 'UPDATE Participants SET valoracio = ? , comentari = ? WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ?;'
-        db.run(sql2, [data.valoracio, comentari, data.usuariCreador, data.dataHoraIni, data.usuariParticipant], (err) => {
-            if (err) {
-                res.status(409).json({
-                    status: err.status,
-                    message: err.message
-                });
-            } else if (this.changes === 0) {
-                res.status(404).send('Participant not found');
-            } else res.status(200).send('Activity successfully valorated');
-        })
-    }
+
+
+
 
 }
 
