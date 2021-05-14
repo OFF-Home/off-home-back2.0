@@ -309,7 +309,13 @@ exports.getActivitatsByRadi = function(info,res,next) {
     });
 }
 
-
+/**
+ *
+ * @param data
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.valorarActivitat= function(data,req,res,next) {
     let comentari;
     if (data.comentari == null ) comentari = null
@@ -339,12 +345,15 @@ exports.valorarActivitat= function(data,req,res,next) {
                 } else res.status(200).send('Activity successfully valorated');
             })}
     })
-
-
-
-
 }
 
+/**
+ *
+ * @param data
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.placesLliures = function(data,req,res,next) {
     let maxParticipant = 0;
     let placesOcupades = 0;
@@ -386,6 +395,12 @@ exports.placesLliures = function(data,req,res,next) {
     } else res.send('False')
 }
 
+/**
+ *
+ * @param data
+ * @param res
+ * @param next
+ */
 exports.getParticipantsActivitat = function(data,res,next) {
     let sql = 'SELECT u.username ' +
         'FROM Participants p, Usuaris u ' +
@@ -403,6 +418,12 @@ exports.getParticipantsActivitat = function(data,res,next) {
     });
 }
 
+/**
+ *
+ * @param categories_done
+ * @param activities_all
+ * @param row_data
+ */
 function createTree(categories_done,activities_all,row_data) {
     var tree = new Tree("root");
     let n = row_data.length;
@@ -424,6 +445,12 @@ function createTree(categories_done,activities_all,row_data) {
     return tree.readTree();
 }
 
+/**
+ *
+ * @param data
+ * @param res
+ * @param next
+ */
 exports.getExplore = function(data,res,next) {
     let sql_all = 'SELECT * ' +
         '        FROM ActivitatsInfo a ' +
@@ -503,6 +530,13 @@ exports.getExplore = function(data,res,next) {
 
 }
 
+/**
+ *
+ * @param data
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getValoracio = function(data,req,res,next) {
     let sql = 'SELECT valoracio,comentari FROM Participants WHERE usuariCreador = ? AND usuariParticipant = ? AND dataHoraIni = ?;'
     console.log(data.usuariCreador + data.usuariParticipant + data.dataHoraIni);
@@ -519,6 +553,13 @@ exports.getValoracio = function(data,req,res,next) {
     })
 }
 
+/**
+ *
+ * @param data
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getComentaris = function(data,req,res,next) {
     let sql = 'SELECT usuariParticipant,comentari FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
     db.all(sql, [data.usuariCreador, data.dataHoraIni], (err,rows) =>

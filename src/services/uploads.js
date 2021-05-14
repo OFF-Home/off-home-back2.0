@@ -22,6 +22,12 @@ exports.uploadImageUser = function(req,res,next) {
         });
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getImageUserUploaded = function(req,res,next) {
     let data = {
         username: req.params.username

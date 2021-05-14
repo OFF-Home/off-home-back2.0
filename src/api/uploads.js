@@ -8,6 +8,10 @@ let upload = require('../services/uploads');
  */
 router.post('/userimage/:email',upload.uploadImageUser);
 
+/**
+ * Funció d'enrutament de la direcció /upload/userimageget/:username amb get.
+ * Retorna l'imatge de l'ususari si s'ha trobat l'usuari especificat.
+ */
 router.get('/userimageget/:username',upload.getImageUserUploaded);
 
 module.exports = router;

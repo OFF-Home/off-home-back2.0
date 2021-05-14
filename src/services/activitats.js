@@ -175,7 +175,12 @@ exports.get_activitatsOrderedByDate = function(req,res,next) {
     activitats.get_activitatsOrderedByDate(req,res,next);
 }
 
-
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.valorarActivitat = function(req,res,next){
     var data = {
         valoracio: req.body.valoracio,
@@ -188,6 +193,12 @@ exports.valorarActivitat = function(req,res,next){
     activitats.valorarActivitat(data,req,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.calcularPlacesLliures = function(req,res,next) {
     let data = {
         username: req.params.username,
@@ -196,6 +207,12 @@ exports.calcularPlacesLliures = function(req,res,next) {
     models.placesLliures(data, req, res, next)
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getParticipantsActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.params.usuariCreador,
@@ -204,6 +221,12 @@ exports.getParticipantsActivitat = function(req,res,next) {
     activitats.getParticipantsActivitat(data,res,next);
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getExplore = function (req,res,next) {
     var data = {
         email: req.params.email
@@ -212,6 +235,12 @@ exports.getExplore = function (req,res,next) {
 
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getValoracio = function (req,res,next) {
     var data = {
         usuariCreador: req.query.usuariCreador,
@@ -222,6 +251,12 @@ exports.getValoracio = function (req,res,next) {
     activitats.getValoracio(data,req,res,next)
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.getComentaris = function (req,res,next ) {
     var data = {
         usuariCreador: req.query.usuariCreador,
