@@ -11,7 +11,7 @@ exports.regUsuari = function(req,res,next) {
     var data = {
         email: req.body.email,
         username: req.params.username,
-        password : req.body.password,
+        uid : req.body.uid,
         birthDate :req.body.birthDate,
         descripcio : req.body.description,
         followers : req.body.followers,
@@ -20,9 +20,8 @@ exports.regUsuari = function(req,res,next) {
         notificacions : req.body.notificacions,
         estrelles : req.body.estrelles,
         language : req.body.language,
-        usid: req.body.usid
     }
-    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language,data.usid];
+    let info = [data.email,data.username,data.uid,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language];
 
     models.regUsuari(info,res,next);
 
@@ -52,7 +51,7 @@ exports.updateUsuari = function (req,res,next) {
     var data = {
         email: req.body.email,
         username: req.body.username,
-        password : req.body.password,
+        uid : req.body.uid,
         birthDate :req.body.birthDate,
         descripcio : req.body.description,
         followers : req.body.followers,
@@ -65,7 +64,7 @@ exports.updateUsuari = function (req,res,next) {
         usid: req.body.usid
     }
     var target = req.params.username;
-    let info = [data.email,data.username,data.password,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language,data.usid];
+    let info = [data.email,data.username,data.uid,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
     models.updateUsuari(info,target,res,next);
 }
 
