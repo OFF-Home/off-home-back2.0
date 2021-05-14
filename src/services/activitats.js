@@ -199,7 +199,7 @@ exports.calcularPlacesLliures = function(req,res,next) {
 exports.getParticipantsActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.params.usuariCreador,
-        dataHoraIni: req.body.dataHoraIni
+        dataHoraIni: req.query.dataHoraIni
     };
     activitats.getParticipantsActivitat(data,res,next);
 }
