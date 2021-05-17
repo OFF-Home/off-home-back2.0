@@ -503,7 +503,7 @@ exports.getValoracio = function(data,req,res,next) {
 }
 
 exports.getComentaris = function(data,req,res,next) {
-    let sql = 'SELECT usuariParticipant,comentari FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ?;'
+    let sql = 'SELECT u.username,p.comentari FROM Participants p, Usuaris u WHERE  p.usuariParticipant == u.email and p.usuariCreador = ? AND p.dataHoraIni = ? ;'
     db.all(sql, [data.usuariCreador, data.dataHoraIni], (err,rows) =>
     {
         if (err) {
