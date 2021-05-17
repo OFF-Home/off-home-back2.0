@@ -2,11 +2,28 @@ var express = require('express');
 var router = express.Router();
 var activitats = require('../services/activitats.js');
 
+/**
+ * Funció d'enrutament de la direcció /activitats/participants/valoracio amb el mètode get.
+ * Retorna la valoració d'un determinat participant de l'activitat especificada.
+ */
 router.get('/participants/valoracio', activitats.getValoracio)
 
+/**
+ * Funció d'enrutament de la direcció /activitats/participants/comentaris amb el mètode get.
+ * Retorna els comentaris que han fet els usuaris a una determinada activitat.
+ */
 router.get('/participants/comentaris', activitats.getComentaris )
+
+/**
+ * Funció d'enrutament de la direcció /activitats/participants/:usuariCreador amb el mètode get.
+ * Retorna tots els usuaris que participen a l'activitat especificada.
+ */
 router.get('/participants/:usuariCreador',activitats.getParticipantsActivitat);
 
+/**
+ * Funció d'enrutament de la direcció /activitats/explore amb el mètode get.
+ * Retorna totes les activitats de la base de dades ordenades segons rellevancia per l'usuari.
+ */
 router.get('/explore/:email',activitats.getExplore);
 
 /**

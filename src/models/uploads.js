@@ -55,6 +55,12 @@ exports.uploadImageUser = function(path_img,email,res,next) {
     });
 }
 
+/**
+ *
+ * @param data
+ * @param res
+ * @param next
+ */
 exports.getImageUser = function (data,res,next) {
     let sql = 'SELECT u.image ' +
         'FROM Usuaris u ' +
