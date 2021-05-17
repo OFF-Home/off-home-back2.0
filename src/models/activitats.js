@@ -1,6 +1,8 @@
 
 var db = require('../../database.js')
 //var Tree = require('../../tree');
+const firebaseAdmin = require('firebase-admin');
+const firebaseDB = firebaseAdmin.database();
 
 /**
  *
@@ -141,7 +143,13 @@ exports.create_activitats = function (data,req,res,next) {
                 message: err.message
             });
         }
-        else res.status(201).send('OK');
+        else{
+                let dataHoraIni = data.dataHoraIni
+                let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
+
+                firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
+
+            res.status(201).send('OK');}
     });
 
 }

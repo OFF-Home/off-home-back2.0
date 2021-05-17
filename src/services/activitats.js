@@ -36,7 +36,8 @@ exports.create_activitats = function(req,res,next) {
         maxParticipants: req.body.maxParticipants,
         titol: req.body.titol,
         descripcio: req.body.descripcio,
-        dataHoraFi: req.body.dataHoraFi
+        dataHoraFi: req.body.dataHoraFi,
+        uid_creador: req.body.uid_creador
     }
     models.create_activitats(data,req,res,next);
 }
