@@ -13,26 +13,28 @@ describe('/GET SearchByRadi:', () => {
     before(function(done){
         db.serialize(() => {
             let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            let sql2 = 'INSERT INTO Llocs VALUES (?,?,?,?)';
+            let sql3 = 'INSERT INTO Categories VALUES (?,?)';
+            let sql4 = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
             db.run(sql,['josep@gmail.com','josep','2365']);
-            sql = 'INSERT INTO Llocs VALUES (?,?,?,?)';
-            db.run(sql,['C/Font',25,41.401703,2.175327]);
-            sql = 'INSERT INTO Categories VALUES (?,?)'
-            db.run(sql,['Training','Train']);
-            sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-            db.run(sql,['josep@gmail.com','C/Font',25,'19-04-2021 18:00:00','Training',10,'Play','playing','19-04-2021 19:00:00'], () => {
+            db.run(sql2,['C/Font',25,41.401703,2.175327])
+            db.run(sql3,['Training','Train']);
+            db.run(sql4,['josep@gmail.com','C/Font',25,'19-04-2021 18:00:00','Training',10,'Play','playing','19-04-2021 19:00:00'], () => {
                 done();
             });
         });
     });
     after(function(done){
-        let sql = 'DELETE FROM Activitats WHERE usuariCreador = ? and dataHoraIni = ?';
-        db.run(sql,['josep@gmail.com','19-04-2021 18:00:00']);
-        sql= 'DELETE FROM Usuaris WHERE username = ?;';
-        db.run(sql,['josep']);
-        sql = 'DELETE FROM Llocs WHERE nomCarrer = ? and numCarrer = ?';
-        db.run(sql,['C/Font',25]);
-        sql = 'DELETE FROM Categories WHERE categoria = ?';
-        db.run(sql,['Training']);
+        db.serialize(() => {
+            let sql = 'DELETE FROM Activitats WHERE usuariCreador = ? and dataHoraIni = ?';
+            let sql2= 'DELETE FROM Usuaris WHERE username = ?;';
+            let sql3 = 'DELETE FROM Llocs WHERE nomCarrer = ? and numCarrer = ?';
+            let sql4 = 'DELETE FROM Categories WHERE categoria = ?';
+            db.run(sql,['josep@gmail.com','19-04-2021 18:00:00']);
+            db.run(sql2,['josep']);
+            db.run(sql3,['C/Font',25]);
+            db.run(sql4,['Training']);
+        })
         done();
     });
     it('should return the activity', (done) => {
@@ -76,24 +78,25 @@ describe('/GET Participants Activitat:', () => {
         });
     });
     after(function (done) {
-        let sql = 'DELETE FROM Activitats WHERE usuariCreador = ? and dataHoraIni = ?';
-        db.run(sql, ['jess@gmail.com', '19-04-2021 18:00:00']);
-        db.run(sql, ['jess@gmail.com', '30-04-2021 18:00:00']);
-        sql = 'DELETE FROM Usuaris WHERE username = ?;';
-        db.run(sql, ['jess']);
-        db.run(sql, ['jess2']);
-        sql = 'DELETE FROM Llocs WHERE nomCarrer = ? and numCarrer = ?';
-        db.run(sql, ['C/Font', 25]);
-        sql = 'DELETE FROM Categories WHERE categoria = ?';
-        db.run(sql, ['Train']);
-        sql = 'DELETE FROM Participants WHERE usuariCreador = ? and dataHoraIni = ?';
-        db.run(sql, ['jess@gmail.com','19-04-2021 18:00:00']);
+        db.serialize(() => {
+            let sql = 'DELETE FROM Participants WHERE usuariCreador = ? and dataHoraIni = ?';
+            db.run(sql, ['jess@gmail.com','19-04-2021 18:00:00']);
+            sql = 'DELETE FROM Activitats WHERE usuariCreador = ? and dataHoraIni = ?';
+            db.run(sql, ['jess@gmail.com', '19-04-2021 18:00:00']);
+            db.run(sql, ['jess@gmail.com', '30-04-2021 18:00:00']);
+            sql = 'DELETE FROM Usuaris WHERE username = ?;';
+            db.run(sql, ['jess']);
+            db.run(sql, ['jess2']);
+            sql = 'DELETE FROM Llocs WHERE nomCarrer = ? and numCarrer = ?';
+            db.run(sql, ['C/Font', 25]);
+            sql = 'DELETE FROM Categories WHERE categoria = ?';
+            db.run(sql, ['Train']);
+        })
         done();
     });
     it('should return the participant', (done) => {
         chai.request(url)
-            .get('/activitats/participants/jess@gmail.com')
-            .send({dataHoraIni: '19-04-2021 18:00:00'})
+            .get('/activitats/participants/jess@gmail.com?dataHoraIni=19-04-2021 18:00:00')
             .end(function (err, res) {
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.an('array');
@@ -102,8 +105,7 @@ describe('/GET Participants Activitat:', () => {
     });
     it('should not return anything', (done) => {
         chai.request(url)
-            .get('/activitats/participants/jess@gmail.com')
-            .send({dataHoraIni: '30-04-2021 18:00:00'})
+            .get('/activitats/participants/jess@gmail.com?dataHoraIni=30-04-2021 18:00:00')
             .end(function (err, res) {
                 expect(res).to.have.status(204);
                 done();

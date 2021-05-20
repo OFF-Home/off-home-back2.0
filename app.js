@@ -21,6 +21,7 @@ var categoriesRouter = require('./src/api/categories');
 var tagsRouter = require('./src/api/tags');
 var UploadsRouter = require('./src/api/uploads');
 var xatsRouter = require('./src/api/xats');
+var assolimentsRouter =  require('./src/api/assoliments');
 
 
 var app = express();
@@ -44,6 +45,7 @@ app.use('/categories',categoriesRouter);
 app.use('/tags',tagsRouter);
 app.use('/upload',UploadsRouter);
 app.use('/xats',xatsRouter);
+app.use('/assoliments',assolimentsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
