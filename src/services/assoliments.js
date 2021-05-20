@@ -20,3 +20,18 @@ exports.afegirAssoliment = function (req,res,next) {
     }
 
 }
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getAssolimentsComplets = function(req,res,next) {
+    if (req.query.useremail == null || req.query.useremail.length === 0) {
+        res.status(400).send('The query parameter is empty');
+    }
+    else {
+        model.getAssolimentsCompletats(req.query.useremail,res,next);
+    }
+}
