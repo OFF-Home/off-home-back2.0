@@ -37,6 +37,11 @@ router.get('/:username/show', user.showUsuari);
 router.put('/:username/update',user.updateUsuari);
 
 /**
+ * Funció d'eliminar un usuari amb el mètode delete, on l'@username es l'usuari esborrat.
+ */
+router.delete('/:username/delete',user.deleteUsuari);
+
+/**
  * Funció d'enrutament de la direcció /users/:username amb el mètode get, on @username és el nom d'usuari.
  * Retorna tota la informació de l'usuari.
  */
