@@ -160,6 +160,26 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             }
         });
 
+        db.run('CREATE TABLE likedActivities (' +
+            'usuariCreador text, ' +
+            'dataHoraIni DateTime, ' +
+            'usuariGuardador text, ' +
+            'CONSTRAINT liked_activities PRIMARY KEY (usuariCreador,dataHoraIni,usuariGuardador),' +
+            'FOREIGN KEY (usuariCreador,dataHoraIni) REFERENCES Activitats (usuariCreador,dataHoraIni),' +
+            'CONSTRAINT Participants_FK2 FOREIGN KEY (usuariGuardador) REFERENCES Usuaris (email));', (err) => {
+            if (err) {
+                console.error(err.message);
+            }
+
+
+             else {
+                let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
+                db.run(sql, ["victorfer@gmai.com", "2021-03-24 18:00:00.000", "victor@gmai.com"]);
+                console.log("Taula d'activitats guardades creada correctament");
+             }
+
+        });
+
     }
 
 });

@@ -583,3 +583,16 @@ exports.getComentaris = function(data,req,res,next) {
         }
     })
 }
+
+exports.afegirActivities = function(data,req,res,next) {
+    let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
+    db.run(sql,[data.usuariCreador,data.dataHoraIni,data.usuariGuardador],(err) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.status(201).send('OK');
+    })
+}

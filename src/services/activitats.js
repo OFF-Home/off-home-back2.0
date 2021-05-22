@@ -265,3 +265,12 @@ exports.getComentaris = function (req,res,next ) {
     }
     activitats.getComentaris(data,req,res,next)
 }
+
+exports.afegirActivies = function(req,res,next) {
+    var data = {
+        usuariCreador: req.body.usuariCreador,
+        datahoraIni: req.body.dataHoraIni,
+        usuariGuardador: req.body.usuariGuardador
+    }
+    activitats.afegirActivities(data,req,res,next)
+}

@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var activitats = require('../services/activitats.js');
 
+
+
+
 /**
  * Funció d'enrutament de la direcció /activitats/participants/valoracio amb el mètode get.
  * Retorna la valoració d'un determinat participant de l'activitat especificada.
@@ -80,6 +83,7 @@ router.get('/:username/:datahora',activitats.get_activitats);
 router.get('/:username/:datahora/placeslliures', activitats.calcularPlacesLliures)
 
 
+router.post('/likedActivities/', activitats.afegirActivies)
 
 /** Funció d'enrutament de la direcció /activitats/:usuariCreador amb post, on @usuariCreador és l'email d'un usuari existent.
  *  Crea una instància d'activitat amb l'usuari de la url i els paràmtres necessaris del body */
