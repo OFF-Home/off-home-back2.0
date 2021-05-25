@@ -32,6 +32,31 @@ exports.get_activitats = function (data,req,res,next) {
 
 /**
  *
+ * @param useremail
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (useremail,res,next) {
+    let sql = 'SELECT a.*, p.valoracio ' +
+        'FROM Activitatsinfo a, Participants p ' +
+        'WHERE p.usuariParticipant = ? AND p.usuariCreador = a.usuariCreador AND p.dataHoraIni = a.dataHoraIni AND a.acabada = 1';
+    db.all(sql, [useremail], (err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length === 0) {
+            res.status(404).send('No activities finished');
+        }
+        else {
+            res.send(rows);
+        }
+    })
+}
+
+
+/**
+ *
  * @param req
  * @param res
  * @param next
@@ -580,6 +605,30 @@ exports.getComentaris = function(data,req,res,next) {
         }
         else {
             res.send(rows); //retorna un json amb la valoració
+        }
+    })
+}
+
+
+/**
+ *
+ * @param useremail
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (useremail,res,next) {
+    let sql = 'SELECT a.*, p.valoracio ' +
+        'FROM Activitatsinfo a, Participants p ' +
+        'WHERE p.usuariParticipant = ? AND p.usuariCreador = a.usuariCreador AND p.dataHoraIni = a.dataHoraIni AND a.acabada = 1';
+    db.all(sql, [useremail], (err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length === 0) {
+            res.status(404).send('No activities finished');
+        }
+        else {
+            res.send(rows);
         }
     })
 }
