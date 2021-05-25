@@ -133,9 +133,10 @@ exports.filterByTitle = function(nom, req,res,next) {
  * @param next
  */
 
-exports.create_activitats = function (data,req,res,next) {
+exports.create_activitats = function (data,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+
     db.run(sql,info,(err) => {
         if (err) {
             res.status(409).json({
@@ -144,12 +145,13 @@ exports.create_activitats = function (data,req,res,next) {
             });
         }
         else{
-                let dataHoraIni = data.dataHoraIni
-                let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
+            let dataHoraIni = data.dataHoraIni
+            let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
 
-                firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
+            firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
 
-            res.status(201).send('OK');}
+            res.status(201).send('OK');
+        }
     });
 
 }

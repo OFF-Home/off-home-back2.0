@@ -2,9 +2,9 @@ const firebaseAdmin = require('firebase-admin');
 
 const firebaseDB = firebaseAdmin.database();
 
-exports.veureXats = function(usid,res,next) {
+exports.veureXats = function(uid,res,next) {
 
-    firebaseDB.ref('usuaris/'+usid).once('value', (snapshot) =>
+    firebaseDB.ref('usuaris/'+uid).once('value', (snapshot) =>
     {
         const data = snapshot.val();
         res.send(data);

@@ -39,7 +39,7 @@ exports.create_activitats = function(req,res,next) {
         dataHoraFi: req.body.dataHoraFi,
         uid_creador: req.body.uid_creador
     }
-    models.create_activitats(data,req,res,next);
+    models.create_activitats(data,res,next);
 }
 
 /**

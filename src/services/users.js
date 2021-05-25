@@ -128,3 +128,12 @@ exports.getFollow = function(req,res,next) {
     models.getFollow(data,res,next);
 
 }
+
+
+exports.deleteUsuari = function(req,res,next) {
+    var data = {
+        email: req.params.email
+    }
+    models.deleteUsuari(data,res,next);
+
+}

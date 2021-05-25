@@ -30,6 +30,7 @@ exports.showUsuari = function(info,res,next) {
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
         'WHERE u.email = ?'
+    console.log('pollo')
     db.get(sql,[info.username],(err,row) => {
         if(row == null) {
             res.status(404).send('User not found');
@@ -260,6 +261,21 @@ exports.decreaseFollowing = function(req,res,next) {
         else {
             res.send ('User has been updated');
         }
+    });
+}
+
+
+exports.deleteUsuari = function(data,res,next){
+
+    let sql = 'DELETE FROM Usuaris WHERE LOWER(email) = LOWER(?)';
+    db.run(sql,[data.email], (err) => {
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
+        }
+        else res.send('Usuari deleted');
     });
 }
 
