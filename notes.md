@@ -11,7 +11,7 @@ docker-compose stop && docker-compose rm -f && docker-compose pull && docker-com
 
 LOGS: docker-compose logs -f pes
 
-docker-compose.yaml
+docker-compose.yaml AQUEST ES EL COMPOSE PEL SERVER!!!!
 ```yaml
 version: '3'
 services:
