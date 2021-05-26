@@ -265,3 +265,33 @@ exports.getComentaris = function (req,res,next ) {
     }
     activitats.getComentaris(data,req,res,next)
 }
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (req,res,next) {
+    if (req.params.useremail == null || req.params.useremail.length === 0) {
+        res.status(400).send('The body has null values');
+    }
+    else {
+        activitats.getActivitatsAcabades(req.params.useremail,res,next);
+    }
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (req,res,next) {
+    if (req.params.useremail == null || req.params.useremail.length === 0) {
+        res.status(400).send('The body has null values');
+    }
+    else {
+        activitats.getActivitatsAcabades(req.params.useremail,res,next);
+    }
+}
