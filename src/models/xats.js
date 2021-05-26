@@ -1,16 +1,33 @@
 const firebaseAdmin = require('firebase-admin');
+var db = require('../../database.js')
 
 const firebaseDB = firebaseAdmin.database();
 
-exports.veureXats = function(uid,res,next) {
+exports.veureXats = function(uid,n,data, res) {
+    let users = []
 
     firebaseDB.ref('usuaris/'+uid).once('value', (snapshot) =>
     {
-        const data = snapshot.val();
-        res.send(data);
-    });
+        snapshot.forEach(child=>{
+            const id = child.val()
+            data.push( id.uid);
+        })
+        let sql = 'SELECT username FROM Usuaris WHERE uid = ?';
+        console.log(data)
+        for(let i = 0; i<data.length;i++){
+            db.all(sql,data[i], (err, rows) => {
+                users.push(rows)
+            });
+        }
+        res.send(users)
+    })
 
 }
+
+exports.traduirXats = function (data) {
+
+}
+
 
 exports.veureXatIndividual = function(usid_1,usid_2,res,next) {
 
@@ -44,8 +61,14 @@ exports.crearXat = function(usid_1,usid_2,res,next) {
         res.status(400).send('Emails iguals');
     }
 
-    firebaseDB.ref('usuaris/'+ usid_1).push(xatid)
-    firebaseDB.ref('usuaris/'+ usid_2).push(xatid)
+    firebaseDB.ref('usuaris/'+ usid_1).child(xatid).set({
+        xatId: xatid,
+        uid: usid_2
+    })
+    firebaseDB.ref('usuaris/'+ usid_2).child(xatid).set({
+        xatId: xatid,
+        uid: usid_1
+    })
     res.send('Creat');
 }
 
@@ -100,6 +123,12 @@ exports.crearXatGrupal = function(info,res,next) {
 
 
     firebaseDB.ref('usuaris/'+usid_creador).push(activitat)
+    firebaseDB.ref('usuaris/'+ usid_creador).child(activitat).set({
+        chatId: activitat,
+        uid: usid_creador,
+
+    });
+    console.log("res")
     res.send('Creat');
 }
 
@@ -151,11 +180,19 @@ exports.esborrarMsgGrup = function(info,res,next) {
 exports.afegirUsuariXatGrupal = function(info,res,next) {
 
 
-    let usid_creador = info.usid_creador
+    let uid_creador = info.usid_creador
     let dataHoraIni = info.dataHoraIni
     let usid_participant = info.usid_participant
-    let activitat = usid_creador.concat("_").concat(dataHoraIni)
+    let activitat = uid_creador.concat("_").concat(dataHoraIni)
 
     firebaseDB.ref('usuaris/'+ usid_participant).push(activitat)
+    console.log("yeehaw")
+    firebaseDB.ref('usuaris/'+ usid_participant).child(activitat).set({
+        chatId: activitat,
+        uid: usid_participant,
+
+    });
+
+    console.log("hola")
     res.send('Afegit');
 }

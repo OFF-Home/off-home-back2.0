@@ -145,10 +145,6 @@ exports.create_activitats = function (data,res,next) {
             });
         }
         else{
-            let dataHoraIni = data.dataHoraIni
-            let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
-
-            firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
 
             res.status(201).send('OK');
         }

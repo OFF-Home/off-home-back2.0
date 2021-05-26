@@ -39,6 +39,10 @@ exports.create_activitats = function(req,res,next) {
         dataHoraFi: req.body.dataHoraFi,
         uid_creador: req.body.uid_creador
     }
+    var resposta = {
+        error: "error",
+
+    }
     models.create_activitats(data,res,next);
 }
 

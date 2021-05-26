@@ -2,8 +2,13 @@ var models = require('../models/xats.js')
 
 exports.veureXats = function(req,res,next) {
 
-    let usid = req.params.usid
-    models.veureXats(usid,res,next);
+    let uid = req.params.uid
+    var status = 500
+    let data = []
+    let n = 0
+    models.veureXats(uid,n, data,res)
+    console.log('fora veure Xats')
+
 
 }
 
