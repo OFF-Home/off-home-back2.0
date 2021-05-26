@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var activitats = require('../services/activitats.js');
 
+/** Funció d'enrutament de la direcció /activitats/acabades/:useremail amb get, on @useremail és l'email d'un usuari existent.
+ *  Retornar les activitats acabades per l'usuari*/
+router.get('/acabades/:useremail', activitats.getActivitatsAcabades);
+
 /** Funció d'enrutament de la direcció /activitats/:usuariCreador amb post, on @usuariCreador és l'email d'un usuari existent.
  *  Crea una instància d'activitat amb l'usuari de la url i els paràmtres necessaris del body */
 router.post('/create/:usuariCreador', activitats.create_activitats);
