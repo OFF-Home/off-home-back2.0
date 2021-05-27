@@ -159,3 +159,30 @@ exports.afegirUsuariXatGrupal = function(info,res,next) {
     firebaseDB.ref('usuaris/'+ usid_participant).push(activitat)
     res.send('Afegit');
 }
+
+
+exports.sendMessage = function(info,res,next) {
+    const notification_options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24
+    };
+
+    const payload = {
+        notification: {
+            title: info.titol,
+            body: info.message
+        }
+    };
+    const token = info.token;
+
+    firebaseAdmin.messaging().sendToDevice(token, payload, notification_options)
+        .then( response => {
+
+            res.status(200).send("Notification sent successfully")
+
+        })
+        .catch( error => {
+            console.log(error);
+            next(error);
+        });
+}
