@@ -266,11 +266,18 @@ exports.getComentaris = function (req,res,next ) {
     activitats.getComentaris(data,req,res,next)
 }
 
-exports.afegirActivies = function(req,res,next) {
+exports.afegirActivities = function(req,res,next) {
     var data = {
         usuariCreador: req.body.usuariCreador,
         datahoraIni: req.body.dataHoraIni,
         usuariGuardador: req.body.usuariGuardador
     }
     activitats.afegirActivities(data,req,res,next)
+}
+
+exports.getActivitatsGuardades = function(req,res,next){
+    var data = {
+        usuariGuardador: req.params.email
+    }
+    activitats.getActivitatsGuardades(data,req,res,next)
 }
