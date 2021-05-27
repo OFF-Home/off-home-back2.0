@@ -6,7 +6,7 @@ let user = require('../services/users');
 /**
  * Funció d'eliminar un usuari amb el mètode delete, on l'@email es l'usuari esborrat.
  */
-router.delete('/delete/:email',user.deleteUsuari);
+router.delete('/delete/:email', user.deleteUsuari);
 
 /**
  *  Funció d'enrutament de la direcció /users/:username/create amb el mètode post, on @username és el nom d'usuari.

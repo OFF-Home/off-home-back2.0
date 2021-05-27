@@ -268,6 +268,7 @@ exports.decreaseFollowing = function(req,res,next) {
 exports.deleteUsuari = function(data,res,next){
 
     let sql = 'DELETE FROM Usuaris WHERE LOWER(email) = LOWER(?)';
+
     db.run(sql,[data.email], (err) => {
         if (err) {
             res.status(409).json({
@@ -275,7 +276,10 @@ exports.deleteUsuari = function(data,res,next){
                 message : err.message
             });
         }
-        else res.send('Usuari deleted');
+
+        else{
+            res.send('Usuari deleted');
+        }
     });
 }
 
