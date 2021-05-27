@@ -29,6 +29,26 @@ exports.get_activitats = function (data,req,res,next) {
     });
 }
 
+exports.getActivitatsGuardades = function(data,req,res,next) {
+    let sql = 'SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?);';
+    db.all(sql,[data.usuariGuardador], (err, rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length == 0) {
+            res.status(204).send('Activities Not Found');
+        }
+        else if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.send(rows);
+
+    });
+}
+
 
 /**
  *
@@ -632,5 +652,18 @@ exports.getActivitatsAcabades = function (useremail,res,next) {
         else {
             res.send(rows);
         }
+    })
+}
+
+exports.afegirActivities = function(data,req,res,next) {
+    let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
+    db.run(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.status(201).send('OK');
     })
 }
