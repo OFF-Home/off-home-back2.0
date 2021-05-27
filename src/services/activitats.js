@@ -295,3 +295,19 @@ exports.getActivitatsAcabades = function (req,res,next) {
         activitats.getActivitatsAcabades(req.params.useremail,res,next);
     }
 }
+
+exports.afegirActivities = function(req,res,next) {
+    var data = {
+        usuariCreador: req.body.usuariCreador,
+        datahoraIni: req.body.dataHoraIni,
+        usuariGuardador: req.body.usuariGuardador
+    }
+    activitats.afegirActivities(data,req,res,next)
+}
+
+exports.getActivitatsGuardades = function(req,res,next){
+    var data = {
+        usuariGuardador: req.params.email
+    }
+    activitats.getActivitatsGuardades(data,req,res,next)
+}
