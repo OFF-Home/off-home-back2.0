@@ -275,6 +275,15 @@ exports.afegirActivities = function(req,res,next) {
     activitats.afegirActivities(data,req,res,next)
 }
 
+exports.eliminarActivities = function(req,res,next) {
+    var data = {
+        usuariCreador: req.body.usuariCreador,
+        datahoraIni: req.body.dataHoraIni,
+        usuariGuardador: req.body.usuariGuardador
+    }
+    activitats.eliminarActivities(data,req,res,next)
+}
+
 exports.getActivitatsGuardades = function(req,res,next){
     var data = {
         usuariGuardador: req.params.email

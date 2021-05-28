@@ -617,3 +617,31 @@ exports.afegirActivities = function(data,req,res,next) {
     })
 }
 
+exports.eliminarActivities = function(data,req,res,next) {
+    let sql = 'SELECT * FROM likedActivities  where usuariCreador == ? and dataHoraIni == ? and usuariGuardador == ?';
+    db.get(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err,row) => {
+        if (err) {
+            res.status(500).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else if (row == null) {
+            res.status(404).send('Activity is not in liked activities');
+            continuar = 0
+        }
+        else {
+            let sql2 = 'DELETE FROM likedActivities where usuariCreador == ? and dataHoraIni == ? and usuariGuardador == ?';
+            db.run(sql2, [data.usuariCreador, data.datahoraIni, data.usuariGuardador], (err) => {
+                if (err) {
+                    res.status(409).json({
+                        status: err.status,
+                        message: err.message
+                    });
+                } else res.status(204).send('OK');
+            })
+        }
+    })
+
+}
+
