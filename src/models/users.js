@@ -263,5 +263,22 @@ exports.decreaseFollowing = function(req,res,next) {
     });
 }
 
+exports.getEstrelles = function(data,res,next) {
+    let sql = 'SELECT AVG(valoracioMitjana) AS estrelles FROM ValoracioActivitats va WHERE usuariCreador == ?'
+    db.all(sql,[data.email],(err,rows) => {
+        if (err) {
+            res.status(500).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else if (rows.length == 0) {
+            res.status(404).send('This user cannot have a valoration');
+        }
+        else res.status(200).send(rows);
+
+    })
+}
+
 
 

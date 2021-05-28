@@ -128,3 +128,10 @@ exports.getFollow = function(req,res,next) {
     models.getFollow(data,res,next);
 
 }
+
+exports.getEstrelles = function(req,res,next) {
+    var data = {
+        email: req.params.data
+    }
+    models.getEstrelles(data,res,next);
+}

@@ -616,3 +616,4 @@ exports.afegirActivities = function(data,req,res,next) {
         else res.status(201).send('OK');
     })
 }
+

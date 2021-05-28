@@ -160,6 +160,15 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             }
         });
 
+        db.run('CREATE VIEW IF NOT EXISTS ValoracioActivitats AS SELECT usuariCreador, dataHoraIni, AVG(valoracio) as valoracioMitjana FROM Participants GROUP BY usuariCreador, dataHoraIni ', (err) => {
+            if (err) {
+                console.error(err.message);
+            } else {
+                console.log("Vista ValoracioActivitats creada correctament");
+            }
+        });
+
+
         db.run('CREATE TABLE likedActivities (' +
             'usuariCreador text, ' +
             'dataHoraIni DateTime, ' +
