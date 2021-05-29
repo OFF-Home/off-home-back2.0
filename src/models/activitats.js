@@ -29,6 +29,51 @@ exports.get_activitats = function (data,req,res,next) {
     });
 }
 
+exports.getActivitatsGuardades = function(data,req,res,next) {
+    let sql = 'SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?);';
+    db.all(sql,[data.usuariGuardador], (err, rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length == 0) {
+            res.status(204).send('Activities Not Found');
+        }
+        else if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.send(rows);
+
+    });
+}
+
+
+/**
+ *
+ * @param useremail
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (useremail,res,next) {
+    let sql = 'SELECT a.*, p.valoracio ' +
+        'FROM Activitatsinfo a, Participants p ' +
+        'WHERE p.usuariParticipant = ? AND p.usuariCreador = a.usuariCreador AND p.dataHoraIni = a.dataHoraIni AND a.acabada = 1';
+    db.all(sql, [useremail], (err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length === 0) {
+            res.status(404).send('No activities finished');
+        }
+        else {
+            res.send(rows);
+        }
+    })
+}
+
 
 /**
  *
@@ -85,7 +130,7 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     let sql = 'SELECT *' +
         'FROM Activitats a ' +
-        'ORDER BY a.dataHoraIni DESC;';
+        'ORDER BY a.dataHoraIni ASC;';
     db.all(sql, (err, rows) => {
         if (err) {
             res.json({
@@ -133,9 +178,10 @@ exports.filterByTitle = function(nom, req,res,next) {
  * @param next
  */
 
-exports.create_activitats = function (data,req,res,next) {
+exports.create_activitats = function (data,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+
     db.run(sql,info,(err) => {
         if (err) {
             res.status(409).json({
@@ -144,12 +190,13 @@ exports.create_activitats = function (data,req,res,next) {
             });
         }
         else{
-                let dataHoraIni = data.dataHoraIni
-                let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
+            let dataHoraIni = data.dataHoraIni
+            let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
 
-                firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
+            firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
 
-            res.status(201).send('OK');}
+            res.status(201).send('OK');
+        }
     });
 
 }
@@ -581,5 +628,42 @@ exports.getComentaris = function(data,req,res,next) {
         else {
             res.send(rows); //retorna un json amb la valoració
         }
+    })
+}
+
+
+/**
+ *
+ * @param useremail
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (useremail,res,next) {
+    let sql = 'SELECT a.*, p.valoracio ' +
+        'FROM Activitatsinfo a, Participants p ' +
+        'WHERE p.usuariParticipant = ? AND p.usuariCreador = a.usuariCreador AND p.dataHoraIni = a.dataHoraIni AND a.acabada = 1';
+    db.all(sql, [useremail], (err,rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length === 0) {
+            res.status(404).send('No activities finished');
+        }
+        else {
+            res.send(rows);
+        }
+    })
+}
+
+exports.afegirActivities = function(data,req,res,next) {
+    let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
+    db.run(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.status(201).send('OK');
     })
 }

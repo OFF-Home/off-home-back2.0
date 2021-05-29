@@ -101,3 +101,17 @@ exports.afegirUsuariXatGrupal = function(req,res,next) {
     models.afegirUsuariXatGrupal(info,res,next);
 
 }
+
+exports.sendMessage = function(req,res,next) {
+    if (req.body.token == null || req.body.message == null) {
+        res.status(400).send('The body has null values');
+    }
+    else {
+        let info = {
+            token: req.body.token,
+            titol: req.body.titol,
+            message: req.body.message
+        };
+        models.sendMessage(info,res,next);
+    }
+}

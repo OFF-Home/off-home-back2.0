@@ -60,13 +60,13 @@ describe('/PUT UpdateUsuari:', () => {
 describe('/POST registrarUsuari', () => {
     after(function(done) {
         let sql= 'DELETE FROM Usuaris WHERE username = ?;';
-        db.run(sql,['josep']);
+        db.run(sql,['jos']);
         done();
     });
     it('should insert the user', (done) => {
         chai.request(url)
-            .post('/users/josep/create')
-            .send({email:'josep@gmail.com'})
+            .post('/users/jos/create')
+            .send({email:'jos@gmail.com'})
             .end(function(err,res) {
                 expect(res).to.have.status(201);
                 expect(res.text).to.eql('OK');
@@ -75,8 +75,8 @@ describe('/POST registrarUsuari', () => {
     });
     it('should can not insert the user', (done) => {
         chai.request(url)
-            .post('/users/josep/create')
-            .send({email:'josep@gmail.com'})
+            .post('/users/jos/create')
+            .send({email:'jos@gmail.com'})
             .end(function(err,res) {
                 expect(res).to.have.status(500);
                 expect(res.text).to.eql('This username is already in use');

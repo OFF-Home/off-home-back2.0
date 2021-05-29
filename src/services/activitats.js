@@ -39,7 +39,7 @@ exports.create_activitats = function(req,res,next) {
         dataHoraFi: req.body.dataHoraFi,
         uid_creador: req.body.uid_creador
     }
-    models.create_activitats(data,req,res,next);
+    models.create_activitats(data,res,next);
 }
 
 /**
@@ -264,4 +264,50 @@ exports.getComentaris = function (req,res,next ) {
         dataHoraIni: req.query.dataHoraIni
     }
     activitats.getComentaris(data,req,res,next)
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (req,res,next) {
+    if (req.params.useremail == null || req.params.useremail.length === 0) {
+        res.status(400).send('The body has null values');
+    }
+    else {
+        activitats.getActivitatsAcabades(req.params.useremail,res,next);
+    }
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (req,res,next) {
+    if (req.params.useremail == null || req.params.useremail.length === 0) {
+        res.status(400).send('The body has null values');
+    }
+    else {
+        activitats.getActivitatsAcabades(req.params.useremail,res,next);
+    }
+}
+
+exports.afegirActivities = function(req,res,next) {
+    var data = {
+        usuariCreador: req.body.usuariCreador,
+        datahoraIni: req.body.dataHoraIni,
+        usuariGuardador: req.body.usuariGuardador
+    }
+    activitats.afegirActivities(data,req,res,next)
+}
+
+exports.getActivitatsGuardades = function(req,res,next){
+    var data = {
+        usuariGuardador: req.params.email
+    }
+    activitats.getActivitatsGuardades(data,req,res,next)
 }

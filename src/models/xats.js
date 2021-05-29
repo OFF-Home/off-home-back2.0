@@ -2,9 +2,9 @@ const firebaseAdmin = require('firebase-admin');
 
 const firebaseDB = firebaseAdmin.database();
 
-exports.veureXats = function(usid,res,next) {
+exports.veureXats = function(uid,res,next) {
 
-    firebaseDB.ref('usuaris/'+usid).once('value', (snapshot) =>
+    firebaseDB.ref('usuaris/'+uid).once('value', (snapshot) =>
     {
         const data = snapshot.val();
         res.send(data);
@@ -158,4 +158,31 @@ exports.afegirUsuariXatGrupal = function(info,res,next) {
 
     firebaseDB.ref('usuaris/'+ usid_participant).push(activitat)
     res.send('Afegit');
+}
+
+
+exports.sendMessage = function(info,res,next) {
+    const notification_options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24
+    };
+
+    const payload = {
+        notification: {
+            title: info.titol,
+            body: info.message
+        }
+    };
+    const token = info.token;
+
+    firebaseAdmin.messaging().sendToDevice(token, payload, notification_options)
+        .then( response => {
+
+            res.status(200).send("Notification sent successfully")
+
+        })
+        .catch( error => {
+            console.log(error);
+            next(error);
+        });
 }

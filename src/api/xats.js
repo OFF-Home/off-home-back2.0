@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let xat = require('../services/xats');
 
-
+router.post('/sendmessage',xat.sendMessage);
 
 /**
  * Et retorna tots els missatges d'un xat individual. Es passa els emails dels dos usuaris pel body.
