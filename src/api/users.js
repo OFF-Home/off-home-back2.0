@@ -4,6 +4,11 @@ let user = require('../services/users');
 
 router.get('/:username/estrelles',user.getEstrelles)
 /**
+ * Funció d'eliminar un usuari amb el mètode delete, on l'@email es l'usuari esborrat.
+ */
+router.delete('/delete/:email',user.deleteUsuari);
+
+/**
  *  Funció d'enrutament de la direcció /users/:username/create amb el mètode post, on @username és el nom d'usuari.
  *  Crea una instància d'Usuari amb l'usuari de la url i els paràmtres necessaris del body */
 router.post('/:username/create', user.regUsuari);
@@ -36,11 +41,16 @@ router.get('/:username/show', user.showUsuari);
  */
 router.put('/:username/update',user.updateUsuari);
 
+
 /**
  * Funció d'enrutament de la direcció /users/:username amb el mètode get, on @username és el nom d'usuari.
  * Retorna tota la informació de l'usuari.
  */
 router.get('/:username/',user.findUserByName);
+
+
+
+
 
 
 module.exports = router;

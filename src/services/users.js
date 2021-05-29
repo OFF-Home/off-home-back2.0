@@ -129,9 +129,20 @@ exports.getFollow = function(req,res,next) {
 
 }
 
+
 exports.getEstrelles = function(req,res,next) {
     var data = {
         email: req.params.data
     }
-    models.getEstrelles(data,res,next);
+    models.getEstrelles(data, res, next);
+
+}
+
+
+exports.deleteUsuari = function(req,res,next) {
+    var data = {
+        email: req.params.email
+    }
+    models.deleteUsuari(data,res,next);
+
 }
