@@ -690,8 +690,8 @@ exports.getActivitatsAcabades = function (useremail,res,next) {
 }
 
 exports.eliminarActivities = function(data,req,res,next) {
-    let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
-    db.run(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err) => {
+    let sql = 'SELECT * FROM likedActivities  where usuariCreador == ? and dataHoraIni == ? and usuariGuardador == ?';
+    db.get(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err,row) => {
         if (err) {
             res.status(409).json({
                 status: err.status,
@@ -700,7 +700,6 @@ exports.eliminarActivities = function(data,req,res,next) {
         }
         else if (row == null) {
             res.status(404).send('Activity is not in liked activities');
-            continuar = 0
         }
         else {
             let sql2 = 'DELETE FROM likedActivities where usuariCreador == ? and dataHoraIni == ? and usuariGuardador == ?';
