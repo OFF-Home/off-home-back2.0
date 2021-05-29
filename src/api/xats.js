@@ -61,4 +61,6 @@ router.post('/afegirUsuariXatGrup', xat.afegirUsuariXatGrupal);
 router.get('/:uid', xat.veureXats);
 
 
+
+
 module.exports = router;

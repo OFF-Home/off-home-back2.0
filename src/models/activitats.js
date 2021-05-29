@@ -133,10 +133,27 @@ exports.filterByTitle = function(nom, req,res,next) {
  * @param next
  */
 
+function ficarUsuariAFirebase(uid_creador, dataHoraIni, uidAfegir) {
+
+    let activitat = uid_creador.concat("_").concat(dataHoraIni)
+
+    firebaseDB.ref('usuaris/' + uidAfegir).child(activitat).set({
+        chatId: activitat,
+        uid: uidAfegir,
+
+    });
+}
+function borrarUsuariAFirebase(uid_creador, dataHoraIni, uidEliminar) {
+
+    let activitat = uid_creador.concat("_").concat(dataHoraIni)
+
+    firebaseDB.ref('usuaris/' + uidEliminar).child(activitat).remove()
+}
+
 exports.create_activitats = function (data,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-
+    ficarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_creador)
     db.run(sql,info,(err) => {
         if (err) {
             res.status(409).json({
@@ -213,6 +230,7 @@ exports.filterByValoration = function(val,req,res,next) {
 exports.insertUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?,NULL)';
+    ficarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_participant)
     db.run(sql,info,(err) => {
         if (err) {
             res.status(409).json({
@@ -233,6 +251,7 @@ exports.insertUsuariActivitat = function(data,req,res,next){
  */
 exports.deleteUsuariActivitat = function(data,req,res,next){ //sempre retorna ok, no sé com comprovar si ha borrat algo
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
+    borrarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_participant)
     let sql = 'DELETE FROM Participants WHERE LOWER(usuariCreador) = LOWER(?) AND ' +
         'LOWER(dataHoraIni) = LOWER(?) AND LOWER(usuariParticipant) = LOWER(?);';
     db.run(sql,info,(err) => {

@@ -3,8 +3,13 @@ var db = require('../../database.js')
 
 const firebaseDB = firebaseAdmin.database();
 
-exports.veureXats = function(uid,n,data, res) {
-    let users = []
+/*exports.firstStep = function (uid,n,data, users, res, next) {
+    veureXats(uid,n,data, users, res, next)
+    next(traduirXats(data, users, res, next))
+    console.log('bueno')
+}*/
+
+exports.veureXats = function (uid,data, res, next) {
 
     firebaseDB.ref('usuaris/'+uid).once('value', (snapshot) =>
     {
@@ -12,21 +17,40 @@ exports.veureXats = function(uid,n,data, res) {
             const id = child.val()
             data.push( id.uid);
         })
-        let sql = 'SELECT username FROM Usuaris WHERE uid = ?';
-        console.log(data)
-        for(let i = 0; i<data.length;i++){
-            db.all(sql,data[i], (err, rows) => {
-                users.push(rows)
-            });
+        res.send(data)
+    })
+}
+
+
+/*function ordenarXats(data, users,res) {
+    let sql = 'SELECT username FROM Usuaris WHERE uid = ?';
+    db.serialize(() => {
+        for (let i = 0; i < data.length; i++) {
+            console.log(i)
+            if(i === data.length-1){
+                console.log('yeehaw'+ i)
+                db.get(sql, [data[data.length-1]], (err, row) => {
+                    users.push(row.username)
+                    res.send(users)
+                })
+            }else {
+                db.get(sql, [data[i]], (err, row) => {
+                    users.push(row.username)
+                    console.log('rows    ' + row.username)
+                    console.log(users)
+                })
+            }
+            console.log('aaaaaaa          ' + users)
         }
-        res.send(users)
     })
 
 }
 
-exports.traduirXats = function (data) {
-
+function traduirXats(data, users, res, next) {
+    console.log('traduir funcio')
+    next(ordenarXats(data,users, res))
 }
+*/
 
 
 exports.veureXatIndividual = function(usid_1,usid_2,res,next) {
