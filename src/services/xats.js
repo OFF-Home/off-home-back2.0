@@ -2,9 +2,10 @@ var models = require('../models/xats.js')
 
 exports.veureXats = function(req,res,next) {
 
-    let usid = req.params.usid
-    models.veureXats(usid,res,next);
-
+    console.log('he entrat uwu')
+    let uid = req.params.uid
+    let data = []
+    models.veureXats(uid,data,res,next)
 }
 
 exports.veureXatIndividual = function(req,res,next) {

@@ -53,7 +53,9 @@ exports.insertUsuariActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.body.usuariCreador,
         dataHoraIni: req.body.dataHoraIni,
-        usuariParticipant: req.body.usuariParticipant
+        usuariParticipant: req.body.usuariParticipant,
+        uid_creador: req.body.uid_creador,
+        uid_participant: req.body.uid_participant
     };
     activitats.insertUsuariActivitat(data,req,res,next)
 
@@ -69,7 +71,9 @@ exports.deleteUsuariActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.body.usuariCreador,
         dataHoraIni: req.body.dataHoraIni,
-        usuariParticipant: req.body.usuariParticipant
+        usuariParticipant: req.body.usuariParticipant,
+        uid_creador: req.body.uid_creador,
+        uid_participant: req.body.uid_participant
     };
     activitats.deleteUsuariActivitat(data,req,res,next)
 

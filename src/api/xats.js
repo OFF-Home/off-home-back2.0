@@ -58,7 +58,9 @@ router.post('/afegirUsuariXatGrup', xat.afegirUsuariXatGrupal);
 /**
  * Et retorna tots els xats d'un usuari que es passa pel body
  */
-router.get('/:usid', xat.veureXats);
+router.get('/:uid', xat.veureXats);
+
+
 
 
 module.exports = router;

@@ -30,7 +30,6 @@ exports.showUsuari = function(info,res,next) {
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
         'WHERE u.email = ?'
-    console.log('pollo')
     db.get(sql,[info.username],(err,row) => {
         if(row == null) {
             res.status(404).send('User not found');
