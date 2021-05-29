@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let user = require('../services/users');
 
-router.get('/:username/estrelles',user.getEstrelles)
+router.get('/:email/estrelles',user.getEstrelles)
 /**
  * Funció d'eliminar un usuari amb el mètode delete, on l'@email es l'usuari esborrat.
  */
