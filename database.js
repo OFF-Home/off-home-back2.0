@@ -262,6 +262,16 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                     console.log("Taula AssolimentsxPersona creada correctament");
                 }
             });
+
+            db.run('CREATE VIEW IF NOT EXISTS ValoracioActivitats AS SELECT usuariCreador, dataHoraIni, AVG(valoracio) as valoracioMitjana FROM Participants GROUP BY usuariCreador, dataHoraIni ', (err) => {
+                if (err) {
+                    console.error(err.message);
+                } else {
+                    console.log("Vista ValoracioActivitats creada correctament");
+                }
+            });
+
+
             db.run('CREATE TABLE likedActivities (' +
                 'usuariCreador text, ' +
                 'dataHoraIni DateTime, ' +
@@ -271,18 +281,20 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 'CONSTRAINT Participants_FK2 FOREIGN KEY (usuariGuardador) REFERENCES Usuaris (email));', (err) => {
                 if (err) {
                     console.error(err.message);
-                }
-
-
-                else {
+                } else {
                     let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
                     db.run(sql, ["victorfer@gmai.com", "2021-03-24 18:00:00.000", "victor@gmai.com"]);
                     console.log("Taula d'activitats guardades creada correctament");
                 }
 
             });
+
         });
     }
 });
+
+
+
+
 
 module.exports = db;

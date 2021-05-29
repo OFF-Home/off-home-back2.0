@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 let user = require('../services/users');
 
-
+router.get('/:email/estrelles',user.getEstrelles)
 /**
  * Funció d'eliminar un usuari amb el mètode delete, on l'@email es l'usuari esborrat.
  */
@@ -28,7 +28,7 @@ router.delete('/:username/unfollow',user.unfollow);
  * Funció d'enrutament de la direcció /users/:username/getFollow , on @username és el nom d'usuari, amb el mètode get.
  * Retorna tota la informació dels usuaris seguidors del usuari passat per la uri.
  */
-router.get('/:username/getFollow', user.getFollow);
+router.get('/:email/getFollow', user.getFollow);
 
 /**
  *  Funció d'enrutament de la direcció /users/:username/show amb el mètode get, on @username és el nom d'usuari.
