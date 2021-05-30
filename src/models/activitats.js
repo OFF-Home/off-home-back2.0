@@ -719,5 +719,19 @@ exports.eliminarActivities = function(data,req,res,next) {
 
 }
 
+exports.getActivitatsAmics = function(data,res,next){
+    let sql= 'SELECT * FROM Activitatsinfo WHERE acabada == 0 AND usuariCreador IN (SELECT usuariSeguit FROM Segueix WHERE usuariSeguidor == ?)'
+    db.all(sql, [data.email], (err,rows) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows.length === 0) {
+            res.status(404).send('No activities found');
+        } else res.send(rows);
+    })
+}
+
 
 

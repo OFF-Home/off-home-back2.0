@@ -307,5 +307,12 @@ exports.getActivitatsGuardades = function(req,res,next){
 
 }
 
+exports.getActivitatsAmics = function(req,res,next){
+    var data = {
+        email: req.params.email
+    }
+    activitats.getActivitatsAmics(data,res,next)
+}
+
 
 
