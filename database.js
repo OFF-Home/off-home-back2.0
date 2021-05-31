@@ -91,7 +91,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 } else {
                     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "2021-03-24 18:00:00.000", "Running", 20, "Correr", "encanta correr", "2021-03-24 19:00:00.000"]);
+                        db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "2021-06-21 18:00:00", "Running", 20, "Correr", "el cumple de agnes", "2021-03-24 19:00:00.000"]);
                     });
                     console.log("Taula Activitats creada correctament");
                 }

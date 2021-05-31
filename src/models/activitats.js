@@ -15,17 +15,14 @@ exports.get_activitats = function (data,req,res,next) {
         'FROM Activitats a ' +
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
 
-    db.all(sql,[data.username, data.datahora], (err,rows) => {
+    db.get(sql,[data.username, data.datahora], (err,row) => {
         if (err) {
             res.json({
                 status: err.status,
                 message: err.message
             });
         }
-        else if (rows.length == 0) {
-            res.status(204).send('No Activity Found');
-        }
-        else res.send(rows);
+        else res.send(row);
     });
 }
 
