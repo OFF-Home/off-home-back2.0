@@ -15,7 +15,7 @@ exports.veureXats = function (uid,data, res, next) {
     {
         snapshot.forEach(child=>{
             const id = child.val()
-            data.push( id.uid);
+            data.push( id);
         })
         res.send(data)
     })
@@ -85,15 +85,14 @@ exports.crearXat = function(usid_1,usid_2,res,next) {
         res.status(400).send('Emails iguals');
     }
 
-    firebaseDB.ref('usuaris/'+ usid_1).child(xatid).set({
-        xatId: xatid,
+    firebaseDB.ref('usuaris/'+ usid_1).set({
         uid: usid_2
     })
-    firebaseDB.ref('usuaris/'+ usid_2).child(xatid).set({
-        xatId: xatid,
+    firebaseDB.ref('usuaris/'+ usid_2).set({
         uid: usid_1
     })
     res.send('Creat');
+
 }
 
 exports.enviarMsg = function(info,res,next) {
