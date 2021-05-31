@@ -13,15 +13,16 @@ exports.showTags = function (data,req,res,next) {
 }
 
 
-exports.insert_tags = function(data,req,res,next) {
-    console.log(data.nomTag)
-    let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
-    db.get(sql,[data.nomTag,data.username],(err,row) => {
-        if(row == null) {
-            console.log('he entrat aqí')
-            res.status(201).send('Insert tag al usuario');
+exports.insert_tags = function(data,res,next) {
+    console.log(data.username)
+    let sql = 'INSERT INTO TagsxUsuari VALUES (?,?);';
+    db.run(sql,[data.nomTag,data.username], (err) => {
+        if (err) {
+            next(err)
         }
-        else res.status(409).json(row);
+        else {
+            res.status(200).send('OK');
+        }
     });
 }
 

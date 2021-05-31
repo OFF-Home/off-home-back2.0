@@ -182,15 +182,13 @@ function ficarUsuariAFirebase(uid_creador, dataHoraIni, uidAfegir) {
 
     let activitat = uid_creador.concat("_").concat(dataHoraIni)
 
-    firebaseDB.ref('usuaris/' + activitat).set({
-        uid: activitat,
-    });
+    firebaseDB.ref('usuaris/' + uidAfegir).push(activitat)
 }
 function borrarUsuariAFirebase(uid_creador, dataHoraIni, uidEliminar) {
 
     let activitat = uid_creador.concat("_").concat(dataHoraIni)
 
-    firebaseDB.ref('usuaris/' + activitat).remove()
+    firebaseDB.ref('usuaris/' + uidEliminar).child(activitat).remove()
 }
 
 exports.create_activitats = function (data,res,next) {

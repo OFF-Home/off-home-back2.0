@@ -26,7 +26,7 @@ exports.insert_tags = function(req,res,next) {
         nomTag: req.body.nomTag,
         username: req.params.username,
     }
-    models.insert_tags(data,req,res,next);
+    models.insert_tags(data,res,next);
 }
 
 /**

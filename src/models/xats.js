@@ -85,12 +85,8 @@ exports.crearXat = function(usid_1,usid_2,res,next) {
         res.status(400).send('Emails iguals');
     }
 
-    firebaseDB.ref('usuaris/'+ usid_1).set({
-        uid: usid_2
-    })
-    firebaseDB.ref('usuaris/'+ usid_2).set({
-        uid: usid_1
-    })
+    firebaseDB.ref('usuaris/'+ usid_1).push(usid_2)
+    firebaseDB.ref('usuaris/'+ usid_2).push(usid_1)
     res.send('Creat');
 
 }
