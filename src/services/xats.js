@@ -1,5 +1,10 @@
 var models = require('../models/xats.js')
 
+exports.traduirUid = function(req,res,next){
+    let uid = req.params.uid
+    models.traduirUid(uid,res,next)
+}
+
 exports.veureXats = function(req,res,next) {
 
     console.log('he entrat uwu')

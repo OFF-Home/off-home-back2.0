@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 let xat = require('../services/xats');
 
+router.get('/traduir/:uid', xat.traduirUid)
+
 router.post('/sendmessage',xat.sendMessage);
 
 /**

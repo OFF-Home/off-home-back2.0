@@ -40,5 +40,5 @@ exports.delete_tags = function(req,res,next) {
         nomTag: req.body.nomTag,
         username: req.params.username,
     }
-    models.delete_tags(data,req,res,next);
+    models.delete_tags(data,res,next);
 }

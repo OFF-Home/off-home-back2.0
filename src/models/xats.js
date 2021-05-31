@@ -9,6 +9,15 @@ const firebaseDB = firebaseAdmin.database();
     console.log('bueno')
 }*/
 
+exports.traduirUid = function(uid,res,next){
+    let sql = 'SELECT username FROM Usuaris WHERE uid = ?';
+
+    db.get(sql, uid, (err, row) => {
+        res.status(201).send(row)
+    })
+
+}
+
 exports.veureXats = function (uid,data, res, next) {
 
     firebaseDB.ref('usuaris/'+uid).once('value', (snapshot) =>

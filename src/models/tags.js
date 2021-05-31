@@ -26,7 +26,7 @@ exports.insert_tags = function(data,res,next) {
     });
 }
 
-exports.delete_tags = function(data,req,res,next) {
+exports.delete_tags = function(data,res,next) {
 
     let sql = 'DELETE FROM TagsxUsuari WHERE LOWER(nomTag) = LOWER(?) AND LOWER(Usuari) = LOWER(?);';
     db.get(sql,[data.nomTag,data.username],(err,row) => {
