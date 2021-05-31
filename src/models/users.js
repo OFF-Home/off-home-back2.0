@@ -159,6 +159,19 @@ exports.getFollow = function(data,req,res,next) {
     });
 }
 
+exports.getFollowing = function(data,req,res,next) {
+
+    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?)';
+    db.all(sql,[data.usuariSeguidor], (err, rows) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+
 /**
  *
  * @param req
