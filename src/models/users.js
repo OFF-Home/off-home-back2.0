@@ -109,6 +109,7 @@ exports.findUserByName = function(data,req,res,next){
 exports.follow = function(data,req,res,next) {
 
     let sql = 'INSERT INTO Segueix VALUES (?,?)';
+
     db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
         if (err) {
             next(err);

@@ -4,7 +4,7 @@ exports.showTags = function (data,req,res,next) {
     let sql = 'SELECT * ' +
         'FROM TagsxUsuari tu ' +
         'WHERE LOWER(tu.Usuari) = LOWER(?)'
-    db.get(sql,[data.username],(err,row) => {
+    db.all(sql,[data.username],(err,row) => {
         if(row == null) {
             res.status(204).send('Tags not found');
         }
