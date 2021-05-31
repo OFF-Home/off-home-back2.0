@@ -12,7 +12,7 @@ const url= 'http://localhost:3000';
 describe('/PUT UpdateUsuari:', () => {
     before(function(done){
         db.serialize(() => {
-            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
             db.run(sql,['josep@gmail.com','josep','130']);
             db.run(sql,['pep@gmail.com','pep','130'], () => {
                 done();
@@ -88,7 +88,7 @@ describe('/POST registrarUsuari', () => {
 describe('/GET show info Usuari', () => {
     before(function(done){
         db.serialize(() => {
-            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+            let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
             db.run(sql,['ruben@gmail.com','ruben','120'], () => {
                 done();
             });

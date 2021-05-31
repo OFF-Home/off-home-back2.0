@@ -104,12 +104,12 @@ exports.afegirUsuariXatGrupal = function(req,res,next) {
 }
 
 exports.sendMessage = function(req,res,next) {
-    if (req.body.token == null || req.body.message == null) {
+    if (req.body.email == null || req.body.message == null || req.body.titol == null) {
         res.status(400).send('The body has null values');
     }
     else {
         let info = {
-            token: req.body.token,
+            email: req.body.email,
             titol: req.body.titol,
             message: req.body.message
         };
