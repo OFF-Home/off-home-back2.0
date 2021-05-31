@@ -62,9 +62,17 @@ exports.uploadImageUser = function(path_img,email,res,next) {
  * @param next
  */
 exports.getImageUser = function (data,res,next) {
-    let sql = 'SELECT u.image ' +
-        'FROM Usuaris u ' +
-        'WHERE u.username = ?';
+    let sql;
+    if (data.username.includes('@')) {
+        sql = 'SELECT u.image ' +
+            'FROM Usuaris u ' +
+            'WHERE u.email = ?';
+    }
+    else {
+        sql = 'SELECT u.image ' +
+            'FROM Usuaris u ' +
+            'WHERE u.username = ?';
+    }
     db.get(sql,[data.username],(err,row) => {
         if (err) {
             next(err);
