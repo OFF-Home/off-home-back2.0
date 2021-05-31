@@ -123,9 +123,9 @@ exports.unfollow = function(req,res,next) {
  */
 exports.getFollow = function(req,res,next) {
     var data = {
-        usuariSeguit: req.params.username,
+        usuariSeguit: req.params.email
     }
-    models.getFollow(data,res,next);
+    models.getFollow(data,req,res,next);
 
 }
 
