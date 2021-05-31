@@ -84,7 +84,6 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 'dataHoraFi DateTime,' +
                 'CONSTRAINT Activitats_PK PRIMARY KEY (usuariCreador,dataHoraIni),' +
                 'CONSTRAINT Activitats_FK_Usuaris FOREIGN KEY (usuariCreador) references Usuaris(email),' +
-                'CONSTRAINT Activitats_FK_Llocs FOREIGN KEY (nomCarrer,numCarrer) references Llocs(nomCarrer,numCarrer),' +
                 'CONSTRAINT Activitats_FK_Categories FOREIGN KEY (categoria) references Categories(categoria));', (err) => {
                 if (err) {
                     console.error(err.message);
