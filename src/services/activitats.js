@@ -162,9 +162,9 @@ exports.getActivitatsALesQueParticipo = function(req,res,next) {
  */
 exports.getActivitatsByRadi = function(req,res,next) {
     var data = {
-        latitud : req.body.latitud,
-        altitud : req.body.altitud,
-        distance : req.body.distance
+        latitud : req.query.latitud,
+        altitud : req.query.altitud,
+        distance : req.query.distance
     }
     models.getActivitatsByRadi(data,res,next);
 

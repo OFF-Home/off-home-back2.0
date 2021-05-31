@@ -32,9 +32,8 @@ exports.get_categories = function (req,res,next) {
  * @param next
  */
 exports.get_activitats_categoria = function (data,req,res,next) {
-    let sql = 'SELECT *' +
-        'FROM Activitats a ' +
-        'WHERE LOWER(a.categoria) = LOWER (?);';
+    let sql = 'SELECT a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi, COUNT(DISTINCT p.usuariParticipant) AS numParticipants FROM Activitats a , Participants p WHERE ' +
+    'a.usuariCreador == p.usuariCreador AND a.dataHoraIni == p.dataHoraIni AND LOWER(a.categoria) = LOWER (?);'
     db.all(sql,[data],(err,rows) => {
         if(err) {
             res.json({
