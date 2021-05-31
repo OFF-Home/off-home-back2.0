@@ -229,16 +229,26 @@ exports.sendMessage = function(info,res,next) {
             body: info.message
         }
     };
-    const token = info.token;
+    let sql = 'SELECT u.token FROM Usuaris u WHERE u.email = ?';
+    db.get(sql,[info.email], (err,row) => {
+        if (err) {
+            next(err);
+        }
+        else if (row == null) {
+            res.status(404).send('User not found');
+        }
+        else {
+            const token = row.token
+            firebaseAdmin.messaging().sendToDevice(token, payload, notification_options)
+                .then( response => {
 
-    firebaseAdmin.messaging().sendToDevice(token, payload, notification_options)
-        .then( response => {
+                    res.status(200).send("Notification sent successfully")
 
-            res.status(200).send("Notification sent successfully")
-
-        })
-        .catch( error => {
-            console.log(error);
-            next(error);
-        });
+                })
+                .catch( error => {
+                    console.log(error);
+                    next(error);
+                });
+        }
+    })
 }

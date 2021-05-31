@@ -11,6 +11,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 'email text,' +
                 'username text not null,' +
                 'uid integer,' +
+                'token text,' +
                 'birthDate date,' +
                 'description text,' +
                 'followers integer,' +
@@ -25,10 +26,10 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 if (err) {
                     console.error(err.message);
                 } else {
-                    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+                    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["victorfer@gmai.com", "victorfer", "101", "10-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
-                        db.run(sql, ["victor@gmai.com", "victor", "102", "12-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
+                        db.run(sql, ["victorfer@gmai.com", "victorfer", "101", "ahp9", "10-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
+                        db.run(sql, ["victor@gmai.com", "victor", "102", "bep2", "12-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
                     });
                     console.log("Taula Usuaris creada correctament");
                 }
