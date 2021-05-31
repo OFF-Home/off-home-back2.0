@@ -83,7 +83,8 @@ exports.getActivitatsAcabades = function (useremail,res,next) {
  */
 exports.get_activitatsOrderedByName = function(req,res,next) {
     let sql = 'SELECT *' +
-        'FROM Activitats a ' +
+        'FROM Activitatsinfo a ' +
+        'WHERE acabada == 0 ' +
         'ORDER BY a.titol ASC;';
     db.all(sql, (err, rows) => {
         if (err) {
@@ -106,7 +107,8 @@ exports.get_activitatsOrderedByName = function(req,res,next) {
  */
 exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
     let sql = 'SELECT *' +
-        'FROM Activitats a ' +
+        'FROM Activitatsinfo a ' +
+        'WHERE acabada == 0 ' +
         'ORDER BY a.titol DESC;';
     db.all(sql, (err, rows) => {
         if (err) {
@@ -129,8 +131,9 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
  */
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     let sql = 'SELECT *' +
-        'FROM Activitats a ' +
-        'ORDER BY a.dataHoraIni DESC;';
+        'FROM Activitatsinfo a ' +
+        'WHERE acabada == 0 ' +
+        'ORDER BY a.dataHoraIni ASC;';
     db.all(sql, (err, rows) => {
         if (err) {
             res.json({
@@ -727,6 +730,20 @@ exports.eliminarActivities = function(data,req,res,next) {
         }
     })
 
+}
+
+exports.getActivitatsAmics = function(data,res,next){
+    let sql= 'SELECT * FROM Activitatsinfo WHERE acabada == 0 AND usuariCreador IN (SELECT usuariSeguit FROM Segueix WHERE usuariSeguidor == ?)'
+    db.all(sql, [data.email], (err,rows) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows.length === 0) {
+            res.status(404).send('No activities found');
+        } else res.send(rows);
+    })
 }
 
 
