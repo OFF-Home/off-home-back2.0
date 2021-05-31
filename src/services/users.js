@@ -129,6 +129,14 @@ exports.getFollow = function(req,res,next) {
 
 }
 
+exports.getFollowing = function(req,res,next) {
+    var data = {
+        usuariSeguidor: req.params.email
+    }
+    models.getFollowing(data,req,res,next);
+
+}
+
 
 exports.getEstrelles = function(req,res,next) {
     var data = {

@@ -31,6 +31,11 @@ router.delete('/:username/unfollow',user.unfollow);
 router.get('/:email/getFollow', user.getFollow);
 
 /**
+ * Funció d'enrutament de la direcció /users/:username/getFollowing , on @username és el nom d'usuari, amb el mètode get.
+ * Retorna tota la informació dels usuaris seguits per l'usuari passat per la uri.
+ */
+router.get('/:email/getFollowing', user.getFollowing);
+/**
  *  Funció d'enrutament de la direcció /users/:username/show amb el mètode get, on @username és el nom d'usuari.
  *  Retorna l'informació de l'usuari @username */
 router.get('/:username/show', user.showUsuari);
