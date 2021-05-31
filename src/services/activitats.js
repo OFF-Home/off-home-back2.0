@@ -31,6 +31,8 @@ exports.create_activitats = function(req,res,next) {
         usuariCreador: req.params.usuariCreador,
         nomCarrer: req.body.nomCarrer,
         carrerNum: req.body.carrerNum,
+        latitud : req.body.latitud,
+        altitud: req.body.altitud,
         dataHoraIni: req.body.dataHoraIni,
         categoria: req.body.categoria,
         maxParticipants: req.body.maxParticipants,

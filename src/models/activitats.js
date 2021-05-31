@@ -171,12 +171,7 @@ exports.filterByTitle = function(nom, req,res,next) {
     });
 }
 
-/**
- *
- * @param req
- * @param res
- * @param next
- */
+
 
 function ficarUsuariAFirebase(uid_creador, dataHoraIni, uidAfegir) {
 
@@ -191,21 +186,44 @@ function borrarUsuariAFirebase(uid_creador, dataHoraIni, uidEliminar) {
     firebaseDB.ref('usuaris/' + uidEliminar).child(activitat).remove()
 }
 
+/**
+ *
+ * @param data
+ * @param res
+ * @param next
+ */
 exports.create_activitats = function (data,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
+    var infoLloc = [data.nomCarrer,data.carrerNum,data.latitud,data.altitud];
+    var infoParticpants = [null,data.usuariCreador,data.dataHoraIni, data.usuariCreador,null];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
+    let sqlLlocs = 'INSERT INTO Llocs VALUES (?,?,?,?)';
+    let sqlParticipants = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
     ficarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_creador)
-    db.run(sql,info,(err) => {
-        if (err) {
-            res.status(409).json({
-                status: err.status,
-                message: err.message
-            });
-        }
-        else{
-
-            res.status(201).send('OK');
-        }
+    db.serialize(() => {
+        db.run(sqlLlocs,infoLloc, (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+        });
+        db.run(sql,info,(err) => {
+            if (err) {
+                res.status(409).json({
+                    status: err.status,
+                    message: err.message
+                });
+            }
+            else {
+                db.run(sqlParticipants,infoParticpants, (error) => {
+                    if (error) {
+                        next(error);
+                    }
+                    else {
+                        res.status(201).send('OK');
+                    }
+                });
+            }
+        });
     });
 
 }
@@ -232,7 +250,6 @@ exports.filterByData = function(nom, req,res,next) {
         }
         else res.send(rows);
     });
-
 }
 
 /**
