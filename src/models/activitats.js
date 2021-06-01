@@ -14,7 +14,6 @@ exports.get_activitats = function (data,req,res,next) {
     let sql = 'SELECT * ' +
         'FROM Activitats a ' +
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
-
     db.get(sql,[data.username, data.datahora], (err,row) => {
         if (err) {
             res.json({
@@ -25,27 +24,6 @@ exports.get_activitats = function (data,req,res,next) {
         else res.send(row);
     });
 }
-
-exports.getActivitatsGuardades = function(data,req,res,next) {
-    let sql = 'SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?);';
-    db.all(sql,[data.usuariGuardador], (err, rows) => {
-        if (err) {
-            next(err);
-        }
-        else if (rows.length == 0) {
-            res.status(204).send('Activities Not Found');
-        }
-        else if (err) {
-            res.json({
-                status: err.status,
-                message: err.message
-            });
-        }
-        else res.send(rows);
-
-    });
-}
-
 
 /**
  *
