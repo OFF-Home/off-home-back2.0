@@ -106,18 +106,30 @@ exports.findUserByName = function(data,req,res,next){
  * @param res
  * @param next
  */
-exports.follow = function(data,req,res,next) {
+exports.follow = function(data,res,next) {
 
     let sql = 'INSERT INTO Segueix VALUES (?,?)';
+    let sqlfollower = 'UPDATE Usuaris SET followers = followers+1 WHERE LOWER(email) = LOWER(?)';
+    let sqlfollowing = 'UPDATE Usuaris SET following = following+1 WHERE LOWER(email) = LOWER(?)';
 
-    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
-    });
+    db.serialize(() => {
+        db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollower,[data.usuariSeguit], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollowing,[data.usuariSeguidor], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+
+    })
 
 }
 
@@ -127,16 +139,28 @@ exports.follow = function(data,req,res,next) {
  * @param res
  * @param next
  */
-exports.unfollow = function(data,req,res,next) {
+exports.unfollow = function(data,res,next) {
 
     let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ? ';
-    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
+    let sqlfollower = 'UPDATE Usuaris SET followers = followers-1 WHERE LOWER(email) = LOWER(?)';
+    let sqlfollowing = 'UPDATE Usuaris SET following = following-1 WHERE LOWER(email) = LOWER(?)';
+
+    db.serialize(() => {
+        db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollower,[data.usuariSeguit], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollowing,[data.usuariSeguidor], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
     });
 }
 

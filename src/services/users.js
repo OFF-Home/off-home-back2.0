@@ -96,9 +96,7 @@ exports.follow = function(req,res,next) {
         usuariSeguidor: req.params.username,
         usuariSeguit: req.body.followed
     }
-    models.follow(data,req,res,next);
-    //models.increaseFollow(req,res,next);
-    //models.increaseFollowing(req,res,next);
+    models.follow(data,res,next);
 }
 
 /**
