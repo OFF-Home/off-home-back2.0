@@ -46,4 +46,5 @@ exports.get_activitats_categoria = function (data,req,res,next) {
         }
         else res.send(rows);
     });
+
 }

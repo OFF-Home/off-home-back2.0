@@ -12,7 +12,6 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 'username text not null,' +
                 'uid integer,' +
                 'token text,' +
-                'birthDate date,' +
                 'description text,' +
                 'followers integer,' +
                 'following integer,' +
@@ -26,10 +25,10 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 if (err) {
                     console.error(err.message);
                 } else {
-                    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                    let sql = 'INSERT INTO Usuaris VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["victorfer@gmai.com", "victorfer", "101", "ahp9", "10-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
-                        db.run(sql, ["victor@gmai.com", "victor", "102", "bep2", "12-10-2000", "holaaaa", 200, 300, 0, 1, 3, "Spanish"]);
+                        db.run(sql, ["marianievas11@gmail.com", "marianievas", "1NjELMMmkFgRB68lMsfvVvTmsdf1", "ahp9", "Sóc la Maria Nievas i m'agrada correr, fer yoga i sortir amb la meva amiga Agnés", 1, 0, 0, 1, 4, "Spanish", null ]);
+                        db.run(sql, ["pau.cuesta@gmail.com", "paucuesta", "6dCwr11w3iZglFaG2j4XWHfCs0q1", "bep2", "Sóc en Pau Cuesta. Sé molt de Kotlin però també de jogging hahaha", 0, 1, 0, 1, 3, "Spanish", null]);
                     });
                     console.log("Taula Usuaris creada correctament");
                 }
@@ -91,7 +90,8 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 } else {
                     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["victorfer@gmai.com", "C/Balmes", 74, "2021-06-21 18:00:00", "Running", 20, "Correr", "el cumple de agnes", "2021-06-24 19:00:00.000"]);
+                        db.run(sql, ["marianievas11@gmail.com", "C/Balmes", 74, "2021-06-21 18:00:00", "Running", 20, "Una vez al año, no hace daño", "Anem a córrer pel cumple de l'Agnés que és una vaga", "2021-08-24 19:00:00"]);
+                        db.run(sql, ["pau.cuesta@gmail.com", "C/Balmes", 74, "2021-03-21 20:00:00", "Walking", 20, "Paseos por BCN", "Paseos al atardecer", "2021-03-21 23:00:00"]);
                     });
                     console.log("Taula Activitats creada correctament");
                 }
@@ -112,7 +112,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 } else {
                     let sql = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, [null, "victorfer@gmai.com", "2021-06-21 18:00:00", "victor@gmai.com", null]);
+                        db.run(sql, [null, "marianievas11@gmail.com", "2021-06-21 18:00:00", "pau.cuesta@gmail.com", null]);
                     });
                     console.log("Taula Participants creada correctament");
                 }
@@ -126,6 +126,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                     let sql = 'INSERT INTO Tags VALUES (?)';
                     db.serialize(() => {
                         db.run(sql, ["running"]);
+                        db.run(sql, ["yoga"]);
                     });
                     console.log("Taula Tags creada correctament");
                 }
@@ -140,7 +141,9 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 } else {
                     let sql = 'INSERT INTO TagsxUsuari VALUES (?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["running", "victor@gmai.com"]);
+                        db.run(sql, ["running", "marianievas11@gmail.com"]);
+                        db.run(sql, ["yoga", "marianievas11@gmail.com"]);
+                        db.run(sql, ["running", "pau.cuesta@gmail.com"]);
                     })
                     console.log("Taula TagsxUsuari creada correctament");
                 }
@@ -157,7 +160,7 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                     console.error(err.message);
                 } else {
                     let sql = 'INSERT INTO Segueix VALUES (?,?)';
-                    db.run(sql, ["victorfer@gmai.com", "victor@gmai.com"]);
+                    db.run(sql, ["pau.cuesta@gmail.com", "marianievas11@gmail.com"]);
                     console.log("Taula Segueix creada correctament");
                 }
             });
@@ -282,7 +285,11 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                     console.error(err.message);
                 } else {
                     let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
-                   db.run(sql, ["victorfer@gmai.com", "2021-06-21 18:00:00", "victor@gmai.com"]);
+                    db.serialize(() => {
+                        db.run(sql, ["marianievas11@gmail.com", "2021-06-21 18:00:00", "marianievas11@gmail.com"]);
+                        db.run(sql, ["marianievas11@gmail.com", "2021-06-21 18:00:00", "pau.cuesta@gmail.com"]);
+                    })
+
                     console.log("Taula d'activitats guardades creada correctament");
                 }
 
