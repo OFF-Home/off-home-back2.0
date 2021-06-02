@@ -12,6 +12,7 @@ exports.regUsuari = function(req,res,next) {
         email: req.body.email,
         username: req.params.username,
         uid : req.body.uid,
+        token : req.body.token,
         birthDate :req.body.birthDate,
         descripcio : req.body.description,
         followers : req.body.followers,
@@ -21,7 +22,7 @@ exports.regUsuari = function(req,res,next) {
         estrelles : req.body.estrelles,
         language : req.body.language,
     }
-    let info = [data.email,data.username,data.uid,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language];
+    let info = [data.email,data.username,data.uid,data.token,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language];
 
     models.regUsuari(info,res,next);
 
@@ -52,19 +53,17 @@ exports.updateUsuari = function (req,res,next) {
         email: req.body.email,
         username: req.body.username,
         uid : req.body.uid,
-        birthDate :req.body.birthDate,
-        descripcio : req.body.description,
+        token : req.body.token,
+        descripcio : req.body.descripcio,
         followers : req.body.followers,
         following : req.body.following,
         darkmode : req.body.darkmode,
         notificacions : req.body.notificacions,
         estrelles : req.body.estrelles,
-        tags : req.body.tags,
         language : req.body.language,
-        usid: req.body.usid
     }
-    var target = req.params.username;
-    let info = [data.email,data.username,data.uid,data.birthDate,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.tags,data.language];
+    var target = req.params.useremail;
+    let info = [data.email,data.username,data.uid,data.token,data.descripcio,data.followers,data.following,data.darkmode,data.notificacions,data.estrelles,data.language];
     models.updateUsuari(info,target,res,next);
 }
 
@@ -94,9 +93,7 @@ exports.follow = function(req,res,next) {
         usuariSeguidor: req.params.username,
         usuariSeguit: req.body.followed
     }
-    models.follow(data,req,res,next);
-    //models.increaseFollow(req,res,next);
-    //models.increaseFollowing(req,res,next);
+    models.follow(data,res,next);
 }
 
 /**
@@ -108,7 +105,7 @@ exports.follow = function(req,res,next) {
 exports.unfollow = function(req,res,next) {
     var data = {
         usuariSeguidor: req.params.username,
-        usuariSeguit: req.body.followed
+        usuariSeguit: req.query.followed
     }
     models.unfollow(data,res,next);
     //models.decreaseFollow(req,res,next);
@@ -123,9 +120,27 @@ exports.unfollow = function(req,res,next) {
  */
 exports.getFollow = function(req,res,next) {
     var data = {
-        usuariSeguit: req.params.username,
+        usuariSeguit: req.params.email
     }
-    models.getFollow(data,res,next);
+    models.getFollow(data,req,res,next);
+
+}
+
+exports.getFollowing = function(req,res,next) {
+    var data = {
+        usuariSeguidor: req.params.email
+    }
+    models.getFollowing(data,req,res,next);
+
+}
+
+
+exports.getEstrelles = function(req,res,next) {
+    var data = {
+        email: req.params.email
+    }
+    console.log(data.email)
+    models.getEstrelles(data, res, next);
 
 }
 
@@ -134,6 +149,7 @@ exports.deleteUsuari = function(req,res,next) {
     var data = {
         email: req.params.email
     }
+
     models.deleteUsuari(data,res,next);
 
 }

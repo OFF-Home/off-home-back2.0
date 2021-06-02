@@ -30,7 +30,6 @@ exports.showUsuari = function(info,res,next) {
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
         'WHERE u.email = ?'
-    console.log('pollo')
     db.get(sql,[info.username],(err,row) => {
         if(row == null) {
             res.status(404).send('User not found');
@@ -54,7 +53,7 @@ exports.updateUsuari = function(info,target,res,next) {
     let n = info.length;
     let first = true;
     let input = [];
-    let entries = ['email','username','uid','birthDate','description','followers','following','darkmode','notifications','estrelles','language'];
+    let entries = ['email','username','uid','token','description','followers','following','darkmode','notifications','estrelles','language'];
     for (let i = 0; i < n; ++i) {
         if (info[i] != null && first) {
             sql += entries[i] + ' = ?';
@@ -107,17 +106,30 @@ exports.findUserByName = function(data,req,res,next){
  * @param res
  * @param next
  */
-exports.follow = function(data,req,res,next) {
-
+exports.follow = function(data,res,next) {
     let sql = 'INSERT INTO Segueix VALUES (?,?)';
-    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
-    });
+    let sqlfollower = 'UPDATE Usuaris SET followers = followers+1 WHERE LOWER(email) = LOWER(?)';
+    let sqlfollowing = 'UPDATE Usuaris SET following = following+1 WHERE LOWER(email) = LOWER(?)';
+
+    db.serialize(() => {
+        db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollower,[data.usuariSeguit], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollowing,[data.usuariSeguidor], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+
+    })
+
 
 }
 
@@ -127,16 +139,29 @@ exports.follow = function(data,req,res,next) {
  * @param res
  * @param next
  */
-exports.unfollow = function(data,req,res,next) {
+exports.unfollow = function(data,res,next) {
 
     let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ? ';
-    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
+    let sqlfollower = 'UPDATE Usuaris SET followers = followers-1 WHERE LOWER(email) = LOWER(?)';
+    let sqlfollowing = 'UPDATE Usuaris SET following = following-1 WHERE LOWER(email) = LOWER(?)';
+
+    db.serialize(() => {
+        db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollower,[data.usuariSeguit], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollowing,[data.usuariSeguidor], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+
     });
 }
 
@@ -148,8 +173,21 @@ exports.unfollow = function(data,req,res,next) {
  */
 exports.getFollow = function(data,req,res,next) {
 
-    let sql = 'SELECT * FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?)';
+    let sql = 'SELECT usuariSeguidor FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?);';
     db.all(sql,[data.usuariSeguit], (err, rows) => {
+        if (err) {
+            next(err);
+        }
+        else {
+            res.send(rows);
+        }
+    });
+}
+
+exports.getFollowing = function(data,req,res,next) {
+
+    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
+    db.all(sql,[data.usuariSeguidor], (err, rows) => {
         if (err) {
             next(err);
         }
@@ -262,6 +300,25 @@ exports.decreaseFollowing = function(req,res,next) {
             res.send ('User has been updated');
         }
     });
+}
+
+exports.getEstrelles = function(data,res,next) {
+
+    let sql = 'SELECT AVG(valoracioMitjana) AS estrelles FROM ValoracioActivitats va WHERE usuariCreador == ?'
+    db.get(sql,[data.email],(err,row) => {
+        console.log(row)
+        if (err) {
+            res.status(500).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else if (row == null) {
+            res.status(404).send('This user cannot have a valoration');
+        }
+        else res.status(200).send(row);
+
+    })
 }
 
 

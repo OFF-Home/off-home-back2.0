@@ -2,8 +2,14 @@ var express = require('express');
 var router = express.Router();
 var activitats = require('../services/activitats.js');
 
+/** Funció d'enrutament de la direcció /amics/:email amb get, on @email és l'email d'un usuari existent.
+ *  Retornar les activitats creades per amics de l'usuari*/
+router.get('/amics/:email',activitats.getActivitatsAmics)
 
+/** Funció d'enrutament de la direcció /likedActivities/:email amb get, on @email és l'email d'un usuari existent.
+ *  Retornar les activitats guardades per l'usuari*/
 router.get('/likedActivities/:email',activitats.getActivitatsGuardades)
+
 /** Funció d'enrutament de la direcció /activitats/acabades/:useremail amb get, on @useremail és l'email d'un usuari existent.
  *  Retornar les activitats acabades per l'usuari*/
 router.get('/acabades/:useremail', activitats.getActivitatsAcabades);
@@ -89,7 +95,20 @@ router.get('/:username/:datahora',activitats.get_activitats);
  *  Retorna el número de places lliures que queden a l'activitat */
 router.get('/:username/:datahora/placeslliures', activitats.calcularPlacesLliures)
 
+
+/** Funció d'enrutament de la direcció /likedActivities/ amb post,
+ *  L'usuari guarda una activitat*/
 router.post('/likedActivities/', activitats.afegirActivities)
+
+/** Funció d'enrutament de la direcció /likedActivities/ amb delete,
+ *  L'usuari esborra una activitat*/
+router.delete('/likedActivities/', activitats.eliminarActivities)
+
+/** Funció d'enrutament de la direcció /activitats/:usuariCreador amb post, on @usuariCreador és l'email d'un usuari existent.
+ *  Crea una instància d'activitat amb l'usuari de la url i els paràmtres necessaris del body */
+router.post('/create/:usuariCreador', activitats.create_activitats);
+
+
 /** Funció d'enrutament de la direcció /activitats/inserusuari amb post.
  *  Crea una instància de participants amb els paràmetres necessaris del body*/
 router.post('/insertusuari',activitats.insertUsuariActivitat);

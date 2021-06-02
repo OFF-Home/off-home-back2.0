@@ -31,6 +31,8 @@ exports.create_activitats = function(req,res,next) {
         usuariCreador: req.params.usuariCreador,
         nomCarrer: req.body.nomCarrer,
         carrerNum: req.body.carrerNum,
+        latitud : req.body.latitud,
+        altitud: req.body.altitud,
         dataHoraIni: req.body.dataHoraIni,
         categoria: req.body.categoria,
         maxParticipants: req.body.maxParticipants,
@@ -53,7 +55,9 @@ exports.insertUsuariActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.body.usuariCreador,
         dataHoraIni: req.body.dataHoraIni,
-        usuariParticipant: req.body.usuariParticipant
+        usuariParticipant: req.body.usuariParticipant,
+        uid_creador: req.body.uid_creador,
+        uid_participant: req.body.uid_participant
     };
     activitats.insertUsuariActivitat(data,req,res,next)
 
@@ -69,7 +73,9 @@ exports.deleteUsuariActivitat = function(req,res,next) {
     var data = {
         usuariCreador: req.body.usuariCreador,
         dataHoraIni: req.body.dataHoraIni,
-        usuariParticipant: req.body.usuariParticipant
+        usuariParticipant: req.body.usuariParticipant,
+        uid_creador: req.body.uid_creador,
+        uid_participant: req.body.uid_participant
     };
     activitats.deleteUsuariActivitat(data,req,res,next)
 
@@ -158,9 +164,9 @@ exports.getActivitatsALesQueParticipo = function(req,res,next) {
  */
 exports.getActivitatsByRadi = function(req,res,next) {
     var data = {
-        latitud : req.body.latitud,
-        altitud : req.body.altitud,
-        distance : req.body.distance
+        latitud : req.query.latitud,
+        altitud : req.query.altitud,
+        distance : req.query.distance
     }
     models.getActivitatsByRadi(data,res,next);
 
@@ -266,35 +272,6 @@ exports.getComentaris = function (req,res,next ) {
     activitats.getComentaris(data,req,res,next)
 }
 
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-exports.getActivitatsAcabades = function (req,res,next) {
-    if (req.params.useremail == null || req.params.useremail.length === 0) {
-        res.status(400).send('The body has null values');
-    }
-    else {
-        activitats.getActivitatsAcabades(req.params.useremail,res,next);
-    }
-}
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-exports.getActivitatsAcabades = function (req,res,next) {
-    if (req.params.useremail == null || req.params.useremail.length === 0) {
-        res.status(400).send('The body has null values');
-    }
-    else {
-        activitats.getActivitatsAcabades(req.params.useremail,res,next);
-    }
-}
 
 exports.afegirActivities = function(req,res,next) {
     var data = {
@@ -305,9 +282,43 @@ exports.afegirActivities = function(req,res,next) {
     activitats.afegirActivities(data,req,res,next)
 }
 
+exports.eliminarActivities = function(req,res,next) {
+    var data = {
+        usuariCreador: req.query.usuariCreador,
+        datahoraIni: req.query.dataHoraIni,
+            usuariGuardador: req.query.usuariGuardador
+    }
+    activitats.eliminarActivities(data, req, res, next)
+}
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+exports.getActivitatsAcabades = function (req,res,next) {
+    if (req.params.useremail == null || req.params.useremail.length === 0) {
+        res.status(400).send('The body has null values');
+    }
+    else {
+        activitats.getActivitatsAcabades(req.params.useremail,res,next);
+    }
+}
+
 exports.getActivitatsGuardades = function(req,res,next){
     var data = {
         usuariGuardador: req.params.email
     }
     activitats.getActivitatsGuardades(data,req,res,next)
+
 }
+
+exports.getActivitatsAmics = function(req,res,next){
+    var data = {
+        email: req.params.email
+    }
+    activitats.getActivitatsAmics(data,res,next)
+}
+
+
+

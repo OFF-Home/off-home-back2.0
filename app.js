@@ -79,6 +79,9 @@ app.use(function(err, req, res, next) {
   else if (String(err).includes("SQLITE_CONSTRAINT: NOT NULL constraint failed: Activitats.titol")) {
     res.status(500).send('A title is needed');
   }
+  else if(String(err).includes("SQLITE_CONSTRAINT: FOREIGN KEY constraint failed") ) {
+    res.status(500).send('Either the user or the activity dont exist');
+  }
   else {
     res.status(500).send(err.message);
   }

@@ -1,10 +1,16 @@
 var models = require('../models/xats.js')
 
+exports.traduirUid = function(req,res,next){
+    let uid = req.params.uid
+    models.traduirUid(uid,res,next)
+}
+
 exports.veureXats = function(req,res,next) {
 
-    let usid = req.params.usid
-    models.veureXats(usid,res,next);
-
+    console.log('he entrat uwu')
+    let uid = req.params.uid
+    let data = []
+    models.veureXats(uid,data,res,next)
 }
 
 exports.veureXatIndividual = function(req,res,next) {
@@ -103,12 +109,12 @@ exports.afegirUsuariXatGrupal = function(req,res,next) {
 }
 
 exports.sendMessage = function(req,res,next) {
-    if (req.body.token == null || req.body.message == null) {
+    if (req.body.email == null || req.body.message == null || req.body.titol == null) {
         res.status(400).send('The body has null values');
     }
     else {
         let info = {
-            token: req.body.token,
+            email: req.body.email,
             titol: req.body.titol,
             message: req.body.message
         };

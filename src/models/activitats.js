@@ -14,41 +14,16 @@ exports.get_activitats = function (data,req,res,next) {
     let sql = 'SELECT * ' +
         'FROM Activitats a ' +
         'WHERE a.usuariCreador = ? AND a.dataHoraIni = ?'
-
-    db.all(sql,[data.username, data.datahora], (err,rows) => {
+    db.get(sql,[data.username, data.datahora], (err,row) => {
         if (err) {
             res.json({
                 status: err.status,
                 message: err.message
             });
         }
-        else if (rows.length == 0) {
-            res.status(204).send('No Activity Found');
-        }
-        else res.send(rows);
+        else res.send(row);
     });
 }
-
-exports.getActivitatsGuardades = function(data,req,res,next) {
-    let sql = 'SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?);';
-    db.all(sql,[data.usuariGuardador], (err, rows) => {
-        if (err) {
-            next(err);
-        }
-        else if (rows.length == 0) {
-            res.status(204).send('Activities Not Found');
-        }
-        else if (err) {
-            res.json({
-                status: err.status,
-                message: err.message
-            });
-        }
-        else res.send(rows);
-
-    });
-}
-
 
 /**
  *
@@ -83,7 +58,8 @@ exports.getActivitatsAcabades = function (useremail,res,next) {
  */
 exports.get_activitatsOrderedByName = function(req,res,next) {
     let sql = 'SELECT *' +
-        'FROM Activitats a ' +
+        'FROM Activitatsinfo a ' +
+        'WHERE acabada == 0 ' +
         'ORDER BY a.titol ASC;';
     db.all(sql, (err, rows) => {
         if (err) {
@@ -106,7 +82,8 @@ exports.get_activitatsOrderedByName = function(req,res,next) {
  */
 exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
     let sql = 'SELECT *' +
-        'FROM Activitats a ' +
+        'FROM Activitatsinfo a ' +
+        'WHERE acabada == 0 ' +
         'ORDER BY a.titol DESC;';
     db.all(sql, (err, rows) => {
         if (err) {
@@ -129,7 +106,8 @@ exports.get_activitatsOrderedByNameDesc = function(req,res,next) {
  */
 exports.get_activitatsOrderedByDate = function(req,res,next) {
     let sql = 'SELECT *' +
-        'FROM Activitats a ' +
+        'FROM Activitatsinfo a ' +
+        'WHERE acabada == 0 ' +
         'ORDER BY a.dataHoraIni ASC;';
     db.all(sql, (err, rows) => {
         if (err) {
@@ -171,32 +149,163 @@ exports.filterByTitle = function(nom, req,res,next) {
     });
 }
 
+
+
+function ficarUsuariAFirebase(uid_creador, dataHoraIni, uidAfegir) {
+
+    let activitat = uid_creador.concat("_").concat(dataHoraIni)
+
+    firebaseDB.ref('usuaris/' + uidAfegir).push(activitat)
+}
+function borrarUsuariAFirebase(uid_creador, dataHoraIni, uidEliminar) {
+
+    let activitat = uid_creador.concat("_").concat(dataHoraIni)
+
+    firebaseDB.ref('usuaris/' + uidEliminar).child(activitat).remove()
+}
+
 /**
  *
- * @param req
+ * @param data
  * @param res
  * @param next
  */
-
 exports.create_activitats = function (data,res,next) {
     var info = [data.usuariCreador,data.nomCarrer,data.carrerNum,data.dataHoraIni,data.categoria,data.maxParticipants,data.titol,data.descripcio,data.dataHoraFi];
+    var infoLloc = [data.nomCarrer,data.carrerNum,data.latitud,data.altitud];
+    var infoParticpants = [null,data.usuariCreador,data.dataHoraIni, data.usuariCreador,null];
     let sql = 'INSERT INTO Activitats VALUES (?,?,?,?,?,?,?,?,?)';
-
-    db.run(sql,info,(err) => {
-        if (err) {
-            res.status(409).json({
-                status: err.status,
-                message: err.message
-            });
-        }
-        else{
-            let dataHoraIni = data.dataHoraIni
-            let activitat = data.uid_creador.concat("_").concat(dataHoraIni)
-
-            firebaseDB.ref('usuaris/'+data.uid_creador).push(activitat)
-
-            res.status(201).send('OK');
-        }
+    let sqlLlocs = 'INSERT INTO Llocs VALUES (?,?,?,?)';
+    let sqlParticipants = 'INSERT INTO Participants VALUES (?,?,?,?,?)';
+    var result = []
+    ficarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_creador)
+    db.serialize(() => {
+        db.run(sqlLlocs,infoLloc, (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+        });
+        db.run(sql,info,(err) => {
+            if (err) {
+                res.status(409).json({
+                    status: err.status,
+                    message: err.message
+                });
+            }
+            else {
+                db.run(sqlParticipants,infoParticpants, (error) => {
+                    if (error) {
+                        next(error);
+                    }
+                    else {
+                        let sqlaux2 = 'SELECT COUNT (*) AS val ' +
+                            'FROM Participants p ' +
+                            'WHERE p.usuariParticipant = ?';
+                        db.get(sqlaux2,[data.usuariCreador],(err2,row) => {
+                            if (err2) {
+                                next(err2);
+                            }
+                            else {
+                                let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
+                                if(row.val === 1) {
+                                    db.run(sqlinsert,['PARTICIPANT BRONZE',data.usuariCreador]);
+                                    result.push('PARTICIPANT BRONZE');
+                                }
+                                else if(row.val === 10) {
+                                    db.run(sqlinsert,['PARTICIPANT SILVER',data.usuariCreador]);
+                                    result.push('PARTICIPANT SILVER');
+                                }
+                                else if(row.val === 25) {
+                                    db.run(sqlinsert,['PARTICIPANT GOLD',data.usuariCreador]);
+                                    result.push('PARTICIPANT GOLD');
+                                }
+                                else if(row.val === 50) {
+                                    db.run(sqlinsert,['PARTICIPANT PLATINUM',data.usuariCreador]);
+                                    result.push('PARTICIPANT PLATINUM');
+                                }
+                                else if(row.val === 100) {
+                                    db.run(sqlinsert,['PARTICIPANT DIAMOND',data.usuariCreador]);
+                                    result.push('PARTICIPANT DIAMOND');
+                                }
+                            }
+                        });
+                        sqlaux2 = 'SELECT COUNT (*) AS val ' +
+                            'FROM Participants p, Activitats a ' +
+                            'WHERE p.usuariParticipant = ? and p.usuariCreador = a.usuariCreador and p.dataHoraIni = a.dataHoraIni and a.categoria = ?'
+                        db.get(sqlaux2,[data.usuariCreador,data.categoria],(err3,row) => {
+                            if (err3) {
+                                next(err3);
+                            }
+                            else {
+                                let trofeu;
+                                if (data.categoria === 'Running') trofeu = 'RUNNER';
+                                else if (data.categoria === 'Skating') trofeu = 'SKATING';
+                                else if (data.categoria === 'Walking') trofeu = 'WALKER';
+                                else if (data.categoria === 'Cycling') trofeu = 'CYCLING';
+                                else if (data.categoria === 'Meditation') trofeu = 'MEDITATION';
+                                else if (data.categoria === 'Cultural') trofeu = 'CULTURAL';
+                                else if (data.categoria === 'Volunteering') trofeu = 'VOLUNTEERING';
+                                else if (data.categoria === 'Gastronomic') trofeu = 'GASTRONOMIC';
+                                else if (data.categoria === 'WaterSports') trofeu = 'WATER SPORTS';
+                                let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
+                                if(row.val === 1) {
+                                    db.run(sqlinsert,[trofeu + ' BRONZE',data.usuariCreador]);
+                                    result.push(trofeu + ' BRONZE');
+                                }
+                                else if(row.val === 10) {
+                                    db.run(sqlinsert,[trofeu + ' SILVER',data.usuariCreador]);
+                                    result.push(trofeu + ' SILVER');
+                                }
+                                else if(row.val === 25) {
+                                    db.run(sqlinsert,[trofeu + ' GOLD',data.usuariCreador]);
+                                    result.push(trofeu + ' GOLD');
+                                }
+                                else if(row.val === 50) {
+                                    db.run(sqlinsert,[trofeu + ' PLATINUM',data.usuariCreador]);
+                                    result.push(trofeu + ' PLATINUM');
+                                }
+                                else if(row.val === 100) {
+                                    db.run(sqlinsert,[trofeu + ' DIAMOND',data.usuariCreador]);
+                                    result.push(trofeu + ' DIAMOND');
+                                }
+                            }
+                        });
+                        let sqlaux = 'SELECT COUNT (*) as val ' +
+                            'FROM Activitats a ' +
+                            'WHERE a.usuariCreador = ?;';
+                        db.get(sqlaux,[data.usuariCreador],(err4,row) => {
+                            if (err4) {
+                                next(err4);
+                            }
+                            else {
+                                let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
+                                if(row.val === 1) {
+                                    db.run(sqlinsert,['CREATOR BRONZE',data.usuariCreador]);
+                                    result.push('CREATOR BRONZE');
+                                }
+                                else if(row.val === 10) {
+                                    db.run(sqlinsert,['CREATOR SILVER',data.usuariCreador]);
+                                    result.push('CREATOR SILVER');
+                                }
+                                else if(row.val === 25) {
+                                    db.run(sqlinsert,['CREATOR GOLD',data.usuariCreador]);
+                                    result.push('CREATOR GOLD');
+                                }
+                                else if(row.val === 50) {
+                                    db.run(sqlinsert,['CREATOR PLATINUM',data.usuariCreador]);
+                                    result.push('CREATOR PLATINUM');
+                                }
+                                else if(row.val === 100) {
+                                    db.run(sqlinsert,['CREATOR DIAMOND',data.usuariCreador]);
+                                    result.push('CREATOR DIAMOND');
+                                }
+                                res.status(201).json({result});
+                            }
+                        });
+                    }
+                });
+            }
+        });
     });
 
 }
@@ -223,7 +332,6 @@ exports.filterByData = function(nom, req,res,next) {
         }
         else res.send(rows);
     });
-
 }
 
 /**
@@ -262,15 +370,104 @@ exports.filterByValoration = function(val,req,res,next) {
 exports.insertUsuariActivitat = function(data,req,res,next){
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
     let sql = 'INSERT INTO Participants VALUES (NULL,?,?,?,NULL)';
-    db.run(sql,info,(err) => {
-        if (err) {
-            res.status(409).json({
-                status: err.status,
-                message: err.message
-            });
-        }
-        else res.status(201).send('OK');
-    })
+    var result = [];
+    ficarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_participant)
+    db.serialize(() => {
+        db.run(sql,info,(err) => {
+            if (err) {
+                res.status(409).json({
+                    status: err.status,
+                    message: err.message
+                });
+            }
+            else {
+                let sqlaux2 = 'SELECT COUNT (*) AS val ' +
+                    'FROM Participants p ' +
+                    'WHERE p.usuariParticipant = ?';
+                db.get(sqlaux2,[data.usuariParticipant],(err2,row) => {
+                    if (err2) {
+                        next(err2);
+                    }
+                    else {
+                        let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
+                        if(row.val === 1) {
+                            db.run(sqlinsert,['PARTICIPANT BRONZE',data.usuariParticipant]);
+                            result.push('PARTICIPANT BRONZE');
+                            console.log(result)
+                        }
+                        else if(row.val === 10) {
+                            db.run(sqlinsert,['PARTICIPANT SILVER',data.usuariParticipant]);
+                            result.push('PARTICIPANT SILVER');
+                        }
+                        else if(row.val === 25) {
+                            db.run(sqlinsert,['PARTICIPANT GOLD',data.usuariParticipant]);
+                            result.push('PARTICIPANT GOLD');
+                        }
+                        else if(row.val === 50) {
+                            db.run(sqlinsert,['PARTICIPANT PLATINUM',data.usuariParticipant]);
+                            result.push('PARTICIPANT PLATINUM');
+                        }
+                        else if(row.val === 100) {
+                            db.run(sqlinsert,['PARTICIPANT DIAMOND',data.usuariParticipant]);
+                            result.push('PARTICIPANT DIAMOND');
+                        }
+                    }
+                });
+                sqlaux2 = 'SELECT a2.categoria ' +
+                    '      FROM Activitats a2' +
+                    '      WHERE a2.usuariCreador = ? and a2.dataHoraIni = ?';
+                db.get(sqlaux2,[data.usuariCreador,data.dataHoraIni], (err4,roow) => {
+                    if (err4) {
+                        next(err4);
+                    }
+                    else {
+                        sqlaux2 = 'SELECT COUNT (*) AS val ' +
+                            '                    FROM Participants p, Activitats a ' +
+                            '                    WHERE p.usuariParticipant = ? and p.usuariCreador = a.usuariCreador and p.dataHoraIni = a.dataHoraIni and a.categoria = ?;'
+                        db.get(sqlaux2,[data.usuariParticipant,roow.categoria],(err3,row) => {
+                            if (err3) {
+                                next(err3);
+                            }
+                            else {
+                                let trofeu;
+                                if (roow.categoria === 'Running') trofeu = 'RUNNER';
+                                else if (roow.categoria=== 'Skating') trofeu = 'SKATING';
+                                else if (roow.categoria === 'Walking') trofeu = 'WALKER';
+                                else if (roow.categoria === 'Cycling') trofeu = 'CYCLING';
+                                else if (roow.categoria === 'Meditation') trofeu = 'MEDITATION';
+                                else if (roow.categoria === 'Cultural') trofeu = 'CULTURAL';
+                                else if (roow.categoria === 'Volunteering') trofeu = 'VOLUNTEERING';
+                                else if (roow.categoria === 'Gastronomic') trofeu = 'GASTRONOMIC';
+                                else if (roow.categoria === 'WaterSports') trofeu = 'WATER SPORTS';
+                                let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
+                                if(row.val === 1) {
+                                    db.run(sqlinsert,[trofeu + ' BRONZE',data.usuariParticipant]);
+                                    result.push(trofeu + ' BRONZE');
+                                }
+                                else if(row.val === 10) {
+                                    db.run(sqlinsert,[trofeu + ' SILVER',data.usuariParticipant]);
+                                    result.push(trofeu + ' SILVER');
+                                }
+                                else if(row.val === 25) {
+                                    db.run(sqlinsert,[trofeu + ' GOLD',data.usuariParticipant]);
+                                    result.push(trofeu + ' GOLD');
+                                }
+                                else if(row.val === 50) {
+                                    db.run(sqlinsert,[trofeu + ' PLATINUM',data.usuariParticipant]);
+                                    result.push(trofeu + ' PLATINUM');
+                                }
+                                else if(row.val === 100) {
+                                    db.run(sqlinsert,[trofeu + ' DIAMOND',data.usuariParticipant]);
+                                    result.push(trofeu + ' DIAMOND');
+                                }
+                                res.status(201).json({result});
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
 }
 
 /**
@@ -282,6 +479,7 @@ exports.insertUsuariActivitat = function(data,req,res,next){
  */
 exports.deleteUsuariActivitat = function(data,req,res,next){ //sempre retorna ok, no sé com comprovar si ha borrat algo
     var info = [data.usuariCreador,data.dataHoraIni,data.usuariParticipant];
+    borrarUsuariAFirebase(data.uid_creador, data.dataHoraIni, data.uid_participant)
     let sql = 'DELETE FROM Participants WHERE LOWER(usuariCreador) = LOWER(?) AND ' +
         'LOWER(dataHoraIni) = LOWER(?) AND LOWER(usuariParticipant) = LOWER(?);';
     db.run(sql,info,(err) => {
@@ -377,6 +575,7 @@ exports.valorarActivitat= function(data,req,res,next) {
     else comentari = data.comentari
     let sql= 'SELECT * FROM Participants WHERE usuariCreador = ? AND dataHoraIni = ? AND usuariParticipant = ? AND valoracio is null;'
     var valorar =0
+    var result = [];
     db.all(sql,[data.usuariCreador,data.dataHoraIni,data.usuariParticipant], (err,rows)=> {
 
         if (err) {
@@ -397,7 +596,41 @@ exports.valorarActivitat= function(data,req,res,next) {
                     });
                 } else if (this.changes === 0) {
                     res.status(404).send('Participant not found');
-                } else res.status(200).send('Activity successfully valorated');
+                } else {
+                    let sqlaux = 'SELECT COUNT (*) AS val ' +
+                        'FROM Participants p ' +
+                        'WHERE p.usuariParticipant = ? and p.valoracio is not null';
+                    db.get(sqlaux,[data.usuariParticipant],(err2,row) => {
+                        if (err2) {
+                            next(err2);
+                        }
+                        else {
+                            let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
+                            if(row.val === 1) {
+                                db.run(sqlinsert,['REVIEWER BRONZE',data.usuariParticipant]);
+                                result.push('REVIEWER BRONZE');
+                                console.log(result)
+                            }
+                            else if(row.val === 10) {
+                                db.run(sqlinsert,['REVIEWER SILVER',data.usuariParticipant]);
+                                result.push('REVIEWER SILVER');
+                            }
+                            else if(row.val === 25) {
+                                db.run(sqlinsert,['REVIEWER GOLD',data.usuariParticipant]);
+                                result.push('REVIEWER GOLD');
+                            }
+                            else if(row.val === 50) {
+                                db.run(sqlinsert,['REVIEWER PLATINUM',data.usuariParticipant]);
+                                result.push('REVIEWER PLATINUM');
+                            }
+                            else if(row.val === 100) {
+                                db.run(sqlinsert,['REVIEWER DIAMOND',data.usuariParticipant]);
+                                result.push('REVIEWER DIAMOND');
+                            }
+                            res.status(200).send({result});
+                        }
+                    });
+                }
             })}
     })
 }
@@ -608,6 +841,26 @@ exports.getValoracio = function(data,req,res,next) {
     })
 }
 
+exports.getActivitatsGuardades = function(data,req,res,next) {
+    let sql = 'SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?);';
+    db.all(sql,[data.usuariGuardador], (err, rows) => {
+        if (err) {
+            next(err);
+        }
+        else if (rows.length == 0) {
+            res.status(204).send('Activities Not Found');
+        }
+        else if (err) {
+            res.json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.send(rows);
+
+    });
+}
+
 /**
  *
  * @param data
@@ -628,6 +881,20 @@ exports.getComentaris = function(data,req,res,next) {
         else {
             res.send(rows); //retorna un json amb la valoració
         }
+    })
+}
+
+
+exports.afegirActivities = function(data,req,res,next) {
+    let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
+    db.run(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        }
+        else res.status(201).send('OK');
     })
 }
 
@@ -655,15 +922,46 @@ exports.getActivitatsAcabades = function (useremail,res,next) {
     })
 }
 
-exports.afegirActivities = function(data,req,res,next) {
-    let sql = 'INSERT INTO likedActivities VALUES (?,?,?)';
-    db.run(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err) => {
+exports.eliminarActivities = function(data,req,res,next) {
+    let sql = 'SELECT * FROM likedActivities  where usuariCreador == ? and dataHoraIni == ? and usuariGuardador == ?';
+    db.get(sql,[data.usuariCreador,data.datahoraIni,data.usuariGuardador],(err,row) => {
         if (err) {
             res.status(409).json({
                 status: err.status,
                 message: err.message
             });
         }
-        else res.status(201).send('OK');
+        else if (row == null) {
+            res.status(404).send('Activity is not in liked activities');
+        }
+        else {
+            let sql2 = 'DELETE FROM likedActivities where usuariCreador == ? and dataHoraIni == ? and usuariGuardador == ?';
+            db.run(sql2, [data.usuariCreador, data.datahoraIni, data.usuariGuardador], (err) => {
+                if (err) {
+                    res.status(409).json({
+                        status: err.status,
+                        message: err.message
+                    });
+                } else res.status(204).send('OK');
+            })
+        }
+    })
+
+}
+
+exports.getActivitatsAmics = function(data,res,next){
+    let sql= 'SELECT * FROM Activitatsinfo WHERE acabada == 0 AND usuariCreador IN (SELECT usuariSeguit FROM Segueix WHERE usuariSeguidor == ?)'
+    db.all(sql, [data.email], (err,rows) => {
+        if (err) {
+            res.status(409).json({
+                status: err.status,
+                message: err.message
+            });
+        } else if (rows.length === 0) {
+            res.status(404).send('No activities found');
+        } else res.send(rows);
     })
 }
+
+
+
