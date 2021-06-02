@@ -833,7 +833,9 @@ exports.getValoracio = function(data,req,res,next) {
             next(err);
         }
         else if (row == null) {
-            res.status(404).send('Activity not valorated');
+            var text = '{"valoracio": null , "comentari": null}';
+            var obj = JSON.parse(text);
+            res.send(obj)
         }
         else {
             res.send(row); //retorna un json amb la valoració
