@@ -286,7 +286,7 @@ exports.eliminarActivities = function(req,res,next) {
     var data = {
         usuariCreador: req.query.usuariCreador,
         datahoraIni: req.query.dataHoraIni,
-            usuariGuardador: req.query.usuariGuardador
+        usuariGuardador: req.query.usuariGuardador
     }
     activitats.eliminarActivities(data, req, res, next)
 }
