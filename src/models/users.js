@@ -109,7 +109,7 @@ exports.findUserByName = function(data,req,res,next){
  */
 exports.follow = function(data,req,res,next) {
 
-    let sql = 'INSERT INTO Segueix VALUES (?,?)';
+    let sql = 'INSERT INTO Segueix VALUES (?,?);';
     db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
         if (err) {
             next(err);
@@ -127,9 +127,9 @@ exports.follow = function(data,req,res,next) {
  * @param res
  * @param next
  */
-exports.unfollow = function(data,req,res,next) {
+exports.unfollow = function(data,res,next) {
 
-    let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ? ';
+    let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ?; ';
     db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
         if (err) {
             next(err);
@@ -148,7 +148,7 @@ exports.unfollow = function(data,req,res,next) {
  */
 exports.getFollow = function(data,req,res,next) {
 
-    let sql = 'SELECT usuariSeguidor FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?)';
+    let sql = 'SELECT usuariSeguidor FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?);';
     db.all(sql,[data.usuariSeguit], (err, rows) => {
         if (err) {
             next(err);
@@ -161,7 +161,7 @@ exports.getFollow = function(data,req,res,next) {
 
 exports.getFollowing = function(data,req,res,next) {
 
-    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?)';
+    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
     db.all(sql,[data.usuariSeguidor], (err, rows) => {
         if (err) {
             next(err);
