@@ -61,15 +61,15 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
                 } else {
                     let sql = 'INSERT INTO Categories VALUES (?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["Running", "Activitats relacionades amb correr","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Walking", "Activitats relacionades amb caminar,senderisme,etc","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Skating", "Activitats relacionades amb esports en patins","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Cycling", "Activitats relacionades amb ciclisme","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Meditation", "Activitats relacionades amb la relaxacio","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Cultural", "Activitats relacionades amb l'ambit cultural","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Volunteering", "Activitats relacionades amb voluntariats","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["Gastronomic", "Activitats relacionades amb la gastronomia","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
-                        db.run(sql, ["WaterSports", "Activitats relacionades amb esports aquatics","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Running", "Activitats relacionades amb correr","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","https://i.ibb.co/687YRnt/running.png"]);
+                        db.run(sql, ["Walking", "Activitats relacionades amb caminar,senderisme,etc","https://lh3.googleusercontent.com/proxy/LNzmrprv4Id_No3qWFYP4fA_2cxn5TuEkDcprVIb73es46RqJIfTHITqCZo_lxmUSvWnUtNNQuo9cG1IbK355ZlL7H8Y1DONXlPMq1-7h19HCe3KxeYqU_fi2Wcb4Y6oJ3BM-Ig0QuzuflFbGQd8v_iubOQGkMsIw9m1sHUWQH_K","https://i.ibb.co/pK0WxgM/walking.png"]);
+                        db.run(sql, ["Skating", "Activitats relacionades amb esports en patins","https://www.osservatorioantitrust.eu/en/wp-content/uploads/2017/12/IMG_0055.jpg","https://i.ibb.co/hs6bxKk/skate.png"]);
+                        db.run(sql, ["Cycling", "Activitats relacionades amb ciclisme","https://img.naturaki.com/64285rutes-ciclisme-girona-1.jpg?auto=compress&h=500&nr=5&usm=50&usmrad=0.5&s=0db63f328444cfa7e4f859fcfb5f3990","https://i.ibb.co/q0yH8m7/cycling.png"]);
+                        db.run(sql, ["Meditation", "Activitats relacionades amb la relaxacio","https://blogmedia.evbstatic.com/wp-content/uploads/wpmulti/sites/21/2019/05/centros-yoga-barcelona.jpg","https://i.ibb.co/Cb0ktr9/mediation.png"]);
+                        db.run(sql, ["Cultural", "Activitats relacionades amb l'ambit cultural","https://api.nnhotels.com/storage/171219/5a58ce53eca45bad3b1b015a/xl/castellers-bcn-10.jpg","https://i.ibb.co/bsW4dgj/cultural.png"]);
+                        db.run(sql, ["Volunteering", "Activitats relacionades amb voluntariats","https://badi.com/blog/wp-content/uploads/2020/03/Voluntariado-en-Barcleona_1-scaled.jpg","https://i.ibb.co/86JtKnN/volunteering.png"]);
+                        db.run(sql, ["Gastronomic", "Activitats relacionades amb la gastronomia","https://dam.ngenespanol.com/wp-content/uploads/2018/11/5-gastronomia-paises-mundo.png","https://i.ibb.co/Jy6jyFH/food.png"]);
+                        db.run(sql, ["WaterSports", "Activitats relacionades amb esports aquatics","https://www.asssa.es/wp-content/uploads/2019/08/00178_1-3.png","https://i.ibb.co/d4xZRS8/water-sports.png"]);
                     });
                     console.log("Taula Categories creada correctament");
                 }
