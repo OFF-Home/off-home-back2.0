@@ -107,7 +107,6 @@ exports.findUserByName = function(data,req,res,next){
  * @param next
  */
 exports.follow = function(data,res,next) {
-
     let sql = 'INSERT INTO Segueix VALUES (?,?)';
     let sqlfollower = 'UPDATE Usuaris SET followers = followers+1 WHERE LOWER(email) = LOWER(?)';
     let sqlfollowing = 'UPDATE Usuaris SET following = following+1 WHERE LOWER(email) = LOWER(?)';
@@ -130,6 +129,7 @@ exports.follow = function(data,res,next) {
         });
 
     })
+
 
 }
 
@@ -161,6 +161,7 @@ exports.unfollow = function(data,res,next) {
                 next(err);
             }
         });
+
     });
 }
 
@@ -172,7 +173,7 @@ exports.unfollow = function(data,res,next) {
  */
 exports.getFollow = function(data,req,res,next) {
 
-    let sql = 'SELECT usuariSeguidor FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?)';
+    let sql = 'SELECT usuariSeguidor FROM Segueix WHERE LOWER(usuariSeguit) == LOWER(?);';
     db.all(sql,[data.usuariSeguit], (err, rows) => {
         if (err) {
             next(err);
@@ -185,7 +186,7 @@ exports.getFollow = function(data,req,res,next) {
 
 exports.getFollowing = function(data,req,res,next) {
 
-    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?)';
+    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
     db.all(sql,[data.usuariSeguidor], (err, rows) => {
         if (err) {
             next(err);

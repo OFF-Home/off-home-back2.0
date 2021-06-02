@@ -105,7 +105,7 @@ exports.follow = function(req,res,next) {
 exports.unfollow = function(req,res,next) {
     var data = {
         usuariSeguidor: req.params.username,
-        usuariSeguit: req.body.followed
+        usuariSeguit: req.query.followed
     }
     models.unfollow(data,res,next);
     //models.decreaseFollow(req,res,next);
