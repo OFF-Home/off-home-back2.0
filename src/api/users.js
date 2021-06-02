@@ -44,7 +44,7 @@ router.get('/:username/show', user.showUsuari);
  * Funció d'enrutament de la direcció /users/:username/update amb el mètode post, on @username és el nom d'usuari.
  * Actualitza la informació de l'usuari amb la informació del body
  */
-router.put('/:username/update',user.updateUsuari);
+router.put('/:useremail/update',user.updateUsuari);
 
 
 /**
