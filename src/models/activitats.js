@@ -842,7 +842,8 @@ exports.getValoracio = function(data,req,res,next) {
 }
 
 exports.getActivitatsGuardades = function(data,req,res,next) {
-    let sql = 'SELECT * FROM Activitats a WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?);';
+    let sql = 'SELECT a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi, COUNT(DISTINCT p.usuariParticipant) AS numParticipants  FROM Activitats a, Participants p WHERE (a.usuariCreador,a.dataHoraIni) IN ( SELECT la.usuariCreador, la.dataHoraIni FROM likedActivities la WHERE la.usuariGuardador == ?) AND a.usuariCreador == p.usuariCreador AND a.dataHoraIni == p.dataHoraIni ' +
+        ' GROUP BY a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi;';
     db.all(sql,[data.usuariGuardador], (err, rows) => {
         if (err) {
             next(err);
