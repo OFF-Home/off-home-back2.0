@@ -29,10 +29,14 @@ exports.insert_tags = function(data,res,next) {
 exports.delete_tags = function(data,res,next) {
 
     let sql = 'DELETE FROM TagsxUsuari WHERE LOWER(nomTag) = LOWER(?) AND LOWER(Usuari) = LOWER(?);';
-    db.get(sql,[data.nomTag,data.username],(err,row) => {
-        if(row == null) {
-            res.status(200).send('Delete tag al usuario');
+    db.run(sql,[data.nomTag,data.username],(err) => {
+        if (err) {
+            res.status(409).json({
+                status : err.status,
+                message : err.message
+            });
         }
-        else res.status(409).json(row);
+        else res.status(200).send('Delete tag al usuario');
     });
+
 }

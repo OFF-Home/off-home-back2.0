@@ -22,5 +22,6 @@ services:
         volumes:
         - "./off-home.sqlite3:/app/off-home.sqlite3"
         - "./off-home-93451-firebase-adminsdk-ew1oq-42cac07c20.json:/app/off-home-93451-firebase-adminsdk-ew1oq-42cac07c20.json"
+        - "./images:/app/images"
         restart: always
 ```

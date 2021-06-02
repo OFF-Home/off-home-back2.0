@@ -10,7 +10,7 @@ const firebaseDB = firebaseAdmin.database();
 }*/
 
 exports.traduirUid = function(uid,res,next){
-    let sql = 'SELECT username FROM Usuaris WHERE uid = ?';
+    let sql = 'SELECT * FROM Usuaris WHERE uid = ?';
 
     db.get(sql, uid, (err, row) => {
         res.status(201).send(row)
