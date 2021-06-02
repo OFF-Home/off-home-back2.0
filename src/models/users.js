@@ -30,7 +30,6 @@ exports.showUsuari = function(info,res,next) {
     let sql = 'SELECT * ' +
         'FROM Usuaris u ' +
         'WHERE u.email = ?'
-    console.log('pollo')
     db.get(sql,[info.username],(err,row) => {
         if(row == null) {
             res.status(404).send('User not found');
@@ -54,7 +53,7 @@ exports.updateUsuari = function(info,target,res,next) {
     let n = info.length;
     let first = true;
     let input = [];
-    let entries = ['email','username','uid','birthDate','description','followers','following','darkmode','notifications','estrelles','language'];
+    let entries = ['email','username','uid','token','description','followers','following','darkmode','notifications','estrelles','language'];
     for (let i = 0; i < n; ++i) {
         if (info[i] != null && first) {
             sql += entries[i] + ' = ?';
@@ -107,17 +106,30 @@ exports.findUserByName = function(data,req,res,next){
  * @param res
  * @param next
  */
-exports.follow = function(data,req,res,next) {
+exports.follow = function(data,res,next) {
+    let sql = 'INSERT INTO Segueix VALUES (?,?)';
+    let sqlfollower = 'UPDATE Usuaris SET followers = followers+1 WHERE LOWER(email) = LOWER(?)';
+    let sqlfollowing = 'UPDATE Usuaris SET following = following+1 WHERE LOWER(email) = LOWER(?)';
 
-    let sql = 'INSERT INTO Segueix VALUES (?,?);';
-    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
-    });
+    db.serialize(() => {
+        db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollower,[data.usuariSeguit], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollowing,[data.usuariSeguidor], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+
+    })
+
 
 }
 
@@ -129,14 +141,27 @@ exports.follow = function(data,req,res,next) {
  */
 exports.unfollow = function(data,res,next) {
 
-    let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ?; ';
-    db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.send('OK');
-        }
+    let sql = 'DELETE FROM Segueix WHERE usuariSeguidor == ? AND usuariSeguit == ? ';
+    let sqlfollower = 'UPDATE Usuaris SET followers = followers-1 WHERE LOWER(email) = LOWER(?)';
+    let sqlfollowing = 'UPDATE Usuaris SET following = following-1 WHERE LOWER(email) = LOWER(?)';
+
+    db.serialize(() => {
+        db.run(sql,[data.usuariSeguidor,data.usuariSeguit], (err) => {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollower,[data.usuariSeguit], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+        db.run(sqlfollowing,[data.usuariSeguidor], function(err) {
+            if (err) {
+                next(err);
+            }
+        });
+
     });
 }
 
@@ -300,6 +325,7 @@ exports.getEstrelles = function(data,res,next) {
 exports.deleteUsuari = function(data,res,next){
 
     let sql = 'DELETE FROM Usuaris WHERE LOWER(email) = LOWER(?)';
+
     db.run(sql,[data.email], (err) => {
         if (err) {
             res.status(409).json({
@@ -307,7 +333,10 @@ exports.deleteUsuari = function(data,res,next){
                 message : err.message
             });
         }
-        else res.send('Usuari deleted');
+
+        else{
+            res.send('Usuari deleted');
+        }
     });
 }
 

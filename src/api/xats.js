@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 let xat = require('../services/xats');
 
+router.get('/traduir/:uid', xat.traduirUid)
 
+router.post('/sendmessage',xat.sendMessage);
 
 /**
  * Et retorna tots els missatges d'un xat individual. Es passa els emails dels dos usuaris pel body.
@@ -58,7 +60,9 @@ router.post('/afegirUsuariXatGrup', xat.afegirUsuariXatGrupal);
 /**
  * Et retorna tots els xats d'un usuari que es passa pel body
  */
-router.get('/:usid', xat.veureXats);
+router.get('/:uid', xat.veureXats);
+
+
 
 
 module.exports = router;
