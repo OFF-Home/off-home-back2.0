@@ -127,7 +127,7 @@ exports.follow = function(data,res,next) {
                 next(err);
             }
         });
-
+        res.status(200).send('Followed correctly');
     })
 
 
@@ -161,7 +161,7 @@ exports.unfollow = function(data,res,next) {
                 next(err);
             }
         });
-
+        res.status(204).send('Unfollowed correctly');
     });
 }
 
