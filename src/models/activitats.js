@@ -202,10 +202,12 @@ exports.create_activitats = function (data,res,next) {
                             'FROM Participants p ' +
                             'WHERE p.usuariParticipant = ?';
                         db.get(sqlaux2,[data.usuariCreador],(err2,row) => {
+                            console.log('4')
                             if (err2) {
                                 next(err2);
                             }
                             else {
+                                console.log('5')
                                 let sqlinsert = 'INSERT INTO AssolimentsxPersona VALUES (?,?)'
                                 if(row.val === 1) {
                                     db.run(sqlinsert,['PARTICIPANT BRONZE',data.usuariCreador]);
@@ -460,7 +462,7 @@ exports.insertUsuariActivitat = function(data,req,res,next){
                                     db.run(sqlinsert,[trofeu + ' DIAMOND',data.usuariParticipant]);
                                     result.push(trofeu + ' DIAMOND');
                                 }
-                                res.status(201).json({result});
+                                res.status(201).json(result);
                             }
                         });
                     }
