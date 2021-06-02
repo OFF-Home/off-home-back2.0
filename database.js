@@ -53,21 +53,23 @@ var db = new sqlite3.Database('./off-home.sqlite3', (err) => {
             db.run('CREATE TABLE Categories (' +
                 'categoria text,' +
                 'descripcio text,' +
+                'urlBackground text,' +
+                'urlIcon text,' +
                 'CONSTRAINT Categoreis_PK PRIMARY KEY (categoria));', (err) => {
                 if (err) {
                     console.error(err.message);
                 } else {
-                    let sql = 'INSERT INTO Categories VALUES (?,?)';
+                    let sql = 'INSERT INTO Categories VALUES (?,?,?,?)';
                     db.serialize(() => {
-                        db.run(sql, ["Running", "Activitats relacionades amb correr"]);
-                        db.run(sql, ["Walking", "Activitats relacionades amb caminar,senderisme,etc"]);
-                        db.run(sql, ["Skating", "Activitats relacionades amb esports en patins"]);
-                        db.run(sql, ["Cycling", "Activitats relacionades amb ciclisme"]);
-                        db.run(sql, ["Meditation", "Activitats relacionades amb la relaxacio"]);
-                        db.run(sql, ["Cultural", "Activitats relacionades amb l'ambit cultural"]);
-                        db.run(sql, ["Volunteering", "Activitats relacionades amb voluntariats"]);
-                        db.run(sql, ["Gastronomic", "Activitats relacionades amb la gastronomia"]);
-                        db.run(sql, ["WaterSports", "Activitats relacionades amb esports aquatics"]);
+                        db.run(sql, ["Running", "Activitats relacionades amb correr","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Walking", "Activitats relacionades amb caminar,senderisme,etc","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Skating", "Activitats relacionades amb esports en patins","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Cycling", "Activitats relacionades amb ciclisme","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Meditation", "Activitats relacionades amb la relaxacio","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Cultural", "Activitats relacionades amb l'ambit cultural","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Volunteering", "Activitats relacionades amb voluntariats","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["Gastronomic", "Activitats relacionades amb la gastronomia","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
+                        db.run(sql, ["WaterSports", "Activitats relacionades amb esports aquatics","https://www.justpodium.com/biblioteca/deporte-cuarentena-94-blog-251.jpg","iconopassamelapau"]);
                     });
                     console.log("Taula Categories creada correctament");
                 }
