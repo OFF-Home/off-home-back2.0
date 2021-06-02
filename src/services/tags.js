@@ -37,7 +37,7 @@ exports.insert_tags = function(req,res,next) {
  */
 exports.delete_tags = function(req,res,next) {
     var data = {
-        nomTag: req.body.nomTag,
+        nomTag: req.params.nomTag,
         username: req.params.username,
     }
     models.delete_tags(data,res,next);
