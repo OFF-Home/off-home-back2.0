@@ -186,7 +186,7 @@ exports.getFollow = function(data,req,res,next) {
 
 exports.getFollowing = function(data,req,res,next) {
 
-    let sql = 'SELECT * FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
+    let sql = 'SELECT userSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
     db.all(sql,[data.usuariSeguidor], (err, rows) => {
         if (err) {
             next(err);
