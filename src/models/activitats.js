@@ -1,6 +1,6 @@
 
 var db = require('../../database.js')
-//var Tree = require('../../tree');
+var Tree = require('../../tree');
 const firebaseAdmin = require('firebase-admin');
 const firebaseDB = firebaseAdmin.database();
 
