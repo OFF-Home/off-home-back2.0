@@ -745,16 +745,14 @@ function createTree(categories_done,activities_all,row_data) {
  * @param next
  */
 exports.getExplore = function(data,res,next) {
-    let sql_all = 'SELECT a.*, COUNT(DISTINCT p.usuariParticipant) AS numParticipants  ' +
-        '        FROM ActivitatsInfo a , Participants p' +
-        '        WHERE a.acabada = 0 AND a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni ' +
-        '        GROUP BY a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi ' +
+    let sql_aux = 'SELECT * ' +
+        'FROM ActivitatsInfo a ' +
+        'WHERE a.acabada = 0 ' +
+        'ORDER BY a.dataHoraIni';
+    let sql_all = 'SELECT * ' +
+        '        FROM ActivitatsInfo a ' +
+        '        WHERE a.acabada = 0 ' +
         '        ORDER BY a.dataHoraIni;';
-    let sql2_all_done = 'SELECT a.categoria ' +
-        '        FROM ActivitatsInfo a , Participants p ' +
-        '        WHERE a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND p.usuariParticipant = ? AND a.acabada = 1 ' +
-        '        group by a.categoria ' +
-        '        order by count(*) desc;';
     db.all(sql2_all_done,[data.email],(err,rows) => {
         if (err) {
             next(err);
