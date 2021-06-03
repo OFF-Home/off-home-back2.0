@@ -186,7 +186,7 @@ exports.getFollow = function(data,req,res,next) {
 
 exports.getFollowing = function(data,req,res,next) {
 
-    let sql = 'SELECT userSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
+    let sql = 'SELECT usuariSeguit FROM Segueix WHERE LOWER(usuariSeguidor) == LOWER(?);';
     db.all(sql,[data.usuariSeguidor], (err, rows) => {
         if (err) {
             next(err);
@@ -199,7 +199,7 @@ exports.getFollowing = function(data,req,res,next) {
 
 exports.getFollowingPlus = function(data,req,res,next) {
 
-    let sql = 'SELECT u.* FROM Usuaris u WHERE u.email IN (SELECT s.userSeguit FROM Segueix s WHERE LOWER(s.usuariSeguidor) == LOWER(?));';
+    let sql = 'SELECT u.* FROM Usuaris u WHERE u.email IN (SELECT s.usuariSeguit FROM Segueix s WHERE LOWER(s.usuariSeguidor) == LOWER(?));';
     db.all(sql,[data.usuariSeguidor], (err, rows) => {
         if (err) {
             next(err);
