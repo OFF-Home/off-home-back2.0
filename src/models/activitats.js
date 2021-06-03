@@ -745,9 +745,10 @@ function createTree(categories_done,activities_all,row_data) {
  * @param next
  */
 exports.getExplore = function(data,res,next) {
-    let sql_all = 'SELECT * ' +
-        '        FROM ActivitatsInfo a ' +
-        '        WHERE a.acabada = 0 ' +
+    let sql_all = 'SELECT a.*, COUNT(DISTINCT p.usuariParticipant) AS numParticipants  ' +
+        '        FROM ActivitatsInfo a , Participants p' +
+        '        WHERE a.acabada = 0 AND a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni ' +
+        '        GROUP BY a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi ' +
         '        ORDER BY a.dataHoraIni;';
     let sql2_all_done = 'SELECT a.categoria ' +
         '        FROM ActivitatsInfo a , Participants p ' +
@@ -759,9 +760,10 @@ exports.getExplore = function(data,res,next) {
             next(err);
         }
         else if (rows.length == 0) {
-            let sql_aux = 'SELECT * ' +
-                'FROM ActivitatsInfo a ' +
-                'WHERE a.acabada = 0 ' +
+            let sql_aux = 'SELECT a.*, COUNT(DISTINCT p.usuariParticipant) AS numParticipants  ' +
+                'FROM ActivitatsInfo a, Participants p ' +
+                'WHERE a.acabada = 0 AND a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni ' +
+                'GROUP BY a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi ' +
                 'ORDER BY a.dataHoraIni';
             db.all(sql_aux, [], (err, rows_all) => {
                 if (err) {
@@ -958,8 +960,12 @@ exports.eliminarActivities = function(data,req,res,next) {
 }
 
 exports.getActivitatsAmics = function(data,res,next){
-    let sql= 'SELECT * FROM Activitatsinfo WHERE acabada == 0 AND usuariCreador IN (SELECT usuariSeguit FROM Segueix WHERE usuariSeguidor == ?)'
+
+    let sql= 'SELECT a.*, COUNT(DISTINCT p.usuariParticipant) AS numParticipants FROM Activitatsinfo a, Participants p WHERE a.acabada == 0 AND a.usuariCreador = p.usuariCreador AND a.dataHoraIni = p.dataHoraIni AND a.usuariCreador IN (SELECT usuariSeguit FROM Segueix WHERE usuariSeguidor == ?)' +
+        '        GROUP BY a.usuariCreador , a.numCarrer , a.nomCarrer , a.dataHoraIni , a.categoria, a.maxParticipant , a.titol, a.descripcio, a.dataHoraFi ' +
+        '        ORDER BY a.dataHoraIni'
     db.all(sql, [data.email], (err,rows) => {
+
         if (err) {
             res.status(409).json({
                 status: err.status,

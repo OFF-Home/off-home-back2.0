@@ -317,6 +317,7 @@ exports.getActivitatsAmics = function(req,res,next){
     var data = {
         email: req.params.email
     }
+    console.log("heyyy")
     activitats.getActivitatsAmics(data,res,next)
 }
 
