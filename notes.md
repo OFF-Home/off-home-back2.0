@@ -7,7 +7,7 @@ docker build -t agnesmgomez/pes:latest .
 docker push agnesmgomez/pes:latest
 
 SERVER: (o ./update.sh)
-docker-compose stop && docker-compose rm -f && docker-compose pull && docker-compose up -d
+docker-compose stop && docker-couser_testing.jsmpose rm -f && docker-compose pull && docker-compose up -d
 
 LOGS: docker-compose logs -f pes
 
