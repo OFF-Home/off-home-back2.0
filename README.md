@@ -12,7 +12,9 @@ OFF-Home is an Android App (found in Play Store) where users can create differen
 * IDE: Webstorm.
 
 # Demo
-https://agnes-masip.github.io/assets/img/off1.png
+![image](https://user-images.githubusercontent.com/55700365/199958899-3468e528-b1f6-44db-ad35-df493053b340.png)
+
 ![image](https://user-images.githubusercontent.com/55700365/199958660-f84747be-560a-493c-8584-713d77bf9cb5.png)
+
 ![image](https://user-images.githubusercontent.com/55700365/199958751-d625d5f0-b080-45f5-8646-5cd62a6c3ad0.png)
 
